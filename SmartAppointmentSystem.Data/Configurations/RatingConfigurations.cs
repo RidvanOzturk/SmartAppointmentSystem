@@ -1,29 +1,31 @@
-﻿using SmartAppointmentSystem.Data.Entities;
-using System.Data.Entity.ModelConfiguration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SmartAppointmentSystem.Data.Entities;
 
 namespace SmartAppointmentSystem.Data.Configurations;
 
-public class RatingConfiguration : EntityTypeConfiguration<Rating>
+public class RatingConfiguration : IEntityTypeConfiguration<Rating>
 {
-    public RatingConfiguration()
+    public void Configure(EntityTypeBuilder<Rating> builder)
     {
-        ToTable("Ratings");
-        HasKey(r => r.Id);
+        builder.ToTable("Ratings");
 
-        Property(r => r.Score)
+        builder.HasKey(r => r.Id);
+
+        builder.Property(r => r.Score)
             .IsRequired();
 
-        Property(r => r.Comment)
+        builder.Property(r => r.Comment)
             .HasMaxLength(500);
 
-        Property(r => r.CreatedAt)
+        builder.Property(r => r.CreatedAt)
             .IsRequired();
 
-        HasRequired(r => r.Professional)
+        builder.HasOne(r => r.Professional)
             .WithMany()
             .HasForeignKey(r => r.ProfessionalId);
 
-        HasRequired(r => r.Customer)
+        builder.HasOne(r => r.Customer)
             .WithMany()
             .HasForeignKey(r => r.CustomerId);
     }

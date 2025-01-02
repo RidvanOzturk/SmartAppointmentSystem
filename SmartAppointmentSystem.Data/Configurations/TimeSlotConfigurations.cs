@@ -1,29 +1,25 @@
-﻿using SmartAppointmentSystem.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SmartAppointmentSystem.Data.Entities;
 
-namespace SmartAppointmentSystem.Data.Configurations
+namespace SmartAppointmentSystem.Data.Configurations;
+
+public class TimeSlotConfiguration : IEntityTypeConfiguration<TimeSlot>
 {
-    public class TimeSlotConfiguration : EntityTypeConfiguration<TimeSlot>
+    public void Configure(EntityTypeBuilder<TimeSlot> builder)
     {
-        public TimeSlotConfiguration()
-        {
-            ToTable("TimeSlots");
-            HasKey(ts => ts.Id);
+        builder.ToTable("TimeSlots");
 
-            Property(ts => ts.AvailableFrom)
-                .IsRequired();
+        builder.HasKey(ts => ts.Id);
 
-            Property(ts => ts.AvailableTo)
-                .IsRequired();
+        builder.Property(ts => ts.AvailableFrom)
+            .IsRequired();
 
-            HasRequired(ts => ts.Service)
-                .WithMany(s => s.TimeSlots)
-                .HasForeignKey(ts => ts.ProfessionalId);
-        }
+        builder.Property(ts => ts.AvailableTo)
+            .IsRequired();
+
+        builder.HasOne(ts => ts.Service)
+            .WithMany(s => s.TimeSlots)
+            .HasForeignKey(ts => ts.ProfessionalId);
     }
 }

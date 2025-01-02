@@ -1,30 +1,32 @@
-﻿using SmartAppointmentSystem.Data.Entities;
-using System.Data.Entity.ModelConfiguration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SmartAppointmentSystem.Data.Entities;
 
 namespace SmartAppointmentSystem.Data.Configurations;
 
-public class AppointmentConfiguration : EntityTypeConfiguration<Appointment>
+public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
 {
-    public AppointmentConfiguration()
+    public void Configure(EntityTypeBuilder<Appointment> builder)
     {
-        ToTable("Appointments");
-        HasKey(a => a.Id);
+        builder.ToTable("Appointments");
 
-        Property(a => a.DateTime)
+        builder.HasKey(a => a.Id);
+
+        builder.Property(a => a.DateTime)
             .IsRequired();
 
-        Property(a => a.Status)
+        builder.Property(a => a.Status)
             .IsRequired()
             .HasMaxLength(50);
 
-        Property(a => a.Notes)
+        builder.Property(a => a.Notes)
             .HasMaxLength(500);
 
-        HasRequired(a => a.Professional)
+        builder.HasOne(a => a.Professional)
             .WithMany()
             .HasForeignKey(a => a.ProfessionalId);
 
-        HasRequired(a => a.Customer)
+        builder.HasOne(a => a.Customer)
             .WithMany(u => u.Appointments)
             .HasForeignKey(a => a.CustomerId);
     }

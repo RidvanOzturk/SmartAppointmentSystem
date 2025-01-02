@@ -1,23 +1,25 @@
-﻿using SmartAppointmentSystem.Data.Entities;
-using System.Data.Entity.ModelConfiguration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SmartAppointmentSystem.Data.Entities;
 
 namespace SmartAppointmentSystem.Data.Configurations;
 
-public class ServiceConfiguration : EntityTypeConfiguration<Service>
+public class ServiceConfiguration : IEntityTypeConfiguration<Service>
 {
-    public ServiceConfiguration()
+    public void Configure(EntityTypeBuilder<Service> builder)
     {
-        ToTable("Services");
-        HasKey(s => s.Id);
+        builder.ToTable("Services");
 
-        Property(s => s.Name)
+        builder.HasKey(s => s.Id);
+
+        builder.Property(s => s.Name)
             .IsRequired()
             .HasMaxLength(150);
 
-        Property(s => s.Duration)
+        builder.Property(s => s.Duration)
             .IsRequired();
 
-        HasRequired(s => s.Professional)
+        builder.HasOne(s => s.Professional)
             .WithMany()
             .HasForeignKey(s => s.ProfessionalId);
     }
