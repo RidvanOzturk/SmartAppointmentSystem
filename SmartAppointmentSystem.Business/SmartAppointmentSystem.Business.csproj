@@ -7,10 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Contacts\" />
+    <Compile Remove="Contacts\IAppointmentBusiness.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="DTOs\" />
     <Folder Include="Extensions\" />
-    <Folder Include="Implementations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Contacts\IAppointmentBusiness.cs" />
   </ItemGroup>
 
 </Project>

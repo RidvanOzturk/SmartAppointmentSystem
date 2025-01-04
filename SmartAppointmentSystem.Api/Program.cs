@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using SmartAppointmentSystem.Business.Contacts;
+using SmartAppointmentSystem.Business.Implementations;
 using SmartAppointmentSystem.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppointmentContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AppointmentContext")));
 
+builder.Services.AddScoped<IAppointmentBusiness, AppointmentBusiness>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
