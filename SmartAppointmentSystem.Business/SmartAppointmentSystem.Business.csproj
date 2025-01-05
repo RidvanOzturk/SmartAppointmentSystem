@@ -7,16 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Contacts\IAppointmentBusiness.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DTOs\" />
     <Folder Include="Extensions\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Contacts\IAppointmentBusiness.cs" />
+    <ProjectReference Include="..\SmartAppointmentSystem.Data\SmartAppointmentSystem.Data.csproj" />
   </ItemGroup>
 
 </Project>

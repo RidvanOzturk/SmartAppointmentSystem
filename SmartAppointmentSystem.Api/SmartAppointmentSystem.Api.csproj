@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SmartAppointmentSystem.Business\SmartAppointmentSystem.Business.csproj" />
-    <ProjectReference Include="..\SmartAppointmentSystem.Data\SmartAppointmentSystem.Data.csproj" />
   </ItemGroup>
 
 </Project>

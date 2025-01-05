@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 
 namespace SmartAppointmentSystem.Business.Implementations;
 
-public class RatingBusiness : IRatingBusiness
+public class ServiceBusiness : IServiceBusiness
 {
 }

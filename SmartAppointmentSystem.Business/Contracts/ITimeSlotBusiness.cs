@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartAppointmentSystem.Business.Contacts;
+namespace SmartAppointmentSystem.Business.Contracts;
 
-public interface IAppointmentBusiness
+public interface ITimeSlotBusiness
 {
-    createUser()
 }
