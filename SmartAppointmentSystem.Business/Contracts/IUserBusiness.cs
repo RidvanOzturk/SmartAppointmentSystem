@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace SmartAppointmentSystem.Business.Contracts;
 
-public interface IAuthBusiness
+public interface IUserBusiness
 {
 }

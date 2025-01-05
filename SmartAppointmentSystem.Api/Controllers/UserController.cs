@@ -6,7 +6,7 @@ using SmartAppointmentSystem.Business.Contracts;
 using SmartAppointmentSystem.Business.Implementations;
 namespace SmartAppointmentSystem.Api.Controllers
 {
-    public class UserController(IAuthBusiness authBusiness) : Controller
+    public class UserController(IUserBusiness userBusiness) : Controller
     {
 
         [HttpGet]

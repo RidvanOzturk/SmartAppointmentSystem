@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 
 namespace SmartAppointmentSystem.Business.Implementations;
 
-public class AuthBusiness : IAuthBusiness
+public class UserBusiness : IUserBusiness
 {
 }
