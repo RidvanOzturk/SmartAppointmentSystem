@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 
 namespace SmartAppointmentSystem.Data.Repositories.Implementations;
 
-public class TimeSlotRepository : ITimeSlotRepository
+public class TimeSlotRepository(AppointmentContext context) : ITimeSlotRepository
 {
 }
