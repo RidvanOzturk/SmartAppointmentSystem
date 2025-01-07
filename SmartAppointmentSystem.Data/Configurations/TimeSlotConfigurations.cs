@@ -18,7 +18,7 @@ public class TimeSlotConfiguration : IEntityTypeConfiguration<TimeSlot>
         builder.Property(ts => ts.AvailableTo)
             .IsRequired();
 
-        builder.HasOne(ts => ts.Service)
+        builder.HasOne(ts => ts.Process)
             .WithMany(s => s.TimeSlots)
             .HasForeignKey(ts => ts.ProfessionalId);
     }

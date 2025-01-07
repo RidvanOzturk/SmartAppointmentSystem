@@ -4,11 +4,11 @@ using SmartAppointmentSystem.Data.Entities;
 
 namespace SmartAppointmentSystem.Data.Configurations;
 
-public class ServiceConfiguration : IEntityTypeConfiguration<Process>
+public class ProcessConfiguration : IEntityTypeConfiguration<Process>
 {
     public void Configure(EntityTypeBuilder<Process> builder)
     {
-        builder.ToTable("Services");
+        builder.ToTable("Processes");
 
         builder.HasKey(s => s.Id);
 

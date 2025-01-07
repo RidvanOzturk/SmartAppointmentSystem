@@ -7,5 +7,5 @@ public class TimeSlot
     public TimeSpan AvailableFrom { get; set; }
     public TimeSpan AvailableTo { get; set; }
 
-    public Process Service { get; set; }
+    public Process Process { get; set; }
 }

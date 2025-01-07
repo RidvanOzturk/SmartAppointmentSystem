@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SmartAppointmentSystem.Business.Contracts;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
-namespace SmartAppointmentSystem.Api.Controllers
+namespace SmartAppointmentSystem.Api.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class RatingController : ControllerBase
 {
-    public class RatingController(IRatingBusiness ratingBusiness) : Controller
-    {
-        public IActionResult Index()
-        {
-            return Ok();
-        }
-    }
 }

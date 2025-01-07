@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartAppointmentSystem.Data;
 
@@ -11,9 +12,11 @@ using SmartAppointmentSystem.Data;
 namespace SmartAppointmentSystem.Data.Migrations
 {
     [DbContext(typeof(AppointmentContext))]
-    partial class AppointmentContextModelSnapshot : ModelSnapshot
+    [Migration("20250107170030_changedServiceEntityNameToProcess")]
+    partial class changedServiceEntityNameToProcess
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,13 +218,13 @@ namespace SmartAppointmentSystem.Data.Migrations
 
             modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.TimeSlot", b =>
                 {
-                    b.HasOne("SmartAppointmentSystem.Data.Entities.Process", "Process")
+                    b.HasOne("SmartAppointmentSystem.Data.Entities.Process", "Service")
                         .WithMany("TimeSlots")
                         .HasForeignKey("ProfessionalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Process");
+                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.Process", b =>

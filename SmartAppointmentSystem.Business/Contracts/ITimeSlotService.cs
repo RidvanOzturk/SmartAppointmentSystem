@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartAppointmentSystem.Data.Repositories.Contracts;
+namespace SmartAppointmentSystem.Business.Contracts;
 
-public interface IServiceRepository
+public interface ITimeSlotService
 {
 }

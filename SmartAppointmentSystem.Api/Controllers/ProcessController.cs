@@ -6,6 +6,6 @@ namespace SmartAppointmentSystem.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AppointmentController(IAppointmentService appointmentService) : ControllerBase
+public class ProcessController(IProcessService processService) : ControllerBase
 {
 }

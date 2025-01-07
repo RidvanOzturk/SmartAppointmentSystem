@@ -8,7 +8,7 @@ namespace SmartAppointmentSystem.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController(IUserService userBusiness) : Controller
+public class UserController(IUserService userService) : Controller
 {
     static List<User> users = new List<User>()
     {
