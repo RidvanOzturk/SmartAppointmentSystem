@@ -11,7 +11,7 @@ public class AppointmentContext : DbContext
     }
 
     public DbSet<User> Users { get; set; }
-    public DbSet<Service> Services { get; set; }
+    public DbSet<Process> Services { get; set; }
     public DbSet<Appointment> Appointments { get; set; }
     public DbSet<Rating> Ratings { get; set; }
     public DbSet<TimeSlot> TimeSlots { get; set; }

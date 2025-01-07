@@ -3,6 +3,6 @@ using SmartAppointmentSystem.Data.Repositories.Contracts;
 
 namespace SmartAppointmentSystem.Business.Implementations;
 
-public class AppointmentBusiness(IAppointmentRepository appointmentRepository) : IAppointmentBusiness
+public class AppointmentService(IAppointmentRepository appointmentRepository) : IAppointmentService
 {
 }

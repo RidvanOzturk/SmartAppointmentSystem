@@ -3,7 +3,7 @@ using SmartAppointmentSystem.Business.Contracts;
 
 namespace SmartAppointmentSystem.Api.Controllers
 {
-    public class AppointmentController(IAppointmentBusiness appointmentBusiness) : Controller
+    public class AppointmentController(IAppointmentService appointmentBusiness) : Controller
     {
         public IActionResult Index()
         {

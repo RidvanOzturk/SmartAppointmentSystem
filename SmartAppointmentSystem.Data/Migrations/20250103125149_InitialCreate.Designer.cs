@@ -91,7 +91,7 @@ namespace SmartAppointmentSystem.Data.Migrations
                     b.ToTable("Ratings", (string)null);
                 });
 
-            modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.Service", b =>
+            modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.Process", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -205,7 +205,7 @@ namespace SmartAppointmentSystem.Data.Migrations
                     b.Navigation("Professional");
                 });
 
-            modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.Service", b =>
+            modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.Process", b =>
                 {
                     b.HasOne("SmartAppointmentSystem.Data.Entities.User", "Professional")
                         .WithMany()
@@ -218,16 +218,16 @@ namespace SmartAppointmentSystem.Data.Migrations
 
             modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.TimeSlot", b =>
                 {
-                    b.HasOne("SmartAppointmentSystem.Data.Entities.Service", "Service")
+                    b.HasOne("SmartAppointmentSystem.Data.Entities.Process", "Process")
                         .WithMany("TimeSlots")
                         .HasForeignKey("ProfessionalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Service");
+                    b.Navigation("Process");
                 });
 
-            modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.Service", b =>
+            modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.Process", b =>
                 {
                     b.Navigation("TimeSlots");
                 });

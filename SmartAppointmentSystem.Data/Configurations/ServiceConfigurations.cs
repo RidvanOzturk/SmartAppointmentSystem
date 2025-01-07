@@ -4,9 +4,9 @@ using SmartAppointmentSystem.Data.Entities;
 
 namespace SmartAppointmentSystem.Data.Configurations;
 
-public class ServiceConfiguration : IEntityTypeConfiguration<Service>
+public class ServiceConfiguration : IEntityTypeConfiguration<Process>
 {
-    public void Configure(EntityTypeBuilder<Service> builder)
+    public void Configure(EntityTypeBuilder<Process> builder)
     {
         builder.ToTable("Services");
 
