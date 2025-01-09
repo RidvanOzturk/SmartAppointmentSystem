@@ -12,7 +12,9 @@ public class UserController(IUserService userService) : Controller
 {
     static List<User> users = new List<User>()
     {
-        new User { Id = Guid.NewGuid(), Name="Rıdvan", Mail="ozturkridvan1@gmail.com", PasswordHash="12345" }
+        new User { Name="Rıdvan", Email="ozturkridvan1@gmail.com", PasswordHash="12345" },
+        new User { Name="Furkan", Email="ozturkridvan1@gmail.com", PasswordHash="12345" }
+
     };
 
     [HttpGet("{id}")]
@@ -48,7 +50,7 @@ public class UserController(IUserService userService) : Controller
     }
 
 
-    [HttpPost]
+    [HttpPost("create")]
     public IActionResult CreateUser(UserRequestModel request)
     {
         // Bunlar yerine Fluent Validation
@@ -70,9 +72,9 @@ public class UserController(IUserService userService) : Controller
 
         var user = request.Map();
 
-        users.Add(user);
+        var gettingUser = userService.RegisterAsync(user);
 
-        return Ok(user.Id);
+        return Ok(gettingUser);
     }
 
     [HttpPut("{id}")]
@@ -86,7 +88,7 @@ public class UserController(IUserService userService) : Controller
         }
 
         user.Name = request.Name;
-        user.Mail = request.Email;
+        user.Email = request.Email;
         user.PasswordHash = request.Password;
         
         return Ok();

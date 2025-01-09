@@ -1,18 +1,18 @@
 ﻿using SmartAppointmentSystem.Api.Models;
+using SmartAppointmentSystem.Business.DTOs;
 using SmartAppointmentSystem.Data.Entities;
 
 namespace SmartAppointmentSystem.Api.Extensions;
 
 public static class MapperExtensions
 {
-    public static User Map(this UserRequestModel value)
+    public static RegisterRequestDTO Map(this UserRequestModel value)
     {
-        return new User()
+        return new RegisterRequestDTO
         {
-            Id = Guid.NewGuid(), // normalde db'de auto increment olucak
             Name = value.Name,
-            Mail = value.Email,
-            PasswordHash = value.Password // normalde hashlemek lazım
+            Email = value.Email,
+            Password = value.Password,
         };
     }
 }
