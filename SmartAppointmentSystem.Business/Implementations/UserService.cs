@@ -8,16 +8,16 @@ public class UserService(AppointmentContext appointmentContext) : IUserService
 {
     public async Task<bool> RegisterAsync(RegisterRequestDTO requestDTO)
     {
-        var addUser = await appointmentContext.AddAsync(requestDTO);
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password); //  Passwordu hashledimm
+        var user = requestDTO.Map();
+
+        var addUser = await appointmentContext.Users.AddAsync(user);
         if (addUser == null) 
         {
             return false;
         }
-        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password); //  Passwordu hashledimm
 
-        var user = requestDTO.Map();
-        var result = await CommitAsync();
-        return result != null;
+        return await CommitAsync();
         // db'ye ekleme
 
     }

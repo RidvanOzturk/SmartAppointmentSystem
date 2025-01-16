@@ -50,8 +50,8 @@ public class UserController(IUserService userService) : Controller
     }
 
 
-    [HttpPost("create")]
-    public IActionResult CreateUser(UserRequestModel request)
+    [HttpPost]
+    public async Task<IActionResult> CreateUser(UserRequestModel request)
     {
         // Bunlar yerine Fluent Validation
 
@@ -72,7 +72,11 @@ public class UserController(IUserService userService) : Controller
 
         var user = request.Map();
 
-        var gettingUser = userService.RegisterAsync(user);
+        var gettingUser = await userService.RegisterAsync(user);
+        if (!gettingUser)
+        {
+            return BadRequest("User invalid");
+        }
 
         return Ok(gettingUser);
     }

@@ -13,6 +13,7 @@ public static class MapperExtensions
             Name = value.Name,
             Email = value.Email,
             Password = value.Password,
+            Role = value.Role,
         };
     }
 }
