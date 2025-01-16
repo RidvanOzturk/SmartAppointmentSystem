@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using SmartAppointmentSystem.Api.Extensions;
 using SmartAppointmentSystem.Api.Models;
+using SmartAppointmentSystem.Api.Models.Validators;
 using SmartAppointmentSystem.Business.Contracts;
 using SmartAppointmentSystem.Data.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace SmartAppointmentSystem.Api.Controllers;
 
@@ -51,21 +54,12 @@ public class UserController(IUserService userService) : Controller
 
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser(UserRequestModel request)
+    public async Task<IActionResult> CreateUser(UserRequestModel request, [FromServices] IValidator<UserRequestModel> validator)
     {
-        // Bunlar yerine Fluent Validation
-
-        if (string.IsNullOrEmpty(request.Name))
+        var fluent = await validator.ValidateAsync(request);
+        if (!fluent.IsValid)
         {
-            return BadRequest("Name is not valid");
-        }
-        if (string.IsNullOrEmpty(request.Email))
-        {
-            return BadRequest("Email is not valid");
-        }
-        if (string.IsNullOrEmpty(request.Password) || request.Password.Length < 5)
-        {
-            return BadRequest("Password is not valid");
+            return BadRequest();
         }
         var user = request.Map();
         var gettingUser = await userService.RegisterAsync(user);

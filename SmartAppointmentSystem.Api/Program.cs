@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using SmartAppointmentSystem.Api.Models.Validators;
 using SmartAppointmentSystem.Business.Contracts;
 using SmartAppointmentSystem.Business.Implementations;
 using SmartAppointmentSystem.Data;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,7 @@ builder.Services.AddScoped<IProcessService, ProcessService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<ITimeSlotService, TimeSlotService>();
 
+builder.Services.AddValidatorsFromAssemblyContaining<UserValidator>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
