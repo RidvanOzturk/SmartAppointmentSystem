@@ -4,6 +4,7 @@ using SmartAppointmentSystem.Api.Extensions;
 using SmartAppointmentSystem.Api.Models;
 using SmartAppointmentSystem.Api.Models.Validators;
 using SmartAppointmentSystem.Business.Contracts;
+using SmartAppointmentSystem.Business.Implementations;
 using SmartAppointmentSystem.Data.Entities;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,17 +14,11 @@ namespace SmartAppointmentSystem.Api.Controllers;
 [ApiController]
 public class UserController(IUserService userService) : Controller
 {
-    static List<User> users = new List<User>()
-    {
-        new User { Name="Rıdvan", Email="ozturkridvan1@gmail.com", PasswordHash="12345" },
-        new User { Name="Furkan", Email="ozturkridvan1@gmail.com", PasswordHash="12345" }
-
-    };
 
     [HttpGet("{id}")]
-    public IActionResult GetUser([FromRoute] Guid id)
+    public async Task<IActionResult> GetUser([FromRoute] Guid id)
     {
-        var user = users.FirstOrDefault(x => x.Id == id);
+        var user = await userService.GetUserByIdAsync(id);
 
         if (user == null)
         {
@@ -47,14 +42,19 @@ public class UserController(IUserService userService) : Controller
     //}
 
     [HttpGet("all")]
-    public IActionResult GetAllUsers()
+    public async Task<IActionResult> GetAllUsers()
     {
+        var users = await userService.GetUsersAsync();
+        if (users.Count < 1 || users == null)
+        {
+            return BadRequest();
+        }
         return Ok(users);
     }
 
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser(UserRequestModel request, [FromServices] IValidator<UserRequestModel> validator)
+    public async Task<IActionResult> CreateUser(UserRequestModel request, [FromServices] IValidator<UserRequestModel> validator) // fromservice???
     {
         var fluent = await validator.ValidateAsync(request);
         if (!fluent.IsValid)
