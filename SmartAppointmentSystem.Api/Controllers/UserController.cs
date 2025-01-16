@@ -59,25 +59,20 @@ public class UserController(IUserService userService) : Controller
         {
             return BadRequest("Name is not valid");
         }
-
         if (string.IsNullOrEmpty(request.Email))
         {
             return BadRequest("Email is not valid");
         }
-
         if (string.IsNullOrEmpty(request.Password) || request.Password.Length < 5)
         {
             return BadRequest("Password is not valid");
         }
-
         var user = request.Map();
-
         var gettingUser = await userService.RegisterAsync(user);
         if (!gettingUser)
         {
             return BadRequest("User invalid");
         }
-
         return Ok(gettingUser);
     }
 
