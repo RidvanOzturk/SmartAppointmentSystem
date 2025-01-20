@@ -1,6 +1,6 @@
 ﻿namespace SmartAppointmentSystem.Business.DTOs;
 
-public class RegisterRequestDTO
+public class UserRequestDTO
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

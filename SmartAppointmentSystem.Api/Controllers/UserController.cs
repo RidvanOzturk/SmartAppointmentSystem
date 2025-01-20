@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartAppointmentSystem.Api.Extensions;
 using SmartAppointmentSystem.Api.Models;
@@ -26,6 +27,19 @@ public class UserController(IUserService userService) : Controller
         }
 
         return Ok(user);
+    }
+    [HttpPost("LoginUser")]
+    [AllowAnonymous]
+    public async Task<ActionResult<UserRequestModel>> LoginUserAsync([FromBody] UserRequestModel request)
+    {
+        var user = request.Map();
+        var result = await userService.LoginUserAsync(user);
+        if (result.AuthenticateResult == false)
+        {
+            return NotFound();
+        }
+
+        return Ok(result);
     }
 
     //[HttpGet]
@@ -67,30 +81,32 @@ public class UserController(IUserService userService) : Controller
         {
             return BadRequest("User invalid");
         }
-        return Ok(gettingUser);
+        return Ok(request.Id);
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update([FromRoute] Guid id, UserRequestModel request)
+    public async Task<IActionResult> Update([FromRoute] Guid id, UserRequestModel request)
     {
-        var user = users.FirstOrDefault(x => x.Id == id);
+        var userId = await userService.GetUserByIdAsync(id);
 
-        if (user == null)
+        if (userId == null)
         {
             return NotFound();
         }
 
-        user.Name = request.Name;
-        user.Email = request.Email;
-        user.PasswordHash = request.Password;
+        var user = request.Map();
         
-        return Ok();
+        return Ok(user);
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete([FromRoute] Guid id)
+    public async Task <IActionResult> Delete([FromRoute] Guid id)
     {
-        users.RemoveAll(x => x.Id == id);
+        var user = await userService.DeleteUserById(id);
+        if (!user)
+        {
+            return BadRequest();
+        }
         return Ok();
     }
 }

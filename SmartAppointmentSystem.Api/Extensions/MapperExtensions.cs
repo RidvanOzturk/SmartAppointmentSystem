@@ -6,9 +6,9 @@ namespace SmartAppointmentSystem.Api.Extensions;
 
 public static class MapperExtensions
 {
-    public static RegisterRequestDTO Map(this UserRequestModel value)
+    public static UserRequestDTO Map(this UserRequestModel value)
     {
-        return new RegisterRequestDTO
+        return new UserRequestDTO
         {
             Name = value.Name,
             Email = value.Email,

@@ -10,8 +10,10 @@ namespace SmartAppointmentSystem.Business.Contracts;
 
 public interface IUserService
 {
-    Task<bool> RegisterAsync(RegisterRequestDTO requestDTO);
+    Task<bool> RegisterAsync(UserRequestDTO requestDTO);
+    public Task<UserResponseDTO> LoginUserAsync(UserRequestDTO request);
     Task<List<User>> GetUsersAsync();
     Task<User> GetUserByIdAsync(Guid id);
+    Task<bool> DeleteUserById(Guid id);
     Task<bool> CommitAsync();
 }

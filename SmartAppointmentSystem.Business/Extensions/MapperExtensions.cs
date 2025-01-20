@@ -10,7 +10,7 @@ namespace SmartAppointmentSystem.Business.Extensions;
 
 public static class MapperExtensions
 {
-    public static User Map(this RegisterRequestDTO registerRequest)
+    public static User Map(this UserRequestDTO registerRequest)
     {
         return new User
         {
