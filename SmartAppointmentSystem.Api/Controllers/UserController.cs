@@ -15,7 +15,7 @@ namespace SmartAppointmentSystem.Api.Controllers;
 [ApiController]
 public class UserController(IUserService userService) : Controller
 {
-
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetUser([FromRoute] Guid id)
     {
@@ -39,7 +39,7 @@ public class UserController(IUserService userService) : Controller
             return NotFound();
         }
 
-        return Ok(result);
+        return Ok(result.AuthToken);
     }
 
     //[HttpGet]
@@ -54,7 +54,7 @@ public class UserController(IUserService userService) : Controller
 
     //    return Ok(user);
     //}
-
+    [Authorize]
     [HttpGet("all")]
     public async Task<IActionResult> GetAllUsers()
     {

@@ -37,7 +37,7 @@ public class TokenService(IConfiguration configuration) : ITokenService
 
         if (string.IsNullOrEmpty(token))
         {
-            throw new Exception("JWT Token oluşturulamadı.");
+            throw new Exception("JWT Token cannot be created.");
         }
 
         return Task.FromResult(new GenerateTokenResponseDTO

@@ -21,4 +21,16 @@ public static class MapperExtensions
             Role = registerRequest.Role,
         };
     }
+    public static Appointment Map(this AppointmentRequestDTO createRequest)
+    {
+        return new Appointment
+        {
+            Id = Guid.NewGuid(),
+            CustomerId = createRequest.CustomerId,
+            DateTime = createRequest.DateTime,
+            Notes = createRequest.Notes,
+            Status = createRequest.Status,
+            ProfessionalId = createRequest.ProfessionalId,
+        };
+    }
 }

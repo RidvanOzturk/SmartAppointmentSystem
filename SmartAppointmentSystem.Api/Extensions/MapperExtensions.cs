@@ -16,4 +16,15 @@ public static class MapperExtensions
             Role = value.Role,
         };
     }
+    public static AppointmentRequestDTO Map(this AppointmentRequestModel value)
+    {
+        return new AppointmentRequestDTO
+        {
+            DateTime = value.DateTime,
+            Notes = value.Notes,
+            Status = value.Status,
+            CustomerId = value.CustomerId,
+            ProfessionalId = value.ProfessionalId,
+        };
+    }
 }
