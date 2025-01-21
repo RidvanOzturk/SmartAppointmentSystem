@@ -17,7 +17,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
         var gettingFilled = await appointmentService.CreateAppointment(fill);
         if (!gettingFilled)
         {
-            return NotFound("Appointment Not Found");
+            return StatusCode(500, "Appointment could not create");
         }
         return Ok(gettingFilled);
     }

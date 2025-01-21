@@ -23,7 +23,8 @@ public class UserService(AppointmentContext appointmentContext, IConfiguration c
         user.PasswordHash = hashedPassword;
 
         await appointmentContext.Users.AddAsync(user);
-        return await CommitAsync();
+        var changes = await appointmentContext.SaveChangesAsync();
+        return changes > 0;
     }
 
     public async Task<UserResponseDTO> LoginUserAsync(UserRequestDTO request)
@@ -39,7 +40,7 @@ public class UserService(AppointmentContext appointmentContext, IConfiguration c
             throw new UnauthorizedAccessException("Kullanıcı adı veya şifre yanlış.");
         }
 
-        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO { Name = user.Name });
+        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO { UserId = user.Id, Name = user.Name });
         return new UserResponseDTO
         {
             AccessTokenExpireDate = generatedToken.TokenExpireDate,
@@ -47,17 +48,14 @@ public class UserService(AppointmentContext appointmentContext, IConfiguration c
             AuthToken = generatedToken.Token
         };
     }
-
     public async Task<List<User>> GetUsersAsync()
     {
         return await appointmentContext.Users.ToListAsync();
     }
-
     public async Task<User> GetUserByIdAsync(Guid id)
     {
         return await appointmentContext.Users.FirstOrDefaultAsync(x => x.Id == id);
     }
-
     public async Task<bool> DeleteUserById(Guid id)
     {
         var user = await appointmentContext.Users.FirstOrDefaultAsync(x => x.Id == id);
@@ -67,11 +65,7 @@ public class UserService(AppointmentContext appointmentContext, IConfiguration c
         }
 
         appointmentContext.Users.Remove(user);
-        return await CommitAsync();
-    }
-
-    public async Task<bool> CommitAsync()
-    {
-        return await appointmentContext.SaveChangesAsync() > 0;
+        var changes = await appointmentContext.SaveChangesAsync();
+        return  changes > 0;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartAppointmentSystem.Api.Extensions;
@@ -15,11 +16,13 @@ namespace SmartAppointmentSystem.Api.Controllers;
 [ApiController]
 public class UserController(IUserService userService) : Controller
 {
-    [Authorize]
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetUser([FromRoute] Guid id)
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [HttpGet]
+    public async Task<IActionResult> GetUser()
     {
-        var user = await userService.GetUserByIdAsync(id);
+        var userId = HttpContext.User.GetUserId();
+
+        var user = await userService.GetUserByIdAsync(userId);
 
         if (user == null)
         {
@@ -28,6 +31,7 @@ public class UserController(IUserService userService) : Controller
 
         return Ok(user);
     }
+    
     [HttpPost("LoginUser")]
     [AllowAnonymous]
     public async Task<ActionResult<UserRequestModel>> LoginUserAsync([FromBody] UserRequestModel request)
@@ -39,7 +43,7 @@ public class UserController(IUserService userService) : Controller
             return NotFound();
         }
 
-        return Ok(result.AuthToken);
+        return Ok(result);
     }
 
     //[HttpGet]
@@ -81,7 +85,7 @@ public class UserController(IUserService userService) : Controller
         {
             return BadRequest("User invalid");
         }
-        return Ok(request.Id);
+        return Ok(request);
     }
 
     [HttpPut("{id}")]

@@ -24,7 +24,6 @@ public static class MapperExtensions
             Notes = value.Notes,
             Status = value.Status,
             CustomerId = value.CustomerId,
-            ProfessionalId = value.ProfessionalId,
         };
     }
 }

@@ -12,7 +12,6 @@ public class TokenService(IConfiguration configuration) : ITokenService
 {
     public Task<GenerateTokenResponseDTO> GenerateToken(GenerateTokenRequestDTO request)
     {
-        Console.WriteLine(configuration["AppSettings:Secret"]);
         var secretKey = Environment.GetEnvironmentVariable("AppSettings__Secret");
         if (string.IsNullOrEmpty(secretKey))
         {
@@ -26,6 +25,7 @@ public class TokenService(IConfiguration configuration) : ITokenService
             audience: configuration["AppSettings:ValidAudience"],
             claims: new List<Claim>
             {
+                new Claim("UserId", request.UserId.ToString()),
                 new Claim("Name", request.Name)
             },
             notBefore: dateTimeNow,

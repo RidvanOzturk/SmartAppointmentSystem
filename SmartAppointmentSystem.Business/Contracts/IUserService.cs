@@ -15,5 +15,4 @@ public interface IUserService
     Task<List<User>> GetUsersAsync();
     Task<User> GetUserByIdAsync(Guid id);
     Task<bool> DeleteUserById(Guid id);
-    Task<bool> CommitAsync();
 }

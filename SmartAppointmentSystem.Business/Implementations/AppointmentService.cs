@@ -11,11 +11,8 @@ public class AppointmentService(AppointmentContext appointmentContext) : IAppoin
     {
         var filled = appointmentRequestDTO.Map();
         await appointmentContext.Appointments.AddAsync(filled);
-        return await CommitAsync();
+        var changes = await appointmentContext.SaveChangesAsync();
+        return changes > 0;
     }
-    public async Task<bool> CommitAsync()
-    {
-        var changes = appointmentContext.SaveChangesAsync();
-        return await changes > 0;
-    }
+   
 }

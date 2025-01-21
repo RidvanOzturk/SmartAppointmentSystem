@@ -4,6 +4,7 @@ using SmartAppointmentSystem.Business.Contracts;
 using SmartAppointmentSystem.Business.Implementations;
 using SmartAppointmentSystem.Data;
 using FluentValidation;
+using SmartAppointmentSystem.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,14 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
-// Ortam deðiþkenleri daha sonra yüklenir
 builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddDbContext<AppointmentContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AppointmentContext")));
-Console.WriteLine($"Environment Variable (Direct): {Environment.GetEnvironmentVariable("AppSettings__Secret")}");
-Console.WriteLine($"Configuration Value: {builder.Configuration["AppSettings:Secret"]}");
-
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProcessService, ProcessService>();
@@ -31,6 +28,8 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.RegisterJWTAuthentication();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -40,7 +39,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -9,6 +9,5 @@ namespace SmartAppointmentSystem.Business.Contracts;
 
 public interface IAppointmentService
 {
-    Task<bool> CommitAsync();
     Task<bool> CreateAppointment(AppointmentRequestDTO requestDTO);
 }
