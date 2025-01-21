@@ -7,65 +7,71 @@ using SmartAppointmentSystem.Data.Entities;
 using System.Linq;
 using System.Collections.Generic;
 using static Azure.Core.HttpHeader;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.Extensions.Configuration;
 namespace SmartAppointmentSystem.Business.Implementations;
 
-public class UserService(AppointmentContext appointmentContext) : IUserService
+public class UserService(AppointmentContext appointmentContext, IConfiguration configuration, ITokenService tokenService) : IUserService
 {
     public async Task<bool> RegisterAsync(UserRequestDTO requestDTO)
     {
-        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password); 
+        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password);
         var user = requestDTO.Map();
-        var addUser = await appointmentContext.Users.AddAsync(user);
-        if (addUser == null) 
-        {
-            return false;
-        }
+        user.PasswordHash = hashedPassword;
+
+        await appointmentContext.Users.AddAsync(user);
         return await CommitAsync();
     }
-    public Task<UserResponseDTO> LoginUserAsync(UserRequestDTO request)
+
+    public async Task<UserResponseDTO> LoginUserAsync(UserRequestDTO request)
     {
-        UserResponseDTO response = new();
-        var user = request.Map();
         if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Password))
         {
             throw new ArgumentNullException(nameof(request));
         }
 
-        if (appointmentContext.Users.Any(x=>x.Name == request.Name) && appointmentContext.Users.Any(x=>x.PasswordHash == request.Password))
+        var user = await appointmentContext.Users.FirstOrDefaultAsync(x => x.Name == request.Name);
+        if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
         {
-            response.AccessTokenExpireDate = DateTime.UtcNow;
-            response.AuthenticateResult = true;
-            response.AuthToken = string.Empty;
+            throw new UnauthorizedAccessException("Kullanıcı adı veya şifre yanlış.");
         }
 
-        return Task.FromResult(response);
+        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO { Name = user.Name });
+        return new UserResponseDTO
+        {
+            AccessTokenExpireDate = generatedToken.TokenExpireDate,
+            AuthenticateResult = true,
+            AuthToken = generatedToken.Token
+        };
     }
+
     public async Task<List<User>> GetUsersAsync()
     {
-        try
-        {
-            return await appointmentContext.Users.ToListAsync();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception("Veritabanından kullanıcıları alırken hata oluştu", ex);
-        }
+        return await appointmentContext.Users.ToListAsync();
     }
+
     public async Task<User> GetUserByIdAsync(Guid id)
     {
-        var user = await appointmentContext.Users.FirstOrDefaultAsync(x =>x.Id == id);
-        return user;
+        return await appointmentContext.Users.FirstOrDefaultAsync(x => x.Id == id);
     }
+
     public async Task<bool> DeleteUserById(Guid id)
     {
         var user = await appointmentContext.Users.FirstOrDefaultAsync(x => x.Id == id);
-        var deletedById = appointmentContext.Users.Remove(user);
-       
+        if (user == null)
+        {
+            throw new Exception("Kullanıcı bulunamadı.");
+        }
+
+        appointmentContext.Users.Remove(user);
         return await CommitAsync();
     }
+
     public async Task<bool> CommitAsync()
     {
-        var changed = await appointmentContext.SaveChangesAsync();
-        return changed > 0;
+        return await appointmentContext.SaveChangesAsync() > 0;
     }
 }
