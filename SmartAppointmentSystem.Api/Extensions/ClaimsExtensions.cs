@@ -10,4 +10,5 @@ public static class ClaimsExtensions
         var userId = Guid.Parse(userIdValue);
         return userId;
     }
+ 
 }

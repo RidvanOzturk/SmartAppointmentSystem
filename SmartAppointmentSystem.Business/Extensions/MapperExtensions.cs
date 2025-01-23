@@ -26,11 +26,23 @@ public static class MapperExtensions
         return new Appointment
         {
             Id = Guid.NewGuid(),
-            CustomerId = createRequest.CustomerId,
             DateTime = createRequest.DateTime,
+            CustomerId = createRequest.CustomerId,
             Notes = createRequest.Notes,
             Status = createRequest.Status,
             ProfessionalId = createRequest.ProfessionalId,
+        };
+    }
+    public static Rating Map(this RatingRequestDTO ratingRequest)
+    {
+        return new Rating
+        {
+            Id = Guid.NewGuid(),
+            ProfessionalId = ratingRequest.ProfessionalId,
+            CustomerId = ratingRequest.CustomerId,
+            Comment = ratingRequest.Comment,
+            CreatedAt = ratingRequest.CreatedAt,
+            Score = ratingRequest.Score,
         };
     }
 }

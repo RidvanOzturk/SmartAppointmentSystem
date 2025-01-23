@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmartAppointmentSystem.Api.Extensions;
 using SmartAppointmentSystem.Api.Models;
 using SmartAppointmentSystem.Business.Contracts;
+using SmartAppointmentSystem.Business.Implementations;
 
 namespace SmartAppointmentSystem.Api.Controllers;
 
@@ -20,5 +21,35 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
             return StatusCode(500, "Appointment could not create");
         }
         return Ok(gettingFilled);
+    }
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetAppointment(Guid id)
+    {
+        var getAppo = await appointmentService.GetAppointmentsById(id);
+        return Ok(getAppo);
+    }
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateAppintment([FromRoute] Guid id, AppointmentRequestModel request)
+    {
+        var appointmentId = await appointmentService.GetAppointmentsById(id);
+
+        if (appointmentId == null)
+        {
+            return NotFound();
+        }
+
+        var appointment = request.Map();
+
+        return Ok(appointment);
+    }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteAppointment([FromRoute] Guid id)
+    {
+        var app = await appointmentService.DeleteAppointmentById(id);
+        if (!app)
+        {
+            return BadRequest();
+        }
+        return Ok("Deleted Appoinment");
     }
 }

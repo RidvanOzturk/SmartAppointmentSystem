@@ -20,10 +20,22 @@ public static class MapperExtensions
     {
         return new AppointmentRequestDTO
         {
+            ProfessionalId = value.ProfessionalId,
+            CustomerId = value.CustomerId,
             DateTime = value.DateTime,
             Notes = value.Notes,
             Status = value.Status,
+        };
+    }
+    public static RatingRequestDTO Map(this RatingRequestModel value)
+    {
+        return new RatingRequestDTO
+        {
+            ProfessionalId = value.ProfessionalId,
             CustomerId = value.CustomerId,
+            Comment = value.Comment,
+            CreatedAt = value.CreatedAt,
+            Score = value.Score,
         };
     }
 }
