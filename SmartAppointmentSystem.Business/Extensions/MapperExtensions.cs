@@ -45,4 +45,12 @@ public static class MapperExtensions
             Score = ratingRequest.Score,
         };
     }
+    public static void Map(this RatingRequestDTO source, Rating target)
+    {
+        target.ProfessionalId = source.ProfessionalId;
+        target.CustomerId = source.CustomerId;
+        target.Comment = source.Comment;
+        target.Score = source.Score;
+        target.CreatedAt = source.CreatedAt;
+    }
 }

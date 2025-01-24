@@ -22,4 +22,12 @@ public class RatingService(AppointmentContext appointmentContext) : IRatingServi
         var rating = await appointmentContext.Ratings.FirstOrDefaultAsync(x => x.Id == id);
         return rating;
     }
+    public async Task<bool> UpdateRating(Guid id, RatingRequestDTO ratingRequestDTO)
+    {
+        var ratingId = await appointmentContext.Ratings.FirstOrDefaultAsync(r => r.Id == id);
+        ratingRequestDTO.Map(ratingId);
+
+        var changes = await appointmentContext.SaveChangesAsync();
+        return changes > 0;
+    }
 }

@@ -12,4 +12,5 @@ public interface IRatingService
 {
     Task<bool> CreateRating(RatingRequestDTO ratingRequestDTO);
     Task<Rating> GetRatingById(Guid id);
+    Task<bool> UpdateRating(Guid id, RatingRequestDTO ratingRequestDTO);
 }

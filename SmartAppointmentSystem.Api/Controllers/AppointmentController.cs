@@ -26,10 +26,14 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     public async Task<IActionResult> GetAppointment(Guid id)
     {
         var getAppo = await appointmentService.GetAppointmentsById(id);
+        if (getAppo==null)
+        {
+            return NotFound();
+        }
         return Ok(getAppo);
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAppintment([FromRoute] Guid id, AppointmentRequestModel request)
+    public async Task<IActionResult> UpdateAppointment([FromRoute] Guid id, AppointmentRequestModel request)
     {
         var appointmentId = await appointmentService.GetAppointmentsById(id);
 
