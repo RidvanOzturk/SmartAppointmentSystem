@@ -16,7 +16,11 @@ public class AppointmentService(AppointmentContext appointmentContext) : IAppoin
         var changes = await appointmentContext.SaveChangesAsync();
         return changes > 0;
     }
-
+    public async Task<List<Appointment>> GetAllAppointments()
+    {
+        var allApp = await appointmentContext.Appointments.ToListAsync();
+        return allApp;
+    }
     public async Task<Appointment> GetAppointmentsById(Guid id)
     {
        var app = appointmentContext.Appointments.FirstOrDefaultAsync(x => x.Id == id);
@@ -31,6 +35,13 @@ public class AppointmentService(AppointmentContext appointmentContext) : IAppoin
         }
         appointmentContext.Appointments.Remove(app);
         var changes =await appointmentContext.SaveChangesAsync();
+        return changes > 0;
+    }
+    public async Task<bool> UpdateAppointmentById(Guid id, AppointmentRequestDTO appointmentRequestDTO)
+    {
+        var appId = await appointmentContext.Appointments.FirstOrDefaultAsync(x=>x.Id== id);
+        appointmentRequestDTO.Map(appId);
+        var changes = await appointmentContext.SaveChangesAsync();
         return changes > 0;
     }
    

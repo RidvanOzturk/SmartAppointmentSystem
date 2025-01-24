@@ -22,6 +22,16 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
         }
         return Ok(gettingFilled);
     }
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAllAppointments()
+    {
+        var getAllApp = await appointmentService.GetAllAppointments();
+        if (getAllApp.Count < 1  || getAllApp == null)
+        {
+            return NotFound("There is no appointment.");
+        }
+        return Ok(getAllApp);
+    }
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAppointment(Guid id)
     {
@@ -42,9 +52,9 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
             return NotFound();
         }
 
-        var appointment = request.Map();
-
-        return Ok(appointment);
+        var appointmentMapping = request.Map();
+        var app = await appointmentService.UpdateAppointmentById(id, appointmentMapping);
+        return Ok(app);
     }
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAppointment([FromRoute] Guid id)

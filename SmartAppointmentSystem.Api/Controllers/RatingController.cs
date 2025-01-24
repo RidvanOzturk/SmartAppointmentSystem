@@ -18,6 +18,17 @@ public class RatingController(IRatingService ratingService) : ControllerBase
         var rating = await ratingService.CreateRating(mapping);
         return Ok(rating);
     }
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAllRatings()
+    {
+        var getAllRatings = await ratingService.GetAllRatings();
+        if (getAllRatings.Count < 1 || getAllRatings == null)
+        {
+            return NotFound("There is no ratings.");
+        }
+        return Ok(getAllRatings);
+    }
+    
     [HttpGet("{id}")]
     public async Task<IActionResult> GetRatingById(Guid id)
     {
@@ -25,7 +36,7 @@ public class RatingController(IRatingService ratingService) : ControllerBase
         return Ok(getRat);
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateRating([FromRoute] Guid id, RatingRequestModel request)
+    public async Task<IActionResult> UpdateRatingById([FromRoute] Guid id, RatingRequestModel request)
     {
         var ratingId = await ratingService.GetRatingById(id);
 
@@ -35,7 +46,17 @@ public class RatingController(IRatingService ratingService) : ControllerBase
         }
 
         var mapping = request.Map();
-        var rating = await ratingService.UpdateRating(id, mapping);
+        var rating = await ratingService.UpdateRatingById(id, mapping);
         return Ok(rating);
+    }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteRatingById([FromRoute] Guid id)
+    {
+        var delRat = await ratingService.DeleteRatingById(id);
+        if (!delRat)
+        {
+            return NotFound();   
+        }
+        return Ok(delRat);
     }
 }

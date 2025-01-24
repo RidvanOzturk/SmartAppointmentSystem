@@ -13,4 +13,6 @@ public interface IAppointmentService
     Task<bool> CreateAppointment(AppointmentRequestDTO requestDTO);
     Task<Appointment> GetAppointmentsById(Guid id);
     Task<bool> DeleteAppointmentById(Guid id);
+    Task<bool> UpdateAppointmentById(Guid id, AppointmentRequestDTO appointmentRequestDTO);
+    Task<List<Appointment>> GetAllAppointments();
 }

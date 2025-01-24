@@ -33,6 +33,15 @@ public static class MapperExtensions
             ProfessionalId = createRequest.ProfessionalId,
         };
     }
+    public static void Map(this AppointmentRequestDTO createRequest, Appointment target)
+    {
+        target.DateTime = createRequest.DateTime;
+        target.CustomerId = createRequest.CustomerId;
+        target.Notes = createRequest.Notes;
+        target.Status = createRequest.Status;
+        target.ProfessionalId = createRequest.ProfessionalId;
+       
+    }
     public static Rating Map(this RatingRequestDTO ratingRequest)
     {
         return new Rating
