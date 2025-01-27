@@ -23,6 +23,10 @@ builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<ITimeSlotService, TimeSlotService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddValidatorsFromAssemblyContaining<UserValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<AppointmentValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<TimeSlotValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<ProcessValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<RatingValidator>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

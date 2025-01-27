@@ -26,10 +26,12 @@ public class TokenService(IConfiguration configuration) : ITokenService
             claims: new List<Claim>
             {
                 new Claim("UserId", request.UserId.ToString()),
-                new Claim("Name", request.Name)
+                new Claim("Name", request.Name),
+                new Claim("Mail", request.Mail),
+                new Claim("Role", request.Role)
             },
             notBefore: dateTimeNow,
-            expires: dateTimeNow.AddMinutes(500),
+            expires: dateTimeNow.AddMinutes(300),
             signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
         );
 
