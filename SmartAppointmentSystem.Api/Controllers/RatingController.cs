@@ -12,7 +12,7 @@ namespace SmartAppointmentSystem.Api.Controllers;
 public class RatingController(IRatingService ratingService) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateRating(RatingRequestModel requestModel)
+    public async Task<IActionResult> CreateRating([FromBody] RatingRequestModel requestModel)
     {
         var mapping = requestModel.Map();
         var rating = await ratingService.CreateRating(mapping);

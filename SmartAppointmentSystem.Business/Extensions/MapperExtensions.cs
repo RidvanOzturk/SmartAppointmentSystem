@@ -62,4 +62,38 @@ public static class MapperExtensions
         target.Score = source.Score;
         target.CreatedAt = source.CreatedAt;
     }
+    public static TimeSlot Map(this TimeSlotRequestDTO timeSlotRequest)
+    {
+        return new TimeSlot
+        {
+            Id = Guid.NewGuid(),
+            ProfessionalId = timeSlotRequest.ProfessionalId,
+            ProcessId = timeSlotRequest.ProcessId,
+            AvailableFrom = timeSlotRequest.AvailableFrom,
+            AvailableTo = timeSlotRequest.AvailableTo,
+        };
+    }
+    public static void Map(this TimeSlotRequestDTO source, TimeSlot target)
+    {
+        target.ProcessId = source.ProcessId;
+        target.AvailableFrom = source.AvailableFrom;
+        target.AvailableTo = source.AvailableTo;
+        target.ProfessionalId = source.ProfessionalId;
+    }
+    public static Process Map(this ProcessRequestDTO processRequest)
+    {
+        return new Process
+        {
+            Id = Guid.NewGuid(),
+            Name = processRequest.Name,
+            Duration = processRequest.Duration,
+            ProfessionalId = processRequest.ProfessionalId
+        };
+    }
+    public static void Map(this ProcessRequestDTO source, Process target)
+    {
+        target.ProfessionalId = source.ProfessionalId;
+        target.Duration = source.Duration;
+        target.Name = source.Name;
+    }
 }

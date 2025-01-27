@@ -19,7 +19,14 @@ public class TimeSlotConfiguration : IEntityTypeConfiguration<TimeSlot>
             .IsRequired();
 
         builder.HasOne(ts => ts.Process)
-            .WithMany(s => s.TimeSlots)
-            .HasForeignKey(ts => ts.ProfessionalId);
+            .WithMany(p => p.TimeSlots)
+            .HasForeignKey(ts => ts.ProcessId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(ts => ts.Professional)
+            .WithMany()
+            .HasForeignKey(ts => ts.ProfessionalId)
+            .OnDelete(DeleteBehavior.Restrict); 
     }
 }
+

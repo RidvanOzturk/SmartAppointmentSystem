@@ -12,7 +12,7 @@ namespace SmartAppointmentSystem.Api.Controllers;
 public class AppointmentController(IAppointmentService appointmentService) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateAppointment(AppointmentRequestModel requestModel)
+    public async Task<IActionResult> CreateAppointment([FromBody] AppointmentRequestModel requestModel)
     {
         var fill = requestModel.Map();
         var gettingFilled = await appointmentService.CreateAppointment(fill);

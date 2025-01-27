@@ -3,9 +3,12 @@
 public class TimeSlot
 {
     public Guid Id { get; set; }
-    public Guid ProfessionalId { get; set; }
+    public Guid ProfessionalId { get; set; } 
+    public Guid ProcessId { get; set; } 
     public TimeSpan AvailableFrom { get; set; }
     public TimeSpan AvailableTo { get; set; }
 
-    public Process Process { get; set; }
+    public Process Process { get; set; } 
+    public User Professional { get; set; } 
 }
+

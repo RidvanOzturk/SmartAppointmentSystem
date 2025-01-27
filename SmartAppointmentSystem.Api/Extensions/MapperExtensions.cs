@@ -38,4 +38,23 @@ public static class MapperExtensions
             Score = value.Score,
         };
     }
+    public static TimeSlotRequestDTO Map(this TimeSlotRequestModel value) 
+    {
+        return new TimeSlotRequestDTO
+        {
+            ProfessionalId = value.ProfessionalId,
+            ProcessId = value.ProcessId,
+            AvailableFrom = value.AvailableFrom,
+            AvailableTo = value.AvailableTo,
+        };
+    }
+    public static ProcessRequestDTO Map(this ProcessRequestModel value)
+    {
+        return new ProcessRequestDTO
+        {
+            Name = value.Name,
+            Duration = value.Duration,
+            ProfessionalId = value.ProfessionalId
+        };
+    }
 }
