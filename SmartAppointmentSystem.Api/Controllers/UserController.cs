@@ -31,7 +31,16 @@ public class UserController(IUserService userService) : Controller
 
         return Ok(user);
     }
-    
+    [HttpGet("{id}/appointment")]
+    public async Task<IActionResult> GetUserAppointments(Guid id, [FromQuery] UserRequestModel userRequestModel)
+
+
+    {
+        var mapping = userRequestModel.Map();
+        var getUserApp = await userService.GetUserAppointments(id,mapping);
+        return Ok(getUserApp);
+    }
+
     [HttpPost("LoginUser")]
     [AllowAnonymous]
     public async Task<ActionResult<UserRequestModel>> LoginUserAsync([FromBody] UserRequestModel request)
@@ -99,12 +108,12 @@ public class UserController(IUserService userService) : Controller
         }
 
         var user = request.Map();
-        
+
         return Ok(user);
     }
 
     [HttpDelete("{id}")]
-    public async Task <IActionResult> Delete([FromRoute] Guid id)
+    public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         var user = await userService.DeleteUserById(id);
         if (!user)

@@ -12,6 +12,7 @@ public interface IUserService
 {
     Task<bool> RegisterAsync(UserRequestDTO requestDTO);
     public Task<UserResponseDTO> LoginUserAsync(UserRequestDTO request);
+    Task<List<Appointment>> GetUserAppointments(Guid id, UserRequestDTO userRequestDTO);
     Task<List<User>> GetUsersAsync();
     Task<User> GetUserByIdAsync(Guid id);
     Task<bool> DeleteUserById(Guid id);

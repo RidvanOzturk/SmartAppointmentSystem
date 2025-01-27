@@ -26,7 +26,13 @@ public class UserService(AppointmentContext appointmentContext, IConfiguration c
         var changes = await appointmentContext.SaveChangesAsync();
         return changes > 0;
     }
-
+    public async Task<List<Appointment>> GetUserAppointments(Guid id, UserRequestDTO userRequestDTO)
+    {
+        var userId= await appointmentContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+        var mapping = userRequestDTO.Map();
+        var getUserApp = await appointmentContext.Appointments.Where(x => x.CustomerId == id).ToListAsync();
+        return getUserApp;
+    }
     public async Task<UserResponseDTO> LoginUserAsync(UserRequestDTO request)
     {
         if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Password))
