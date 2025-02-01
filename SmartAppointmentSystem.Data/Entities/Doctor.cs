@@ -8,7 +8,9 @@ public class Doctor
     public string PasswordHash { get; set; }
     public string Description { get; set; }
     public string Image { get; set; }
-    public string Polyclinic { get; set; }  
+    public int BranchId { get; set; }        
+
+    public Branch Branch { get; set; }         
 
     public ICollection<Appointment> Appointments { get; set; }
     public ICollection<Rating> Ratings { get; set; }
