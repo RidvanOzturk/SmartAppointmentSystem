@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartAppointmentSystem.Api.Extensions;
 using SmartAppointmentSystem.Api.Models;
@@ -41,6 +43,23 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
             return NotFound();
         }
         return Ok(getAppo);
+    }
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [HttpGet("appointments")]
+    public async Task<IActionResult> GetUserAppointments()
+    {
+        // JWT içerisindeki "UserId" claim'ini alıyoruz
+        var userId = HttpContext.User.GetUserId();
+
+        // Servisten kullanıcının randevularını çekiyoruz
+        var appointments = await appointmentService.GetUserAppointments(userId);
+
+        if (appointments == null || !appointments.Any())
+        {
+            return NotFound("There is no appointment.");
+        }
+
+        return Ok(appointments);
     }
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAppointment([FromRoute] Guid id, AppointmentRequestModel request)

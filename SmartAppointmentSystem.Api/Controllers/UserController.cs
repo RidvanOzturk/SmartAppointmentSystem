@@ -31,15 +31,8 @@ public class UserController(IUserService userService) : Controller
 
         return Ok(user);
     }
-    [HttpGet("{id}/appointment")]
-    public async Task<IActionResult> GetUserAppointments(Guid id, [FromQuery] UserRequestModel userRequestModel)
+    
 
-
-    {
-        var mapping = userRequestModel.Map();
-        var getUserApp = await userService.GetUserAppointments(id,mapping);
-        return Ok(getUserApp);
-    }
 
     [HttpPost("LoginUser")]
     [AllowAnonymous]

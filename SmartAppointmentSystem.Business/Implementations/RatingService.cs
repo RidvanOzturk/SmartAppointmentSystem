@@ -19,24 +19,24 @@ public class RatingService(AppointmentContext appointmentContext) : IRatingServi
     }
     public async Task<List<Rating>> GetAllRatings()
     {
-        var getAll = await appointmentContext.Ratings.ToListAsync();
+        var getAll = await appointmentContext.Ratings.AsNoTracking().ToListAsync();
         return getAll;
     }
     public async Task<Rating> GetRatingById(Guid id)
     {
-        var rating = await appointmentContext.Ratings.FirstOrDefaultAsync(x => x.Id == id);
+        var rating = await appointmentContext.Ratings.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         return rating;
     }
     public async Task<bool> UpdateRatingById(Guid id, RatingRequestDTO ratingRequestDTO)
     {
-        var ratingId = await appointmentContext.Ratings.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        var ratingId = await appointmentContext.Ratings.FirstOrDefaultAsync(x => x.Id == id);
         ratingRequestDTO.Map(ratingId);
         var changes = await appointmentContext.SaveChangesAsync();
         return changes > 0;
     }
     public async Task<bool> DeleteRatingById(Guid id)
     {
-        var ratingId = await appointmentContext.Ratings.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        var ratingId = await appointmentContext.Ratings.FirstOrDefaultAsync(x => x.Id == id);
         appointmentContext.Remove(ratingId);
         var changes = await appointmentContext.SaveChangesAsync();
         return changes > 0;

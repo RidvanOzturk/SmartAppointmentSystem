@@ -22,12 +22,12 @@ public class TimeSlotService(AppointmentContext appointmentContext) : ITimeSlotS
     }
     public async Task<TimeSlot> GetTimeSlotById(Guid id)
     {
-        var getTimeSlot = await appointmentContext.TimeSlots.FirstOrDefaultAsync(x => x.Id == id);
+        var getTimeSlot = await appointmentContext.TimeSlots.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         return getTimeSlot;
     }
     public async Task<List<TimeSlot>> GetAllTimeSlots()
     {
-        var getAll = await appointmentContext.TimeSlots.ToListAsync();
+        var getAll = await appointmentContext.TimeSlots.AsNoTracking().ToListAsync();
         return getAll;
     }
     public async Task<bool> UpdateTimeSlotById(Guid id, TimeSlotRequestDTO timeSlotRequestDTO)

@@ -18,12 +18,12 @@ public class ProcessService(AppointmentContext appointmentContext) : IProcessSer
     }
     public async Task<Process> GetProcessById(Guid id)
     {
-        var getProcess = await appointmentContext.Processes.FirstOrDefaultAsync(x=>x.Id == id);
+        var getProcess = await appointmentContext.Processes.AsNoTracking().FirstOrDefaultAsync(x=>x.Id == id);
         return getProcess;
     }
     public async Task<List<Process>> GetAllProcesses()
     {
-        var getAll = await appointmentContext.Processes.ToListAsync();
+        var getAll = await appointmentContext.Processes.AsNoTracking().ToListAsync();
         return getAll;
     }
     public async Task<bool> UpdateProcessById(Guid id, ProcessRequestDTO processRequestDTO)

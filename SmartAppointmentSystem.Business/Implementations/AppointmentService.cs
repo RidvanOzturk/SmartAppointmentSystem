@@ -18,13 +18,18 @@ public class AppointmentService(AppointmentContext appointmentContext) : IAppoin
     }
     public async Task<List<Appointment>> GetAllAppointments()
     {
-        var allApp = await appointmentContext.Appointments.ToListAsync();
+        var allApp = await appointmentContext.Appointments.AsNoTracking().ToListAsync();
         return allApp;
     }
     public async Task<Appointment> GetAppointmentsById(Guid id)
     {
-       var app = appointmentContext.Appointments.FirstOrDefaultAsync(x => x.Id == id);
+       var app = appointmentContext.Appointments.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         return await app;
+    }
+    public async Task<List<Appointment>> GetUserAppointments(Guid id)
+    {
+        var getUserApp = await appointmentContext.Appointments.AsNoTracking().Where(x => x.CustomerId == id).ToListAsync();
+        return getUserApp;
     }
     public async Task<bool> DeleteAppointmentById(Guid id)
     {
