@@ -7,7 +7,7 @@ using SmartAppointmentSystem.Data.Entities;
 
 namespace SmartAppointmentSystem.Business.Implementations;
 
-public class TimeSlotService(AppointmentContext appointmentContext) : ITimeSlotService
+public class TimeSlotService(AppointmentContext context) : ITimeSlotService
 {
     public async Task<bool> CreateTimeSlot(TimeSlotRequestDTO timeSlotRequestDTO)
     {
@@ -16,32 +16,32 @@ public class TimeSlotService(AppointmentContext appointmentContext) : ITimeSlotS
             return false;
         }
         var mappingTarget = timeSlotRequestDTO.Map();
-        var addTimeSlot = await appointmentContext.TimeSlots.AddAsync(mappingTarget);
-        var changes = await appointmentContext.SaveChangesAsync();
+        var addTimeSlot = await context.TimeSlots.AddAsync(mappingTarget);
+        var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
     public async Task<TimeSlot> GetTimeSlotById(Guid id)
     {
-        var getTimeSlot = await appointmentContext.TimeSlots.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        var getTimeSlot = await context.TimeSlots.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         return getTimeSlot;
     }
     public async Task<List<TimeSlot>> GetAllTimeSlots()
     {
-        var getAll = await appointmentContext.TimeSlots.AsNoTracking().ToListAsync();
+        var getAll = await context.TimeSlots.AsNoTracking().ToListAsync();
         return getAll;
     }
     public async Task<bool> UpdateTimeSlotById(Guid id, TimeSlotRequestDTO timeSlotRequestDTO)
     {
-        var TimeSlotId = await appointmentContext.TimeSlots.FirstOrDefaultAsync(x => x.Id == id);
+        var TimeSlotId = await context.TimeSlots.FirstOrDefaultAsync(x => x.Id == id);
         timeSlotRequestDTO.Map(TimeSlotId);
-        var changes = await appointmentContext.SaveChangesAsync();
+        var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
     public async Task<bool> DeleteTimeSlotById(Guid id)
     {
-        var deletedId = await appointmentContext.TimeSlots.FirstOrDefaultAsync(x => x.Id == id);
-        appointmentContext.TimeSlots.Remove(deletedId);
-        var changes = await appointmentContext.SaveChangesAsync();
+        var deletedId = await context.TimeSlots.FirstOrDefaultAsync(x => x.Id == id);
+        context.TimeSlots.Remove(deletedId);
+        var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
 }

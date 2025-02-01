@@ -14,7 +14,7 @@ namespace SmartAppointmentSystem.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class PatientController(IUserService userService) : Controller
+public class PatientController(IPatientUserService userService) : Controller
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet]

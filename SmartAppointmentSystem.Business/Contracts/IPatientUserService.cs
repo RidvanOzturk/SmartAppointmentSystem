@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SmartAppointmentSystem.Business.Contracts;
 
-public interface IUserService
+public interface IPatientUserService
 {
     Task<bool> RegisterAsync(UserRequestDTO requestDTO);
     public Task<PatientUserResponseModel> LoginUserAsync(UserRequestDTO request);
