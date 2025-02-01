@@ -4,9 +4,9 @@ using SmartAppointmentSystem.Data.Entities;
 using System.ComponentModel.DataAnnotations;
 namespace SmartAppointmentSystem.Api.Models.Validators;
 
-public class UserValidator : AbstractValidator<PatientUserRequestModel>
+public class PatientUserValidator : AbstractValidator<PatientUserRequestModel>
 {
-    public UserValidator()
+    public PatientUserValidator()
     {
         RuleFor(x => x.Name).MaximumLength(10).MinimumLength(3).NotEmpty().NotNull();
         RuleFor(x => x.Email).NotEmpty().WithMessage("Email cannot be empty.").EmailAddress().WithMessage("Wrong format for Email");

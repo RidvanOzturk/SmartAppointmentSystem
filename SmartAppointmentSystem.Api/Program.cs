@@ -23,7 +23,7 @@ builder.Services.AddScoped<IProcessService, ProcessService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<ITimeSlotService, TimeSlotService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddValidatorsFromAssemblyContaining<UserValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<PatientUserValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<AppointmentValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<TimeSlotValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<ProcessValidator>();

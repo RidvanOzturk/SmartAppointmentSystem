@@ -10,7 +10,7 @@ namespace SmartAppointmentSystem.Business.Extensions;
 
 public static class MapperExtensions
 {
-    public static Patient Map(this UserRequestDTO registerRequest)
+    public static Patient Map(this PatientUserRequestDTO registerRequest)
     {
         return new Patient
         {
@@ -18,7 +18,6 @@ public static class MapperExtensions
             Name = registerRequest.Name,
             Email = registerRequest.Email,
             PasswordHash = registerRequest.Password,
-            Role = registerRequest.Role,
         };
     }
     public static Appointment Map(this AppointmentRequestDTO createRequest)

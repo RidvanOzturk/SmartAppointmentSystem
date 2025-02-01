@@ -18,10 +18,6 @@ public static class ClaimsExtensions
     {
         return user.Claims.FirstOrDefault(x => x.Type == "Mail")?.Value;
     }
-    public static string GetRole(this ClaimsPrincipal user)
-    {
-        return user.Claims.FirstOrDefault(x => x.Type == "Role")?.Value;
-    }
-
+ 
 
 }

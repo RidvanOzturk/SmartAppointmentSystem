@@ -16,7 +16,7 @@ namespace SmartAppointmentSystem.Business.Implementations;
 
 public class PatientUserService(AppointmentContext context, IConfiguration configuration, ITokenService tokenService) : IPatientUserService
 {
-    public async Task<bool> RegisterAsync(UserRequestDTO requestDTO)
+    public async Task<bool> RegisterAsync(PatientUserRequestDTO requestDTO)
     {
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password);
         var user = requestDTO.Map();
@@ -27,7 +27,7 @@ public class PatientUserService(AppointmentContext context, IConfiguration confi
         return changes > 0;
     }
 
-    public async Task<PatientUserResponseModel> LoginUserAsync(UserRequestDTO request)
+    public async Task<PatientUserResponseModel> LoginUserAsync(PatientUserRequestDTO request)
     {
         if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Password))
         {
@@ -40,7 +40,7 @@ public class PatientUserService(AppointmentContext context, IConfiguration confi
             throw new UnauthorizedAccessException("Kullanıcı adı veya şifre yanlış.");
         }
 
-        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO { UserId = user.Id, Name = user.Name, Mail = user.Email, Role = user.Role });
+        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO { UserId = user.Id, Name = user.Name, Mail = user.Email });
         return new PatientUserResponseModel
         {
             AccessTokenExpireDate = generatedToken.TokenExpireDate,

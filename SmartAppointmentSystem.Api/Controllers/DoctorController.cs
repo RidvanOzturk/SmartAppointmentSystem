@@ -7,4 +7,11 @@ namespace SmartAppointmentSystem.Api.Controllers;
 [ApiController]
 public class DoctorController : ControllerBase
 {
+    [HttpGet]
+    public async Task<IActionResult> GetDoctor()
+    {
+        return Ok();
+    }
+
+
 }

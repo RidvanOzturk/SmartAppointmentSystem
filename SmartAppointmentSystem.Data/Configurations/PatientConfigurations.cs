@@ -23,10 +23,6 @@ public class PatientConfiguration : IEntityTypeConfiguration<Patient>
         builder.Property(p => p.PasswordHash)
             .IsRequired();
 
-        builder.Property(p => p.Role)
-            .IsRequired()
-            .HasMaxLength(50);
-
         builder.HasMany(p => p.Appointments)
             .WithOne(a => a.Patient)
             .HasForeignKey(a => a.PatientId);

@@ -48,18 +48,6 @@ public class PatientController(IPatientUserService userService) : Controller
         return Ok(result);
     }
 
-    //[HttpGet]
-    //public IActionResult GetUserabc([FromQuery] string name, [FromQuery] int length)
-    //{
-    //    var user = registerRequests.FirstOrDefault(x => x.Name.Contains(name) && x.Name.Length > 3);
-
-    //    if (user == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    return Ok(user);
-    //}
     [Authorize]
     [HttpGet("all")]
     public async Task<IActionResult> GetAllUsers()
