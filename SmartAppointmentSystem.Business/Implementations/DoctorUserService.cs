@@ -11,13 +11,20 @@ public class DoctorUserService(AppointmentContext context) : IDoctorUserService
 {
     public async Task<Doctor> GetDoctorById(Guid id)
     {
-        var getDoc = await context.Doctors.FirstOrDefaultAsync(x=>x.Id== id);
+        var getDoc = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
         return getDoc;
     }
     public async Task<bool> CreateDoctor(DoctorUserRequestDTO requestDTO)
     {
         var filled = requestDTO.Map();
         var createDoc = await context.Doctors.AddAsync(filled);
+        var changes = await context.SaveChangesAsync();
+        return changes > 0;
+    }
+    public async Task<bool> UpdateDoctorById(Guid id, DoctorUserRequestDTO requestDTO)
+    {
+        var docId = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
+        requestDTO.Map(docId);
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
