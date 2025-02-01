@@ -39,7 +39,6 @@ public static class MapperExtensions
         target.Notes = createRequest.Notes;
         target.Status = createRequest.Status;
         target.DoctorId = createRequest.DoctorId;
-       
     }
     public static Rating Map(this RatingRequestDTO ratingRequest)
     {
@@ -51,6 +50,18 @@ public static class MapperExtensions
             Comment = ratingRequest.Comment,
             CreatedAt = ratingRequest.CreatedAt,
             Score = ratingRequest.Score,
+        };
+    }
+    public static Doctor Map(this DoctorUserRequestDTO doctorUserRequest)
+    {
+        return new Doctor
+        {
+            Id = Guid.NewGuid(),
+            PasswordHash = doctorUserRequest.PasswordHash,
+            Name = doctorUserRequest.Name,
+            Email = doctorUserRequest.Email,
+            Description = doctorUserRequest.Description,
+            BranchId = doctorUserRequest.BranchId,
         };
     }
     public static void Map(this RatingRequestDTO source, Rating target)

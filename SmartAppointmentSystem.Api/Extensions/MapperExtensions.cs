@@ -56,4 +56,15 @@ public static class MapperExtensions
             DoctorId = value.DoctorId
         };
     }
+    public static DoctorUserRequestDTO Map(this DoctorUserRequestModel value)
+    {
+        return new DoctorUserRequestDTO
+        {
+            BranchId = value.BranchId,
+            Description = value.Description,
+            Email = value.Email,
+            Name = value.Name,
+            PasswordHash = value.PasswordHash,
+        };
+    }
 }

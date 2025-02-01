@@ -1,6 +1,6 @@
-﻿namespace SmartAppointmentSystem.Api.Models;
+﻿namespace SmartAppointmentSystem.Business.DTOs;
 
-public class DoctorUserRequestModel
+public class DoctorUserRequestDTO
 {
     public string Name { get; set; }
     public string Email { get; set; }
