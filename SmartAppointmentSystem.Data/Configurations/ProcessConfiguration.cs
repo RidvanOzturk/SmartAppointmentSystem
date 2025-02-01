@@ -19,8 +19,8 @@ public class ProcessConfiguration : IEntityTypeConfiguration<Process>
         builder.Property(s => s.Duration)
             .IsRequired();
 
-        builder.HasOne(s => s.Professional)
+        builder.HasOne(s => s.Doctor)
             .WithMany()
-            .HasForeignKey(s => s.ProfessionalId);
+            .HasForeignKey(s => s.DoctorId);
     }
 }

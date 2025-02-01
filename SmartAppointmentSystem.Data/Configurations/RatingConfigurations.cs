@@ -21,12 +21,12 @@ public class RatingConfiguration : IEntityTypeConfiguration<Rating>
         builder.Property(r => r.CreatedAt)
             .IsRequired();
 
-        builder.HasOne(r => r.Professional)
+        builder.HasOne(r => r.Doctor)
             .WithMany()
-            .HasForeignKey(r => r.ProfessionalId);
+            .HasForeignKey(r => r.DoctorId);
 
-        builder.HasOne(r => r.Customer)
+        builder.HasOne(r => r.Patient)
             .WithMany()
-            .HasForeignKey(r => r.CustomerId);
+            .HasForeignKey(r => r.PatientId);
     }
 }

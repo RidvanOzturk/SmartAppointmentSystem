@@ -23,9 +23,9 @@ public class TimeSlotConfiguration : IEntityTypeConfiguration<TimeSlot>
             .HasForeignKey(ts => ts.ProcessId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(ts => ts.Professional)
+        builder.HasOne(ts => ts.Doctor)
             .WithMany()
-            .HasForeignKey(ts => ts.ProfessionalId)
+            .HasForeignKey(ts => ts.DoctorId)
             .OnDelete(DeleteBehavior.Restrict); 
     }
 }

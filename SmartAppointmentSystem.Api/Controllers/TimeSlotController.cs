@@ -34,7 +34,7 @@ public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBa
         var getAll = await timeSlotService.GetAllTimeSlots();
         if (getAll == null)
         {
-            return BadRequest();  
+            return BadRequest();
         }
         return Ok(getAll);
     }

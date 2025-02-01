@@ -22,14 +22,14 @@ namespace SmartAppointmentSystem.Data.Configurations
             builder.Property(a => a.Notes)
                 .HasMaxLength(500);
 
-            builder.HasOne(a => a.Professional)
+            builder.HasOne(a => a.Doctor)
                 .WithMany()
-                .HasForeignKey(a => a.ProfessionalId)
+                .HasForeignKey(a => a.DoctorId)
                 .OnDelete(DeleteBehavior.Restrict); 
 
-            builder.HasOne(a => a.Customer)
+            builder.HasOne(a => a.Patient)
                 .WithMany(u => u.Appointments)
-                .HasForeignKey(a => a.CustomerId)
+                .HasForeignKey(a => a.PatientId)
                 .OnDelete(DeleteBehavior.Restrict); 
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace SmartAppointmentSystem.Api.Models;
 
-public class UserRequestModel
+public class PatientUserRequestModel
 {
     public string Name { get; set; }
     
@@ -8,5 +8,4 @@ public class UserRequestModel
     
     public string Password { get; set; }
 
-    public string? Role { get; set; }
 }

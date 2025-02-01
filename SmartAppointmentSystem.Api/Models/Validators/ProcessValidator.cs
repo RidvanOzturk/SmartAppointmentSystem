@@ -8,7 +8,7 @@ namespace SmartAppointmentSystem.Api.Models.Validators
         {
             RuleFor(x=>x.Name).NotEmpty().MinimumLength(3).MaximumLength(35);
             RuleFor(x => x.Duration).NotEmpty().GreaterThan(1);
-            RuleFor(x => x.ProfessionalId).NotNull().NotEmpty();
+            RuleFor(x => x.DoctorId).NotNull().NotEmpty();
         }
     }
 }

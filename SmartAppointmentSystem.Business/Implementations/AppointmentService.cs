@@ -21,15 +21,15 @@ public class AppointmentService(AppointmentContext appointmentContext) : IAppoin
         var allApp = await appointmentContext.Appointments.AsNoTracking().ToListAsync();
         return allApp;
     }
-    public async Task<Appointment> GetAppointmentsById(Guid id)
-    {
-       var app = appointmentContext.Appointments.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
-        return await app;
-    }
     public async Task<List<Appointment>> GetUserAppointments(Guid id)
     {
-        var getUserApp = await appointmentContext.Appointments.AsNoTracking().Where(x => x.CustomerId == id).ToListAsync();
-        return getUserApp;
+        var gelUserAppointments = await appointmentContext.Appointments.AsNoTracking().Where(x=> x.PatientId == id).ToListAsync();
+        return gelUserAppointments;
+    }
+    public async Task<Appointment> GetAppointmentsById(Guid id)
+    {
+        var app = appointmentContext.Appointments.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        return await app;
     }
     public async Task<bool> DeleteAppointmentById(Guid id)
     {
@@ -39,15 +39,15 @@ public class AppointmentService(AppointmentContext appointmentContext) : IAppoin
             throw new Exception("There is no Appointment");
         }
         appointmentContext.Appointments.Remove(app);
-        var changes =await appointmentContext.SaveChangesAsync();
+        var changes = await appointmentContext.SaveChangesAsync();
         return changes > 0;
     }
     public async Task<bool> UpdateAppointmentById(Guid id, AppointmentRequestDTO appointmentRequestDTO)
     {
-        var appId = await appointmentContext.Appointments.FirstOrDefaultAsync(x=>x.Id== id);
+        var appId = await appointmentContext.Appointments.FirstOrDefaultAsync(x => x.Id == id);
         appointmentRequestDTO.Map(appId);
         var changes = await appointmentContext.SaveChangesAsync();
         return changes > 0;
     }
-   
+
 }

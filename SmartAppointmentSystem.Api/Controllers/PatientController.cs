@@ -14,7 +14,7 @@ namespace SmartAppointmentSystem.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController(IUserService userService) : Controller
+public class PatientController(IUserService userService) : Controller
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet]
@@ -31,12 +31,12 @@ public class UserController(IUserService userService) : Controller
 
         return Ok(user);
     }
-    
+
 
 
     [HttpPost("LoginUser")]
     [AllowAnonymous]
-    public async Task<ActionResult<UserRequestModel>> LoginUserAsync([FromBody] UserRequestModel request)
+    public async Task<ActionResult<PatientUserRequestModel>> LoginUserAsync([FromBody] PatientUserRequestModel request)
     {
         var user = request.Map();
         var result = await userService.LoginUserAsync(user);
@@ -74,7 +74,7 @@ public class UserController(IUserService userService) : Controller
 
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser(UserRequestModel request, [FromServices] IValidator<UserRequestModel> validator) // fromservice???
+    public async Task<IActionResult> CreateUser(PatientUserRequestModel request, [FromServices] IValidator<PatientUserRequestModel> validator) 
     {
         var fluent = await validator.ValidateAsync(request);
         if (!fluent.IsValid)
@@ -91,7 +91,7 @@ public class UserController(IUserService userService) : Controller
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromRoute] Guid id, UserRequestModel request)
+    public async Task<IActionResult> Update([FromRoute] Guid id, PatientUserRequestModel request)
     {
         var userId = await userService.GetUserByIdAsync(id);
 

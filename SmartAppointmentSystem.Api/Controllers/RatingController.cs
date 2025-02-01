@@ -28,7 +28,7 @@ public class RatingController(IRatingService ratingService) : ControllerBase
         }
         return Ok(getAllRatings);
     }
-    
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetRatingById(Guid id)
     {
@@ -55,7 +55,7 @@ public class RatingController(IRatingService ratingService) : ControllerBase
         var delRat = await ratingService.DeleteRatingById(id);
         if (!delRat)
         {
-            return NotFound();   
+            return NotFound();
         }
         return Ok(delRat);
     }

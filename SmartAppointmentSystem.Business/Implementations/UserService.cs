@@ -22,50 +22,50 @@ public class UserService(AppointmentContext appointmentContext, IConfiguration c
         var user = requestDTO.Map();
         user.PasswordHash = hashedPassword;
 
-        await appointmentContext.Users.AddAsync(user);
+        await appointmentContext.Patients.AddAsync(user);
         var changes = await appointmentContext.SaveChangesAsync();
         return changes > 0;
     }
-   
-    public async Task<UserResponseDTO> LoginUserAsync(UserRequestDTO request)
+
+    public async Task<PatientUserResponseModel> LoginUserAsync(UserRequestDTO request)
     {
         if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Password))
         {
             throw new ArgumentNullException(nameof(request));
         }
 
-        var user = await appointmentContext.Users.FirstOrDefaultAsync(x => x.Name == request.Name);
+        var user = await appointmentContext.Patients.FirstOrDefaultAsync(x => x.Name == request.Name);
         if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
         {
             throw new UnauthorizedAccessException("Kullanıcı adı veya şifre yanlış.");
         }
 
-        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO { UserId = user.Id, Name = user.Name });
-        return new UserResponseDTO
+        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO { UserId = user.Id, Name = user.Name, Mail = user.Email, Role = user.Role });
+        return new PatientUserResponseModel
         {
             AccessTokenExpireDate = generatedToken.TokenExpireDate,
             AuthenticateResult = true,
             AuthToken = generatedToken.Token
         };
     }
-    public async Task<List<User>> GetUsersAsync()
+    public async Task<List<Patient>> GetUsersAsync()
     {
-        return await appointmentContext.Users.AsNoTracking().ToListAsync();
+        return await appointmentContext.Patients.AsNoTracking().ToListAsync();
     }
-    public async Task<User> GetUserByIdAsync(Guid id)
+    public async Task<Patient> GetUserByIdAsync(Guid id)
     {
-        return await appointmentContext.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        return await appointmentContext.Patients.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
     }
     public async Task<bool> DeleteUserById(Guid id)
     {
-        var user = await appointmentContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+        var user = await appointmentContext.Patients.FirstOrDefaultAsync(x => x.Id == id);
         if (user == null)
         {
             throw new Exception("Kullanıcı bulunamadı.");
         }
 
-        appointmentContext.Users.Remove(user);
+        appointmentContext.Patients.Remove(user);
         var changes = await appointmentContext.SaveChangesAsync();
-        return  changes > 0;
+        return changes > 0;
     }
 }

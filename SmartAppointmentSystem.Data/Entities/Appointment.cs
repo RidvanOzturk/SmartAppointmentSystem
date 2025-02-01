@@ -3,12 +3,12 @@
 public class Appointment
 {
     public Guid Id { get; set; }
-    public Guid ProfessionalId { get; set; }
-    public Guid CustomerId { get; set; }
+    public Guid DoctorId { get; set; }  
+    public Guid PatientId { get; set; }     
     public DateTime DateTime { get; set; }
     public string Status { get; set; }
     public string Notes { get; set; }
 
-    public User Professional { get; set; }
-    public User Customer { get; set; }
+    public Doctor Doctor { get; set; }
+    public Patient Patient { get; set; }
 }

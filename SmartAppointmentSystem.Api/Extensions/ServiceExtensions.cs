@@ -21,10 +21,11 @@ public static class ServiceExtensions
             x.SaveToken = true;
             x.TokenValidationParameters = new TokenValidationParameters
             {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey)),
-                ValidateIssuer = false,
-                ValidateAudience = false
             };
         });
     }

@@ -18,7 +18,7 @@ public class ProcessService(AppointmentContext appointmentContext) : IProcessSer
     }
     public async Task<Process> GetProcessById(Guid id)
     {
-        var getProcess = await appointmentContext.Processes.AsNoTracking().FirstOrDefaultAsync(x=>x.Id == id);
+        var getProcess = await appointmentContext.Processes.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         return getProcess;
     }
     public async Task<List<Process>> GetAllProcesses()
@@ -28,7 +28,7 @@ public class ProcessService(AppointmentContext appointmentContext) : IProcessSer
     }
     public async Task<bool> UpdateProcessById(Guid id, ProcessRequestDTO processRequestDTO)
     {
-        var getId = await appointmentContext.Processes.FirstOrDefaultAsync(x=> x.Id == id);
+        var getId = await appointmentContext.Processes.FirstOrDefaultAsync(x => x.Id == id);
         if (getId == null)
         {
             return false;
@@ -39,7 +39,7 @@ public class ProcessService(AppointmentContext appointmentContext) : IProcessSer
     }
     public async Task<bool> DeleteProcessById(Guid id)
     {
-        var delete = await appointmentContext.Processes.FirstOrDefaultAsync(x=> x.Id == id);
+        var delete = await appointmentContext.Processes.FirstOrDefaultAsync(x => x.Id == id);
         appointmentContext.Processes.Remove(delete);
         var changes = await appointmentContext.SaveChangesAsync();
         return changes > 0;

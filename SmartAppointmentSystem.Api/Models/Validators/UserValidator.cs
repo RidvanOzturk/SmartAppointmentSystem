@@ -4,7 +4,7 @@ using SmartAppointmentSystem.Data.Entities;
 using System.ComponentModel.DataAnnotations;
 namespace SmartAppointmentSystem.Api.Models.Validators;
 
-public class UserValidator : AbstractValidator<UserRequestModel>
+public class UserValidator : AbstractValidator<PatientUserRequestModel>
 {
     public UserValidator()
     {

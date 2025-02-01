@@ -6,22 +6,21 @@ namespace SmartAppointmentSystem.Api.Extensions;
 
 public static class MapperExtensions
 {
-    public static UserRequestDTO Map(this UserRequestModel value)
+    public static UserRequestDTO Map(this PatientUserRequestModel value)
     {
         return new UserRequestDTO
         {
             Name = value.Name,
             Email = value.Email,
             Password = value.Password,
-            Role = value.Role,
         };
     }
     public static AppointmentRequestDTO Map(this AppointmentRequestModel value)
     {
         return new AppointmentRequestDTO
         {
-            ProfessionalId = value.ProfessionalId,
-            CustomerId = value.CustomerId,
+            DoctorId = value.DoctorId,
+            PatientId = value.PatientId,
             DateTime = value.DateTime,
             Notes = value.Notes,
             Status = value.Status,
@@ -31,18 +30,18 @@ public static class MapperExtensions
     {
         return new RatingRequestDTO
         {
-            ProfessionalId = value.ProfessionalId,
-            CustomerId = value.CustomerId,
+            DoctorId = value.DoctorId,
+            PatientId = value.PatientId,
             Comment = value.Comment,
             CreatedAt = value.CreatedAt,
             Score = value.Score,
         };
     }
-    public static TimeSlotRequestDTO Map(this TimeSlotRequestModel value) 
+    public static TimeSlotRequestDTO Map(this TimeSlotRequestModel value)
     {
         return new TimeSlotRequestDTO
         {
-            ProfessionalId = value.ProfessionalId,
+            DoctorId = value.DoctorId,
             ProcessId = value.ProcessId,
             AvailableFrom = value.AvailableFrom,
             AvailableTo = value.AvailableTo,
@@ -54,7 +53,7 @@ public static class MapperExtensions
         {
             Name = value.Name,
             Duration = value.Duration,
-            ProfessionalId = value.ProfessionalId
+            DoctorId = value.DoctorId
         };
     }
 }

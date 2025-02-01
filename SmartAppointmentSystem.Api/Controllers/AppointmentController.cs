@@ -28,7 +28,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     public async Task<IActionResult> GetAllAppointments()
     {
         var getAllApp = await appointmentService.GetAllAppointments();
-        if (getAllApp.Count < 1  || getAllApp == null)
+        if (getAllApp.Count < 1 || getAllApp == null)
         {
             return NotFound("There is no appointment.");
         }
@@ -38,20 +38,18 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     public async Task<IActionResult> GetAppointment(Guid id)
     {
         var getAppo = await appointmentService.GetAppointmentsById(id);
-        if (getAppo==null)
+        if (getAppo == null)
         {
             return NotFound();
         }
         return Ok(getAppo);
     }
+
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [HttpGet("appointments")]
+    [HttpGet("apps")]
     public async Task<IActionResult> GetUserAppointments()
     {
-        // JWT içerisindeki "UserId" claim'ini alıyoruz
         var userId = HttpContext.User.GetUserId();
-
-        // Servisten kullanıcının randevularını çekiyoruz
         var appointments = await appointmentService.GetUserAppointments(userId);
 
         if (appointments == null || !appointments.Any())

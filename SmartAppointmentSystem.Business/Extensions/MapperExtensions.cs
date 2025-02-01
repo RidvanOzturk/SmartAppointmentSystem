@@ -10,9 +10,9 @@ namespace SmartAppointmentSystem.Business.Extensions;
 
 public static class MapperExtensions
 {
-    public static User Map(this UserRequestDTO registerRequest)
+    public static Patient Map(this UserRequestDTO registerRequest)
     {
-        return new User
+        return new Patient
         {
             Id = Guid.NewGuid(),
             Name = registerRequest.Name,
@@ -27,19 +27,19 @@ public static class MapperExtensions
         {
             Id = Guid.NewGuid(),
             DateTime = createRequest.DateTime,
-            CustomerId = createRequest.CustomerId,
+            PatientId = createRequest.PatientId,
             Notes = createRequest.Notes,
             Status = createRequest.Status,
-            ProfessionalId = createRequest.ProfessionalId,
+            DoctorId = createRequest.DoctorId,
         };
     }
     public static void Map(this AppointmentRequestDTO createRequest, Appointment target)
     {
         target.DateTime = createRequest.DateTime;
-        target.CustomerId = createRequest.CustomerId;
+        target.PatientId = createRequest.PatientId;
         target.Notes = createRequest.Notes;
         target.Status = createRequest.Status;
-        target.ProfessionalId = createRequest.ProfessionalId;
+        target.DoctorId = createRequest.DoctorId;
        
     }
     public static Rating Map(this RatingRequestDTO ratingRequest)
@@ -47,8 +47,8 @@ public static class MapperExtensions
         return new Rating
         {
             Id = Guid.NewGuid(),
-            ProfessionalId = ratingRequest.ProfessionalId,
-            CustomerId = ratingRequest.CustomerId,
+            DoctorId = ratingRequest.DoctorId,
+            PatientId = ratingRequest.PatientId,
             Comment = ratingRequest.Comment,
             CreatedAt = ratingRequest.CreatedAt,
             Score = ratingRequest.Score,
@@ -56,8 +56,8 @@ public static class MapperExtensions
     }
     public static void Map(this RatingRequestDTO source, Rating target)
     {
-        target.ProfessionalId = source.ProfessionalId;
-        target.CustomerId = source.CustomerId;
+        target.DoctorId = source.DoctorId;
+        target.PatientId = source.PatientId;
         target.Comment = source.Comment;
         target.Score = source.Score;
         target.CreatedAt = source.CreatedAt;
@@ -67,7 +67,7 @@ public static class MapperExtensions
         return new TimeSlot
         {
             Id = Guid.NewGuid(),
-            ProfessionalId = timeSlotRequest.ProfessionalId,
+            DoctorId = timeSlotRequest.DoctorId,
             ProcessId = timeSlotRequest.ProcessId,
             AvailableFrom = timeSlotRequest.AvailableFrom,
             AvailableTo = timeSlotRequest.AvailableTo,
@@ -78,7 +78,7 @@ public static class MapperExtensions
         target.ProcessId = source.ProcessId;
         target.AvailableFrom = source.AvailableFrom;
         target.AvailableTo = source.AvailableTo;
-        target.ProfessionalId = source.ProfessionalId;
+        target.DoctorId = source.DoctorId;
     }
     public static Process Map(this ProcessRequestDTO processRequest)
     {
@@ -87,12 +87,12 @@ public static class MapperExtensions
             Id = Guid.NewGuid(),
             Name = processRequest.Name,
             Duration = processRequest.Duration,
-            ProfessionalId = processRequest.ProfessionalId
+            DoctorId = processRequest.DoctorId
         };
     }
     public static void Map(this ProcessRequestDTO source, Process target)
     {
-        target.ProfessionalId = source.ProfessionalId;
+        target.DoctorId = source.DoctorId;
         target.Duration = source.Duration;
         target.Name = source.Name;
     }

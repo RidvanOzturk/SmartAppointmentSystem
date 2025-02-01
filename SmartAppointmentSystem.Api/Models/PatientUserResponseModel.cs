@@ -1,6 +1,6 @@
 ﻿namespace SmartAppointmentSystem.Api.Models;
 
-public class UserResponseModel
+public class PatientUserResponseModel
 {
     public bool AuthenticateResult { get; set; }
     public string AuthToken { get; set; }
