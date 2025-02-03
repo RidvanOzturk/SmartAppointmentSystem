@@ -18,7 +18,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     {
         var fill = requestModel.Map();
         var gettingFilled = await appointmentService.CreateAppointment(fill);
-        if (!   gettingFilled)
+        if (!gettingFilled)
         {
             return StatusCode(500, "Appointment could not create");
         }
@@ -34,6 +34,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
         }
         return Ok(getAllApp);
     }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAppointmentAsync(Guid id)
     {

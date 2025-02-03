@@ -25,6 +25,10 @@ public class RatingService(AppointmentContext context) : IRatingService
     public async Task<Rating> GetRatingById(Guid id)
     {
         var rating = await context.Ratings.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        if (rating == null) 
+        { 
+            return null;
+        }
         return rating;
     }
     public async Task<bool> UpdateRatingById(Guid id, RatingRequestDTO ratingRequestDTO)

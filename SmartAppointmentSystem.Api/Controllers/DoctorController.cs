@@ -27,6 +27,12 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         var createDoc = await doctorUserService.CreateDoctor(mapping);
         return Ok(createDoc);
     }
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAllDoctorsAsync()
+    {
+        var getAllDoc = await doctorUserService.GetAllDoctors();
+        return Ok(getAllDoc);
+    }
 
     [HttpPost("DoctorUserLogin")]
     public async Task<ActionResult<DoctorUserLoginRequestModel>> LoginUserAsync([FromBody] DoctorUserLoginRequestModel request)

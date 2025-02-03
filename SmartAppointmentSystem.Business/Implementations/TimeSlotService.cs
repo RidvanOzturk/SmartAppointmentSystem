@@ -20,6 +20,16 @@ public class TimeSlotService(AppointmentContext context) : ITimeSlotService
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
+    public async Task<List<TimeSlot>> GetDoctorTimeSlots(Guid id)
+    {
+        var getDoctorTS = await context.TimeSlots.Where(x=>x.DoctorId == id).ToListAsync();
+        return getDoctorTS;
+    }
+    public async Task<List<TimeSlot>> AvailableTimeSlotDoctor(Guid id)
+    {
+        var availableTimeSlots = await context.TimeSlots.Where(ts => ts.DoctorId == id && !context.Appointments.Any(a => a.TimeSlotId == ts.Id)).ToListAsync();
+        return availableTimeSlots;
+    }
     public async Task<TimeSlot> GetTimeSlotById(Guid id)
     {
         var getTimeSlot = await context.TimeSlots.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);

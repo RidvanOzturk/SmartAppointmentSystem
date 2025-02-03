@@ -15,6 +15,11 @@ public class DoctorUserService(AppointmentContext context, IConfiguration config
         var getDoc = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
         return getDoc;
     }
+    public async Task<List<Doctor>> GetAllDoctors()
+    {
+        var getAllDoc = await context.Doctors.ToListAsync();
+        return getAllDoc;
+    }
     public async Task<bool> CreateDoctor(DoctorUserRequestDTO requestDTO)
     {
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password);

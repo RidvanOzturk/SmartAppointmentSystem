@@ -12,9 +12,6 @@ namespace SmartAppointmentSystem.Data.Configurations
 
             builder.HasKey(a => a.Id);
 
-            builder.Property(a => a.DateTime)
-                .IsRequired();
-
             builder.Property(a => a.Status)
                 .IsRequired()
                 .HasMaxLength(50);
@@ -23,14 +20,19 @@ namespace SmartAppointmentSystem.Data.Configurations
                 .HasMaxLength(500);
 
             builder.HasOne(a => a.Doctor)
-                .WithMany()
+                .WithMany(d => d.Appointments)
                 .HasForeignKey(a => a.DoctorId)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(a => a.Patient)
-                .WithMany(u => u.Appointments)
+                .WithMany(p => p.Appointments)
                 .HasForeignKey(a => a.PatientId)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(a => a.TimeSlot)
+                .WithMany()
+                .HasForeignKey(a => a.TimeSlotId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

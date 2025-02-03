@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmartAppointmentSystem.Api.Extensions;
 using SmartAppointmentSystem.Api.Models;
 using SmartAppointmentSystem.Business.Contracts;
+using SmartAppointmentSystem.Business.Implementations;
 
 namespace SmartAppointmentSystem.Api.Controllers;
 
@@ -28,6 +29,27 @@ public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBa
         }
         return Ok(getTimeSlot);
     }
+    [HttpGet("doctorTimeSlots/{id}")]
+    public async Task<IActionResult> GetDoctorTimeSlotsAsync(Guid id)
+    {
+        var getDoctorTs = await timeSlotService.GetDoctorTimeSlots(id);
+        if (getDoctorTs == null)
+        {
+            return NotFound();
+        }
+        return Ok(getDoctorTs);
+    }
+    [HttpGet("availablets/{id}")]
+    public async Task<IActionResult> AvailableTimeSlotsDoctorAsync(Guid id)
+    {
+        var getSuitApp = await timeSlotService.AvailableTimeSlotDoctor(id);
+        if (getSuitApp == null)
+        {
+            return NotFound();
+        }
+        return Ok(getSuitApp);
+    }
+
     [HttpGet("all")]
     public async Task<IActionResult> GetAllTimeSlotsAsync()
     {
