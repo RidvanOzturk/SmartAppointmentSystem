@@ -57,7 +57,7 @@ public static class MapperExtensions
         return new Doctor
         {
             Id = Guid.NewGuid(),
-            PasswordHash = doctorUserRequest.PasswordHash,
+            PasswordHash = doctorUserRequest.Password,
             Name = doctorUserRequest.Name,
             Email = doctorUserRequest.Email,
             Description = doctorUserRequest.Description,
@@ -66,7 +66,7 @@ public static class MapperExtensions
     }
     public static void Map(this DoctorUserRequestDTO source, Doctor target)
     {
-        target.PasswordHash = source.PasswordHash;
+        target.PasswordHash = source.Password;
         target.Name = source.Name;
         target.Email = source.Email;
         target.Description = source.Email;

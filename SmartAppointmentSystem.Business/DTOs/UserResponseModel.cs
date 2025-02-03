@@ -1,6 +1,6 @@
 ﻿namespace SmartAppointmentSystem.Business.DTOs;
 
-public class PatientUserResponseModel
+public class UserResponseModel
 {
         public bool AuthenticateResult { get; set; }
         public string AuthToken { get; set; }

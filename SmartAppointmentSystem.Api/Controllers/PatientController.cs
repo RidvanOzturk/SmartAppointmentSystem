@@ -14,7 +14,7 @@ namespace SmartAppointmentSystem.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class PatientController(IPatientUserService userService) : Controller
+public class PatientController(IPatientUserService userPatientService) : Controller
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet]
@@ -22,7 +22,7 @@ public class PatientController(IPatientUserService userService) : Controller
     {
         var userId = HttpContext.User.GetUserId();
 
-        var user = await userService.GetUserByIdAsync(userId);
+        var user = await userPatientService.GetUserByIdAsync(userId);
 
         if (user == null)
         {
@@ -34,12 +34,12 @@ public class PatientController(IPatientUserService userService) : Controller
 
 
 
-    [HttpPost("LoginUser")]
+    [HttpPost("PatientUserLogin")]
     [AllowAnonymous]
     public async Task<ActionResult<PatientUserRequestModel>> LoginUserAsync([FromBody] PatientUserRequestModel request)
     {
         var user = request.Map();
-        var result = await userService.LoginUserAsync(user);
+        var result = await userPatientService.LoginUserAsync(user);
         if (result.AuthenticateResult == false)
         {
             return NotFound();
@@ -52,7 +52,7 @@ public class PatientController(IPatientUserService userService) : Controller
     [HttpGet("all")]
     public async Task<IActionResult> GetAllUsers()
     {
-        var users = await userService.GetUsersAsync();
+        var users = await userPatientService.GetUsersAsync();
         if (users.Count < 1 || users == null)
         {
             return BadRequest();
@@ -70,7 +70,7 @@ public class PatientController(IPatientUserService userService) : Controller
             return BadRequest();
         }
         var user = request.Map();
-        var gettingUser = await userService.RegisterAsync(user);
+        var gettingUser = await userPatientService.RegisterAsync(user);
         if (!gettingUser)
         {
             return BadRequest("User invalid");
@@ -81,7 +81,7 @@ public class PatientController(IPatientUserService userService) : Controller
     [HttpPut("{id}")]
     public async Task<IActionResult> Update([FromRoute] Guid id, PatientUserRequestModel request)
     {
-        var userId = await userService.GetUserByIdAsync(id);
+        var userId = await userPatientService.GetUserByIdAsync(id);
 
         if (userId == null)
         {
@@ -96,7 +96,7 @@ public class PatientController(IPatientUserService userService) : Controller
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        var user = await userService.DeleteUserById(id);
+        var user = await userPatientService.DeleteUserById(id);
         if (!user)
         {
             return BadRequest();

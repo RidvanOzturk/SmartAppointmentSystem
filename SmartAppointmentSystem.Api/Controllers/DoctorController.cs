@@ -12,7 +12,7 @@ namespace SmartAppointmentSystem.Api.Controllers;
 [ApiController]
 public class DoctorController(IDoctorUserService doctorUserService) : ControllerBase
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(Roles = "Doctor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet]
     public async Task<IActionResult> GetDoctor()
     {
@@ -27,17 +27,33 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         var createDoc = await doctorUserService.CreateDoctor(mapping);
         return Ok(createDoc);
     }
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateDoctor([FromRoute] Guid id, [FromBody] DoctorUserRequestModel doctorUserRequest)
+    [HttpPost("DoctorUserLogin")]
+    [AllowAnonymous]
+    public async Task<ActionResult<DoctorUserLoginRequestModel>> LoginUserAsync([FromBody] DoctorUserLoginRequestModel request)
+    {
+        var user = request.Map();
+        var result = await doctorUserService.LoginUserAsync(user);
+        if (result.AuthenticateResult == false)
+        {
+            return NotFound();
+        }
+
+        return Ok(result);
+    }
+
+    [AllowAnonymous]
+    [HttpPut]
+    public async Task<IActionResult> UpdateDoctor([FromBody] DoctorUserRequestModel doctorUserRequest)
     {
         var mapping = doctorUserRequest.Map();
-        var updateDoc = await doctorUserService.UpdateDoctorById(id, mapping);
+        var doctorId = HttpContext.User.GetUserId();
+        var updateDoc = await doctorUserService.UpdateDoctorById(doctorId, mapping);
         return Ok(updateDoc);
     }
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDoctor([FromRoute] Guid id)
     {
-
+        return Ok();
     }
 
 
