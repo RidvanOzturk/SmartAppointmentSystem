@@ -18,12 +18,13 @@ public class DoctorUserService(AppointmentContext context, IConfiguration config
     public async Task<bool> CreateDoctor(DoctorUserRequestDTO requestDTO)
     {
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password);
-        var filled = requestDTO.Map();
-        filled.PasswordHash = hashedPassword;
-        var createDoc = await context.Doctors.AddAsync(filled);
+        var doctorEntity = requestDTO.Map();
+        doctorEntity.PasswordHash = hashedPassword;
+        var createDoc = await context.Doctors.AddAsync(doctorEntity);
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
+
     public async Task<UserResponseModel> LoginUserAsync(DoctorUserLoginRequestDTO request)
     {
         if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Password))
@@ -49,6 +50,13 @@ public class DoctorUserService(AppointmentContext context, IConfiguration config
     {
         var docId = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
         requestDTO.Map(docId);
+        var changes = await context.SaveChangesAsync();
+        return changes > 0;
+    }
+    public async Task<bool> DeleteDoctorById(Guid id)
+    {
+        var docId = await context.Doctors.FirstOrDefaultAsync(x=>x.Id == id);
+        context.Doctors.Remove(docId);
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }

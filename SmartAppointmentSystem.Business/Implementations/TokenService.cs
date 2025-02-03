@@ -21,8 +21,8 @@ public class TokenService(IConfiguration configuration) : ITokenService
         var dateTimeNow = DateTime.UtcNow;
 
         JwtSecurityToken jwt = new JwtSecurityToken(
-            issuer: configuration["AppSettings:ValidIssuer"],
-            audience: configuration["AppSettings:ValidAudience"],
+            //issuer: configuration["AppSettings:ValidIssuer"],
+            //audience: configuration["AppSettings:ValidAudience"],
             claims: new List<Claim>
             {
                 new Claim("UserId", request.UserId.ToString()),

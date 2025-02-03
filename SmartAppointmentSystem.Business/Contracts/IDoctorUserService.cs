@@ -9,4 +9,5 @@ public interface IDoctorUserService
     Task<bool> CreateDoctor(DoctorUserRequestDTO requestDTO);
     Task<UserResponseModel> LoginUserAsync(DoctorUserLoginRequestDTO request);
     Task<bool> UpdateDoctorById(Guid id, DoctorUserRequestDTO requestDTO);
+    Task<bool> DeleteDoctorById(Guid id);
 }

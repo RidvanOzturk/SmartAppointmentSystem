@@ -12,7 +12,7 @@ namespace SmartAppointmentSystem.Api.Controllers;
 public class ProcessController(IProcessService processService) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateProcess([FromBody] ProcessRequestModel processRequest)
+    public async Task<IActionResult> CreateProcessAsync([FromBody] ProcessRequestModel processRequest)
     {
         if (processRequest == null)
         {
@@ -24,7 +24,7 @@ public class ProcessController(IProcessService processService) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetProcess(Guid id)
+    public async Task<IActionResult> GetProcessAsync(Guid id)
     {
         var getProcess = await processService.GetProcessById(id);
         if (getProcess == null)
@@ -35,7 +35,7 @@ public class ProcessController(IProcessService processService) : ControllerBase
     }
 
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllProcesses()
+    public async Task<IActionResult> GetAllProcessesAsync()
     {
         var getAll = await processService.GetAllProcesses();
         if (getAll == null)
@@ -46,14 +46,14 @@ public class ProcessController(IProcessService processService) : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateProcess([FromRoute] Guid id, ProcessRequestModel processRequestModel)
+    public async Task<IActionResult> UpdateProcessAsync([FromRoute] Guid id, ProcessRequestModel processRequestModel)
     {
         var mapping = processRequestModel.Map();
         var process = await processService.UpdateProcessById(id, mapping);
         return Ok(process);
     }
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteProcess([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteProcessAsync([FromRoute] Guid id)
     {
         var process = await processService.DeleteProcessById(id);
         if (!process)

@@ -11,7 +11,7 @@ namespace SmartAppointmentSystem.Api.Controllers;
 public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateTimeSlot([FromBody] TimeSlotRequestModel timeSlotRequest)
+    public async Task<IActionResult> CreateTimeSlotAsync([FromBody] TimeSlotRequestModel timeSlotRequest)
     {
         var mapping = timeSlotRequest.Map();
         var timeSlot = await timeSlotService.CreateTimeSlot(mapping);
@@ -19,7 +19,7 @@ public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBa
         return Ok(timeSlot);
     }
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetTimeSlot(Guid id)
+    public async Task<IActionResult> GetTimeSlotAsync(Guid id)
     {
         var getTimeSlot = await timeSlotService.GetTimeSlotById(id);
         if (getTimeSlot == null)
@@ -29,7 +29,7 @@ public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBa
         return Ok(getTimeSlot);
     }
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllTimeSlots()
+    public async Task<IActionResult> GetAllTimeSlotsAsync()
     {
         var getAll = await timeSlotService.GetAllTimeSlots();
         if (getAll == null)
@@ -39,7 +39,7 @@ public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBa
         return Ok(getAll);
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateTimeSlot([FromRoute] Guid id, TimeSlotRequestModel timeSlotRequest)
+    public async Task<IActionResult> UpdateTimeSlotAsync([FromRoute] Guid id, TimeSlotRequestModel timeSlotRequest)
     {
         var getId = await timeSlotService.GetTimeSlotById(id);
         if (getId == null)
@@ -51,7 +51,7 @@ public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBa
         return Ok(timeSlot);
     }
     [HttpDelete]
-    public async Task<IActionResult> DeleteTimeSlot([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteTimeSlotAsync([FromRoute] Guid id)
     {
         var delete = await timeSlotService.DeleteTimeSlotById(id);
         if (!delete)

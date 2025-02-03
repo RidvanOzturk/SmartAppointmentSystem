@@ -12,23 +12,23 @@ namespace SmartAppointmentSystem.Api.Controllers;
 [ApiController]
 public class DoctorController(IDoctorUserService doctorUserService) : ControllerBase
 {
-    [Authorize(Roles = "Doctor", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize]
     [HttpGet]
-    public async Task<IActionResult> GetDoctor()
+    public async Task<IActionResult> GetDoctorUserAsync()
     {
         var doctorId = HttpContext.User.GetUserId();
         var getDoc = await doctorUserService.GetDoctorById(doctorId);
-        return Ok();
+        return Ok(getDoc);
     }
     [HttpPost]
-    public async Task<IActionResult> CreateDoctor([FromBody] DoctorUserRequestModel doctorUserRequest)
+    public async Task<IActionResult> CreateDoctorUserAsync([FromBody] DoctorUserRequestModel doctorUserRequest)
     {
         var mapping = doctorUserRequest.Map();
         var createDoc = await doctorUserService.CreateDoctor(mapping);
         return Ok(createDoc);
     }
+
     [HttpPost("DoctorUserLogin")]
-    [AllowAnonymous]
     public async Task<ActionResult<DoctorUserLoginRequestModel>> LoginUserAsync([FromBody] DoctorUserLoginRequestModel request)
     {
         var user = request.Map();
@@ -43,18 +43,19 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
 
     [AllowAnonymous]
     [HttpPut]
-    public async Task<IActionResult> UpdateDoctor([FromBody] DoctorUserRequestModel doctorUserRequest)
+    public async Task<IActionResult> UpdateDoctorUserAsync([FromBody] DoctorUserRequestModel doctorUserRequest)
     {
         var mapping = doctorUserRequest.Map();
         var doctorId = HttpContext.User.GetUserId();
         var updateDoc = await doctorUserService.UpdateDoctorById(doctorId, mapping);
         return Ok(updateDoc);
     }
+
+    [Authorize(Roles = "Doctor")]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteDoctor([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteDoctorUserAsync([FromRoute] Guid id)
     {
-        return Ok();
+        var deleteDoc = await doctorUserService.DeleteDoctorById(id);
+        return Ok("Deleted");
     }
-
-
 }

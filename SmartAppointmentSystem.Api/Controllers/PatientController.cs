@@ -16,9 +16,9 @@ namespace SmartAppointmentSystem.Api.Controllers;
 [ApiController]
 public class PatientController(IPatientUserService userPatientService) : Controller
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(Roles = "Patient", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet]
-    public async Task<IActionResult> GetUser()
+    public async Task<IActionResult> GetUserAsync()
     {
         var userId = HttpContext.User.GetUserId();
 
@@ -31,7 +31,6 @@ public class PatientController(IPatientUserService userPatientService) : Control
 
         return Ok(user);
     }
-
 
 
     [HttpPost("PatientUserLogin")]
@@ -48,9 +47,8 @@ public class PatientController(IPatientUserService userPatientService) : Control
         return Ok(result);
     }
 
-    [Authorize]
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllUsers()
+    public async Task<IActionResult> GetAllUsersAsync()
     {
         var users = await userPatientService.GetUsersAsync();
         if (users.Count < 1 || users == null)
@@ -62,7 +60,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
 
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser(PatientUserRequestModel request, [FromServices] IValidator<PatientUserRequestModel> validator) 
+    public async Task<IActionResult> CreatePatientUserAsync(PatientUserRequestModel request, [FromServices] IValidator<PatientUserRequestModel> validator)
     {
         var fluent = await validator.ValidateAsync(request);
         if (!fluent.IsValid)
@@ -79,7 +77,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update([FromRoute] Guid id, PatientUserRequestModel request)
+    public async Task<IActionResult> UpdatePatientUserAsync([FromRoute] Guid id, PatientUserRequestModel request)
     {
         var userId = await userPatientService.GetUserByIdAsync(id);
 
@@ -94,7 +92,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    public async Task<IActionResult> DeletePatientUserAsync([FromRoute] Guid id)
     {
         var user = await userPatientService.DeleteUserById(id);
         if (!user)

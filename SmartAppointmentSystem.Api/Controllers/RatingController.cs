@@ -12,14 +12,14 @@ namespace SmartAppointmentSystem.Api.Controllers;
 public class RatingController(IRatingService ratingService) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateRating([FromBody] RatingRequestModel requestModel)
+    public async Task<IActionResult> CreateRatingAsync([FromBody] RatingRequestModel requestModel)
     {
         var mapping = requestModel.Map();
         var rating = await ratingService.CreateRating(mapping);
         return Ok(rating);
     }
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllRatings()
+    public async Task<IActionResult> GetAllRatingsAsync()
     {
         var getAllRatings = await ratingService.GetAllRatings();
         if (getAllRatings.Count < 1 || getAllRatings == null)
@@ -30,13 +30,13 @@ public class RatingController(IRatingService ratingService) : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetRatingById(Guid id)
+    public async Task<IActionResult> GetRatingAsync(Guid id)
     {
         var getRat = await ratingService.GetRatingById(id);
         return Ok(getRat);
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateRatingById([FromRoute] Guid id, RatingRequestModel request)
+    public async Task<IActionResult> UpdateRatingAsync([FromRoute] Guid id, RatingRequestModel request)
     {
         var ratingId = await ratingService.GetRatingById(id);
 
@@ -50,7 +50,7 @@ public class RatingController(IRatingService ratingService) : ControllerBase
         return Ok(rating);
     }
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteRatingById([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteRatingAsync([FromRoute] Guid id)
     {
         var delRat = await ratingService.DeleteRatingById(id);
         if (!delRat)
