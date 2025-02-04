@@ -14,7 +14,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 namespace SmartAppointmentSystem.Business.Implementations;
 
-public class PatientUserService(AppointmentContext context, IConfiguration configuration, ITokenService tokenService) : IPatientUserService
+public class PatientUserService(AppointmentContext context, ITokenService tokenService) : IPatientUserService
 {
     public async Task<bool> RegisterAsync(PatientUserRequestDTO requestDTO)
     {
@@ -54,7 +54,9 @@ public class PatientUserService(AppointmentContext context, IConfiguration confi
     }
     public async Task<Patient> GetUserByIdAsync(Guid id)
     {
-        return await context.Patients.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        return await context.Patients
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
     public async Task<bool> DeleteUserById(Guid id)
     {

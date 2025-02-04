@@ -12,19 +12,23 @@ public class RatingService(AppointmentContext context) : IRatingService
 {
     public async Task<bool> CreateRating(RatingRequestDTO ratingRequestDTO)
     {
-        var filled = ratingRequestDTO.Map();
-        var rating = context.Ratings.AddAsync(filled);
+        var ratingEntity = ratingRequestDTO.Map();
+        var rating = context.Ratings.AddAsync(ratingEntity);
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
     public async Task<List<Rating>> GetAllRatings()
     {
-        var getAll = await context.Ratings.AsNoTracking().ToListAsync();
+        var getAll = await context.Ratings
+            .AsNoTracking()
+            .ToListAsync();
         return getAll;
     }
     public async Task<Rating> GetRatingById(Guid id)
     {
-        var rating = await context.Ratings.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        var rating = await context.Ratings
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id);
         if (rating == null) 
         { 
             return null;

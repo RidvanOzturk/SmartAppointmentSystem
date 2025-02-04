@@ -11,19 +11,23 @@ public class ProcessService(AppointmentContext context) : IProcessService
 {
     public async Task<bool> CreateProcess(ProcessRequestDTO processRequestDTO)
     {
-        var filled = processRequestDTO.Map();
-        var process = await context.Processes.AddAsync(filled);
+        var processEntity = processRequestDTO.Map();
+        var process = await context.Processes.AddAsync(processEntity);
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
     public async Task<Process> GetProcessById(Guid id)
     {
-        var getProcess = await context.Processes.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        var getProcess = await context.Processes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id);
         return getProcess;
     }
     public async Task<List<Process>> GetAllProcesses()
     {
-        var getAll = await context.Processes.AsNoTracking().ToListAsync();
+        var getAll = await context.Processes
+            .AsNoTracking()
+            .ToListAsync();
         return getAll;
     }
     public async Task<bool> UpdateProcessById(Guid id, ProcessRequestDTO processRequestDTO)

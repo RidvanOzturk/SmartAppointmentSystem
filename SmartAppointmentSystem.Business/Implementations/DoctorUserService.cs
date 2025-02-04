@@ -8,7 +8,7 @@ using SmartAppointmentSystem.Data.Entities;
 
 namespace SmartAppointmentSystem.Business.Implementations;
 
-public class DoctorUserService(AppointmentContext context, IConfiguration configuration, ITokenService tokenService) : IDoctorUserService
+public class DoctorUserService(AppointmentContext context, ITokenService tokenService) : IDoctorUserService
 {
     public async Task<Doctor> GetDoctorById(Guid id)
     {

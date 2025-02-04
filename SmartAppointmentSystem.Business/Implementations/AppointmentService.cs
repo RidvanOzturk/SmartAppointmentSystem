@@ -11,24 +11,31 @@ public class AppointmentService(AppointmentContext context) : IAppointmentServic
 {
     public async Task<bool> CreateAppointment(AppointmentRequestDTO appointmentRequestDTO)
     {
-        var filled = appointmentRequestDTO.Map();
-        await context.Appointments.AddAsync(filled);
+        var appointment = appointmentRequestDTO.Map();
+        await context.Appointments.AddAsync(appointment);
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
     public async Task<List<Appointment>> GetAllAppointments()
     {
-        var allApp = await context.Appointments.AsNoTracking().ToListAsync();
+        var allApp = await context.Appointments
+            .AsNoTracking()
+            .ToListAsync();
         return allApp;
     }
     public async Task<List<Appointment>> GetUserAppointments(Guid id)
     {
-        var gelUserAppointments = await context.Appointments.AsNoTracking().Where(x=> x.PatientId == id).ToListAsync();
+        var gelUserAppointments = await context.Appointments
+            .AsNoTracking()
+            .Where(x=> x.PatientId == id)
+            .ToListAsync();
         return gelUserAppointments;
     }
     public async Task<Appointment> GetAppointmentsById(Guid id)
     {
-        var app = context.Appointments.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        var app = context.Appointments
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id);
         return await app;
     }
     public async Task<bool> DeleteAppointmentById(Guid id)
