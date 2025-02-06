@@ -8,14 +8,23 @@ using SmartAppointmentSystem.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// appsettings dosyalarýný ve ortam deðiþkenlerini yükle
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
-
 builder.Configuration.AddEnvironmentVariables();
 
+var baseConnectionString = builder.Configuration.GetConnectionString("AppointmentContext");
+var saPassword = Environment.GetEnvironmentVariable("SA_PASSWORD");
+
+if (!string.IsNullOrEmpty(saPassword))
+{
+    baseConnectionString = $"{baseConnectionString}{saPassword}";
+}
+
 builder.Services.AddDbContext<AppointmentContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("AppointmentContext")));
+    options.UseSqlServer(baseConnectionString));
+
+// Diðer servisleri ekle
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IPatientUserService, PatientUserService>();
 builder.Services.AddScoped<IDoctorUserService, DoctorUserService>();
@@ -30,14 +39,12 @@ builder.Services.AddValidatorsFromAssemblyContaining<ProcessValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<RatingValidator>();
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 builder.Services.RegisterJWTAuthentication();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
