@@ -18,12 +18,15 @@ spec:
         ports:
         - containerPort: 80
         env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: "Development"
-        - name: ASPNETCORE_URLS
-          value: "http://+:80"
-        - name: SA_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mssql-secret
-              key: SA_PASSWORD
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "Test"  
+          - name: ASPNETCORE_URLS
+            value: "http://+:80"
+          - name: SA_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mssql-secret
+                key: SA_PASSWORD
+          - name: AppSettings__Secret
+            value: "MySuperSecretJWTKey19072001!ExtraChars" 
+
