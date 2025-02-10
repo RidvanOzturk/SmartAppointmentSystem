@@ -13,6 +13,12 @@ namespace SmartAppointmentSystem.Api.Controllers;
 [ApiController]
 public class AppointmentController(IAppointmentService appointmentService) : ControllerBase
 {
+    [HttpGet("healthcheck")]
+    public IActionResult HealthCheck()
+    {
+        return Ok("Working properly!!!");
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateAppointmentAsync([FromBody] AppointmentRequestModel requestModel)
     {
