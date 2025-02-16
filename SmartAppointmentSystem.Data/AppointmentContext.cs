@@ -9,6 +9,13 @@ public class AppointmentContext : DbContext
         : base(options)
     {
     }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseNpgsql("Host=db.bvdxozbpwjblxsmpkxgt.supabase.co;Port=5432;Username=postgres;Password=FBr-18062001-;Database=postgres;SSL Mode=Require;Trust Server Certificate=true;");
+        }
+    }
 
     public DbSet<Patient> Patients { get; set; }
     public DbSet<Doctor> Doctors { get; set; }

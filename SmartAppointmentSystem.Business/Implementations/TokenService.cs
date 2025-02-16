@@ -1,14 +1,12 @@
-﻿using SmartAppointmentSystem.Business.Contracts;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
+using SmartAppointmentSystem.Business.Contracts;
+using SmartAppointmentSystem.Business.DTOs;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using SmartAppointmentSystem.Data;
-using Microsoft.Extensions.Configuration;
-using SmartAppointmentSystem.Business.DTOs;
 namespace SmartAppointmentSystem.Business.Implementations;
 
-public class TokenService(IConfiguration configuration) : ITokenService
+public class TokenService : ITokenService
 {
     public Task<GenerateTokenResponseDTO> GenerateToken(GenerateTokenRequestDTO request)
     {
@@ -21,8 +19,6 @@ public class TokenService(IConfiguration configuration) : ITokenService
         var dateTimeNow = DateTime.UtcNow;
 
         JwtSecurityToken jwt = new JwtSecurityToken(
-            //issuer: configuration["AppSettings:ValidIssuer"],
-            //audience: configuration["AppSettings:ValidAudience"],
             claims: new List<Claim>
             {
                 new Claim("UserId", request.UserId.ToString()),

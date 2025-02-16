@@ -8,23 +8,15 @@ using SmartAppointmentSystem.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// appsettings dosyalarýný ve ortam deðiþkenlerini yükle
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddEnvironmentVariables();
 
-var baseConnectionString = builder.Configuration.GetConnectionString("AppointmentContext");
-var saPassword = Environment.GetEnvironmentVariable("SA_PASSWORD");
-
-if (!string.IsNullOrEmpty(saPassword))
-{
-    baseConnectionString = $"{baseConnectionString}{saPassword}";
-}
+var connectionString = builder.Configuration.GetConnectionString("AppointmentContext");
 
 builder.Services.AddDbContext<AppointmentContext>(options =>
-    options.UseSqlServer(baseConnectionString));
+    options.UseNpgsql(connectionString));
 
-// Diðer servisleri ekle
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IPatientUserService, PatientUserService>();
 builder.Services.AddScoped<IDoctorUserService, DoctorUserService>();
@@ -32,6 +24,7 @@ builder.Services.AddScoped<IProcessService, ProcessService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<ITimeSlotService, TimeSlotService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+
 builder.Services.AddValidatorsFromAssemblyContaining<PatientUserValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<AppointmentValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<TimeSlotValidator>();

@@ -2,25 +2,29 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SmartAppointmentSystem.Data.Entities;
 
-namespace SmartAppointmentSystem.Data.Configurations;
-
-public class ProcessConfiguration : IEntityTypeConfiguration<Process>
+namespace SmartAppointmentSystem.Data.Configurations
 {
-    public void Configure(EntityTypeBuilder<Process> builder)
+    public class ProcessConfiguration : IEntityTypeConfiguration<Process>
     {
-        builder.ToTable("Processes");
+        public void Configure(EntityTypeBuilder<Process> builder)
+        {
+            builder.ToTable("Processes");
 
-        builder.HasKey(s => s.Id);
+            builder.HasKey(s => s.Id);
+            builder.Property(s => s.Id).HasColumnType("uuid");
 
-        builder.Property(s => s.Name)
-            .IsRequired()
-            .HasMaxLength(150);
+            builder.Property(s => s.Name)
+                .IsRequired()
+                .HasMaxLength(150);
 
-        builder.Property(s => s.Duration)
-            .IsRequired();
+            builder.Property(s => s.Duration)
+                .IsRequired();
 
-        builder.HasOne(s => s.Doctor)
-            .WithMany()
-            .HasForeignKey(s => s.DoctorId);
+            builder.Property(s => s.DoctorId).HasColumnType("uuid");
+            builder.HasOne(s => s.Doctor)
+                .WithMany(d => d.Processes)
+                .HasForeignKey(s => s.DoctorId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
     }
 }

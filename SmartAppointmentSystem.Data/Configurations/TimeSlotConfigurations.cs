@@ -2,31 +2,35 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SmartAppointmentSystem.Data.Entities;
 
-namespace SmartAppointmentSystem.Data.Configurations;
-
-public class TimeSlotConfiguration : IEntityTypeConfiguration<TimeSlot>
+namespace SmartAppointmentSystem.Data.Configurations
 {
-    public void Configure(EntityTypeBuilder<TimeSlot> builder)
+    public class TimeSlotConfiguration : IEntityTypeConfiguration<TimeSlot>
     {
-        builder.ToTable("TimeSlots");
+        public void Configure(EntityTypeBuilder<TimeSlot> builder)
+        {
+            builder.ToTable("TimeSlots");
 
-        builder.HasKey(ts => ts.Id);
+            builder.HasKey(ts => ts.Id);
+            builder.Property(ts => ts.Id).HasColumnType("uuid");
 
-        builder.Property(ts => ts.AvailableFrom)
-            .IsRequired();
+            builder.Property(ts => ts.AvailableFrom)
+                .IsRequired();
 
-        builder.Property(ts => ts.AvailableTo)
-            .IsRequired();
+            builder.Property(ts => ts.AvailableTo)
+                .IsRequired();
 
-        builder.HasOne(ts => ts.Process)
-            .WithMany(p => p.TimeSlots)
-            .HasForeignKey(ts => ts.ProcessId)
-            .OnDelete(DeleteBehavior.Cascade);
+            // Foreign keys
+            builder.Property(ts => ts.ProcessId).HasColumnType("uuid");
+            builder.HasOne(ts => ts.Process)
+                .WithMany(p => p.TimeSlots)
+                .HasForeignKey(ts => ts.ProcessId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(ts => ts.Doctor)
-            .WithMany()
-            .HasForeignKey(ts => ts.DoctorId)
-            .OnDelete(DeleteBehavior.Restrict); 
+            builder.Property(ts => ts.DoctorId).HasColumnType("uuid");
+            builder.HasOne(ts => ts.Doctor)
+                .WithMany(d => d.TimeSlots)
+                .HasForeignKey(ts => ts.DoctorId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
     }
 }
-

@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartAppointmentSystem.Api.Extensions;
 using SmartAppointmentSystem.Api.Models;
 using SmartAppointmentSystem.Business.Contracts;
-using SmartAppointmentSystem.Business.Implementations;
 
 namespace SmartAppointmentSystem.Api.Controllers;
 

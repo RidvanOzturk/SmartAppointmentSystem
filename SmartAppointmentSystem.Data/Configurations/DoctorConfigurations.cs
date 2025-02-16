@@ -11,6 +11,7 @@ namespace SmartAppointmentSystem.Data.Configurations
             builder.ToTable("Doctors");
 
             builder.HasKey(d => d.Id);
+            builder.Property(d => d.Id).HasColumnType("uuid");
 
             builder.Property(d => d.Name)
                 .IsRequired()
@@ -29,26 +30,11 @@ namespace SmartAppointmentSystem.Data.Configurations
             builder.Property(d => d.Image)
                 .HasMaxLength(200);
 
+           
             builder.HasOne(d => d.Branch)
-                .WithMany() 
+                .WithMany()
                 .HasForeignKey(d => d.BranchId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasMany(d => d.Appointments)
-                .WithOne(a => a.Doctor)
-                .HasForeignKey(a => a.DoctorId);
-
-            builder.HasMany(d => d.Ratings)
-                .WithOne(r => r.Doctor)
-                .HasForeignKey(r => r.DoctorId);
-
-            builder.HasMany(d => d.Processes)
-                .WithOne(p => p.Doctor)
-                .HasForeignKey(p => p.DoctorId);
-
-            builder.HasMany(d => d.TimeSlots)
-                .WithOne(ts => ts.Doctor)
-                .HasForeignKey(ts => ts.DoctorId);
         }
     }
 }

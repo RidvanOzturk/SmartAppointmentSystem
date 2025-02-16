@@ -11,6 +11,7 @@ namespace SmartAppointmentSystem.Data.Configurations
             builder.ToTable("Appointments");
 
             builder.HasKey(a => a.Id);
+            builder.Property(a => a.Id).HasColumnType("uuid");
 
             builder.Property(a => a.Status)
                 .IsRequired()
@@ -18,6 +19,10 @@ namespace SmartAppointmentSystem.Data.Configurations
 
             builder.Property(a => a.Notes)
                 .HasMaxLength(500);
+
+            builder.Property(a => a.DoctorId).HasColumnType("uuid");
+            builder.Property(a => a.PatientId).HasColumnType("uuid");
+            builder.Property(a => a.TimeSlotId).HasColumnType("uuid");
 
             builder.HasOne(a => a.Doctor)
                 .WithMany(d => d.Appointments)
