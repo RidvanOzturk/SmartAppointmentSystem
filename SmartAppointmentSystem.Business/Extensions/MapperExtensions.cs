@@ -25,7 +25,6 @@ public static class MapperExtensions
         return new Appointment
         {
             Id = Guid.NewGuid(),
-            TimeSlotId = createRequest.TimeSlotId,
             PatientId = createRequest.PatientId,
             Notes = createRequest.Notes,
             Status = createRequest.Status,
@@ -34,7 +33,6 @@ public static class MapperExtensions
     }
     public static void Map(this AppointmentRequestDTO createRequest, Appointment target)
     {
-        target.TimeSlotId = createRequest.TimeSlotId;
         target.PatientId = createRequest.PatientId;
         target.Notes = createRequest.Notes;
         target.Status = createRequest.Status;
@@ -86,14 +84,12 @@ public static class MapperExtensions
         {
             Id = Guid.NewGuid(),
             DoctorId = timeSlotRequest.DoctorId,
-            ProcessId = timeSlotRequest.ProcessId,
             AvailableFrom = timeSlotRequest.AvailableFrom,
             AvailableTo = timeSlotRequest.AvailableTo,
         };
     }
     public static void Map(this TimeSlotRequestDTO source, TimeSlot target)
     {
-        target.ProcessId = source.ProcessId;
         target.AvailableFrom = source.AvailableFrom;
         target.AvailableTo = source.AvailableTo;
         target.DoctorId = source.DoctorId;

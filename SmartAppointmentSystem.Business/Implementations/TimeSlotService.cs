@@ -29,10 +29,10 @@ public class TimeSlotService(AppointmentContext context) : ITimeSlotService
     }
     public async Task<List<TimeSlot>> AvailableTimeSlotDoctor(Guid id)
     {
-        var availableTimeSlots = await context.TimeSlots
-            .Where(ts => ts.DoctorId == id && !context.Appointments
-            .Any(a => a.TimeSlotId == ts.Id))
-            .ToListAsync();
+        var availableTimeSlots = await context.TimeSlots.ToListAsync();
+            //.Where(ts => ts.DoctorId == id && !context.Appointments
+            //.Any(a => a.TimeSlotId == ts.Id))
+            //.ToListAsync();
         return availableTimeSlots;
     }
     public async Task<TimeSlot> GetTimeSlotById(Guid id)

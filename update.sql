@@ -100,5 +100,26 @@ CREATE INDEX "IX_TimeSlots_ProcessId" ON "TimeSlots" ("ProcessId");
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
 VALUES ('20250216121907_initialCreate', '9.0.2');
 
+ALTER TABLE "Appointments" DROP CONSTRAINT "FK_Appointments_TimeSlots_TimeSlotId";
+
+ALTER TABLE "TimeSlots" DROP CONSTRAINT "FK_TimeSlots_Processes_ProcessId";
+
+DROP INDEX "IX_Appointments_TimeSlotId";
+
+ALTER TABLE "Appointments" DROP COLUMN "TimeSlotId";
+
+ALTER TABLE "TimeSlots" ALTER COLUMN "ProcessId" DROP NOT NULL;
+
+ALTER TABLE "TimeSlots" ADD "AppointmentFrequency" integer NOT NULL DEFAULT 0;
+
+ALTER TABLE "TimeSlots" ADD "AvailableDay" integer NOT NULL DEFAULT 0;
+
+ALTER TABLE "Appointments" ADD "Time" timestamp with time zone NOT NULL DEFAULT TIMESTAMPTZ '-infinity';
+
+ALTER TABLE "TimeSlots" ADD CONSTRAINT "FK_TimeSlots_Processes_ProcessId" FOREIGN KEY ("ProcessId") REFERENCES "Processes" ("Id");
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20250217205123_changedAppointmentAndTimeSlotEntities', '9.0.2');
+
 COMMIT;
 
