@@ -34,6 +34,18 @@ CREATE TABLE "Doctors" (
     CONSTRAINT "FK_Doctors_Branches_BranchId" FOREIGN KEY ("BranchId") REFERENCES "Branches" ("Id") ON DELETE RESTRICT
 );
 
+CREATE TABLE "Appointments" (
+    "Id" uuid NOT NULL,
+    "DoctorId" uuid NOT NULL,
+    "PatientId" uuid NOT NULL,
+    "Time" timestamp with time zone NOT NULL,
+    "Status" character varying(50) NOT NULL,
+    "Notes" character varying(500) NOT NULL,
+    CONSTRAINT "PK_Appointments" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_Appointments_Doctors_DoctorId" FOREIGN KEY ("DoctorId") REFERENCES "Doctors" ("Id") ON DELETE RESTRICT,
+    CONSTRAINT "FK_Appointments_Patients_PatientId" FOREIGN KEY ("PatientId") REFERENCES "Patients" ("Id") ON DELETE RESTRICT
+);
+
 CREATE TABLE "Processes" (
     "Id" uuid NOT NULL,
     "Name" character varying(150) NOT NULL,
@@ -58,32 +70,19 @@ CREATE TABLE "Ratings" (
 CREATE TABLE "TimeSlots" (
     "Id" uuid NOT NULL,
     "DoctorId" uuid NOT NULL,
-    "ProcessId" uuid NOT NULL,
     "AvailableFrom" interval NOT NULL,
     "AvailableTo" interval NOT NULL,
+    "AvailableDay" integer NOT NULL,
+    "AppointmentFrequency" integer NOT NULL,
+    "ProcessId" uuid,
     CONSTRAINT "PK_TimeSlots" PRIMARY KEY ("Id"),
     CONSTRAINT "FK_TimeSlots_Doctors_DoctorId" FOREIGN KEY ("DoctorId") REFERENCES "Doctors" ("Id") ON DELETE RESTRICT,
-    CONSTRAINT "FK_TimeSlots_Processes_ProcessId" FOREIGN KEY ("ProcessId") REFERENCES "Processes" ("Id") ON DELETE CASCADE
-);
-
-CREATE TABLE "Appointments" (
-    "Id" uuid NOT NULL,
-    "DoctorId" uuid NOT NULL,
-    "PatientId" uuid NOT NULL,
-    "TimeSlotId" uuid NOT NULL,
-    "Status" character varying(50) NOT NULL,
-    "Notes" character varying(500) NOT NULL,
-    CONSTRAINT "PK_Appointments" PRIMARY KEY ("Id"),
-    CONSTRAINT "FK_Appointments_Doctors_DoctorId" FOREIGN KEY ("DoctorId") REFERENCES "Doctors" ("Id") ON DELETE RESTRICT,
-    CONSTRAINT "FK_Appointments_Patients_PatientId" FOREIGN KEY ("PatientId") REFERENCES "Patients" ("Id") ON DELETE RESTRICT,
-    CONSTRAINT "FK_Appointments_TimeSlots_TimeSlotId" FOREIGN KEY ("TimeSlotId") REFERENCES "TimeSlots" ("Id") ON DELETE RESTRICT
+    CONSTRAINT "FK_TimeSlots_Processes_ProcessId" FOREIGN KEY ("ProcessId") REFERENCES "Processes" ("Id")
 );
 
 CREATE INDEX "IX_Appointments_DoctorId" ON "Appointments" ("DoctorId");
 
 CREATE INDEX "IX_Appointments_PatientId" ON "Appointments" ("PatientId");
-
-CREATE INDEX "IX_Appointments_TimeSlotId" ON "Appointments" ("TimeSlotId");
 
 CREATE INDEX "IX_Doctors_BranchId" ON "Doctors" ("BranchId");
 
@@ -98,28 +97,7 @@ CREATE INDEX "IX_TimeSlots_DoctorId" ON "TimeSlots" ("DoctorId");
 CREATE INDEX "IX_TimeSlots_ProcessId" ON "TimeSlots" ("ProcessId");
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20250216121907_initialCreate', '9.0.2');
-
-ALTER TABLE "Appointments" DROP CONSTRAINT "FK_Appointments_TimeSlots_TimeSlotId";
-
-ALTER TABLE "TimeSlots" DROP CONSTRAINT "FK_TimeSlots_Processes_ProcessId";
-
-DROP INDEX "IX_Appointments_TimeSlotId";
-
-ALTER TABLE "Appointments" DROP COLUMN "TimeSlotId";
-
-ALTER TABLE "TimeSlots" ALTER COLUMN "ProcessId" DROP NOT NULL;
-
-ALTER TABLE "TimeSlots" ADD "AppointmentFrequency" integer NOT NULL DEFAULT 0;
-
-ALTER TABLE "TimeSlots" ADD "AvailableDay" integer NOT NULL DEFAULT 0;
-
-ALTER TABLE "Appointments" ADD "Time" timestamp with time zone NOT NULL DEFAULT TIMESTAMPTZ '-infinity';
-
-ALTER TABLE "TimeSlots" ADD CONSTRAINT "FK_TimeSlots_Processes_ProcessId" FOREIGN KEY ("ProcessId") REFERENCES "Processes" ("Id");
-
-INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20250217205123_changedAppointmentAndTimeSlotEntities', '9.0.2');
+VALUES ('20250217205554_changedAppointmentAndTimeSlotEntities', '9.0.2');
 
 COMMIT;
 

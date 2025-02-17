@@ -12,8 +12,8 @@ using SmartAppointmentSystem.Data;
 namespace SmartAppointmentSystem.Data.Migrations
 {
     [DbContext(typeof(AppointmentContext))]
-    [Migration("20250216121907_initialCreate")]
-    partial class initialCreate
+    [Migration("20250217205554_changedAppointmentAndTimeSlotEntities")]
+    partial class changedAppointmentAndTimeSlotEntities
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,16 +47,14 @@ namespace SmartAppointmentSystem.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<Guid>("TimeSlotId")
-                        .HasColumnType("uuid");
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DoctorId");
 
                     b.HasIndex("PatientId");
-
-                    b.HasIndex("TimeSlotId");
 
                     b.ToTable("Appointments", (string)null);
                 });
@@ -216,6 +214,12 @@ namespace SmartAppointmentSystem.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<int>("AppointmentFrequency")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("AvailableDay")
+                        .HasColumnType("integer");
+
                     b.Property<TimeSpan>("AvailableFrom")
                         .HasColumnType("interval");
 
@@ -225,7 +229,7 @@ namespace SmartAppointmentSystem.Data.Migrations
                     b.Property<Guid>("DoctorId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ProcessId")
+                    b.Property<Guid?>("ProcessId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -251,17 +255,9 @@ namespace SmartAppointmentSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SmartAppointmentSystem.Data.Entities.TimeSlot", "TimeSlot")
-                        .WithMany()
-                        .HasForeignKey("TimeSlotId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
-
-                    b.Navigation("TimeSlot");
                 });
 
             modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.Doctor", b =>
@@ -313,15 +309,11 @@ namespace SmartAppointmentSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SmartAppointmentSystem.Data.Entities.Process", "Process")
+                    b.HasOne("SmartAppointmentSystem.Data.Entities.Process", null)
                         .WithMany("TimeSlots")
-                        .HasForeignKey("ProcessId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProcessId");
 
                     b.Navigation("Doctor");
-
-                    b.Navigation("Process");
                 });
 
             modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.Doctor", b =>
