@@ -19,12 +19,11 @@ namespace SmartAppointmentSystem.Data.Configurations
             builder.Property(ts => ts.AvailableTo)
                 .IsRequired();
 
-            // Foreign keys
-            builder.Property(ts => ts.ProcessId).HasColumnType("uuid");
-            builder.HasOne(ts => ts.Process)
-                .WithMany(p => p.TimeSlots)
-                .HasForeignKey(ts => ts.ProcessId)
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.Property(ts => ts.AvailableDay)
+                .IsRequired();
+
+            builder.Property(ts => ts.AppointmentFrequency)
+                .IsRequired();
 
             builder.Property(ts => ts.DoctorId).HasColumnType("uuid");
             builder.HasOne(ts => ts.Doctor)

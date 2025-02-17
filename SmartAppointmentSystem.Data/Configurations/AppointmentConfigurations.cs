@@ -20,9 +20,11 @@ namespace SmartAppointmentSystem.Data.Configurations
             builder.Property(a => a.Notes)
                 .HasMaxLength(500);
 
+            builder.Property(a => a.Time)
+                .IsRequired();
+
             builder.Property(a => a.DoctorId).HasColumnType("uuid");
             builder.Property(a => a.PatientId).HasColumnType("uuid");
-            builder.Property(a => a.TimeSlotId).HasColumnType("uuid");
 
             builder.HasOne(a => a.Doctor)
                 .WithMany(d => d.Appointments)
@@ -32,11 +34,6 @@ namespace SmartAppointmentSystem.Data.Configurations
             builder.HasOne(a => a.Patient)
                 .WithMany(p => p.Appointments)
                 .HasForeignKey(a => a.PatientId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasOne(a => a.TimeSlot)
-                .WithMany()
-                .HasForeignKey(a => a.TimeSlotId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
