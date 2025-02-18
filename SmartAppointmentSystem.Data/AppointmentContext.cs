@@ -2,36 +2,54 @@
 using SmartAppointmentSystem.Data.Configurations;
 using SmartAppointmentSystem.Data.Entities;
 using System.Reflection;
-namespace SmartAppointmentSystem.Data;
-public class AppointmentContext : DbContext
+
+namespace SmartAppointmentSystem.Data
 {
-    public AppointmentContext(DbContextOptions<AppointmentContext> options)
-        : base(options)
+    public class AppointmentContext : DbContext
     {
-    }
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
+        public AppointmentContext(DbContextOptions<AppointmentContext> options)
+            : base(options)
         {
-            optionsBuilder.UseNpgsql("Host=db.bvdxozbpwjblxsmpkxgt.supabase.co;Port=5432;Username=postgres;Password=FBr-18062001-;Database=postgres;SSL Mode=Require;Trust Server Certificate=true;");
         }
-    }
 
-    public DbSet<Patient> Patients { get; set; }
-    public DbSet<Doctor> Doctors { get; set; }
-    public DbSet<Process> Processes { get; set; }
-    public DbSet<Appointment> Appointments { get; set; }
-    public DbSet<Rating> Ratings { get; set; }
-    public DbSet<TimeSlot> TimeSlots { get; set; }
+        public DbSet<Patient> Patients { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Process> Processes { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
+        public DbSet<TimeSlot> TimeSlots { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Tüm entity configuration'ları uygula (AppointmentConfiguration dahil)
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        base.OnModelCreating(modelBuilder);
+            // Veritabanı sağlayıcısını al
+            var provider = this.Database.ProviderName;
+            Console.WriteLine("Database Provider: " + provider); // Debug amaçlı
+
+            // Eğer PostgreSQL değilse (SQL Server gibi) "uuid" ayarını kaldır
+            if (!string.IsNullOrEmpty(provider) && !provider.Contains("Npgsql"))
+            {
+                // Appointment entity'sindeki ilgili sütunların tipini sıfırlıyoruz
+                modelBuilder.Entity<Appointment>().Property(a => a.Id).HasColumnType(null);
+                modelBuilder.Entity<Appointment>().Property(a => a.DoctorId).HasColumnType(null);
+                modelBuilder.Entity<Appointment>().Property(a => a.PatientId).HasColumnType(null);
+                modelBuilder.Entity<Doctor>().Property(a => a.Id).HasColumnType(null);
+                modelBuilder.Entity<Patient>().Property(a => a.Id).HasColumnType(null);
+                modelBuilder.Entity<Process>().Property(a => a.Id).HasColumnType(null);
+                modelBuilder.Entity<Process>().Property(a => a.DoctorId).HasColumnType(null);
+                modelBuilder.Entity<Rating>().Property(a => a.Id).HasColumnType(null);
+                modelBuilder.Entity<Rating>().Property(a => a.DoctorId).HasColumnType(null);
+                modelBuilder.Entity<Rating>().Property(a => a.PatientId).HasColumnType(null);
+                modelBuilder.Entity<TimeSlot>().Property(a => a.Id).HasColumnType(null);
+                modelBuilder.Entity<TimeSlot>().Property(a => a.DoctorId).HasColumnType(null);
+
+            }
+
+            base.OnModelCreating(modelBuilder);
+        }
+
+
     }
 }
-
-
-  
-

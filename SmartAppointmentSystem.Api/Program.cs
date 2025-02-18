@@ -14,8 +14,15 @@ builder.Configuration.AddEnvironmentVariables();
 
 var connectionString = builder.Configuration.GetConnectionString("AppointmentContext");
 
-builder.Services.AddDbContext<AppointmentContext>(options =>
-    options.UseNpgsql(connectionString));
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<AppointmentContext>(options =>
+        options.UseSqlServer(connectionString, b => b.MigrationsAssembly("SmartAppointmentSystem.Data")));
+}
+
+
+
 
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IPatientUserService, PatientUserService>();
@@ -33,7 +40,6 @@ builder.Services.AddValidatorsFromAssemblyContaining<RatingValidator>();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-
 builder.Services.RegisterJWTAuthentication();
 
 var app = builder.Build();

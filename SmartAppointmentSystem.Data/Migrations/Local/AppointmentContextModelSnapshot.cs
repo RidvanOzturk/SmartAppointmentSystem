@@ -8,7 +8,7 @@ using SmartAppointmentSystem.Data;
 
 #nullable disable
 
-namespace SmartAppointmentSystem.Data.Migrations
+namespace SmartAppointmentSystem.Data.Migrations.Local
 {
     [DbContext(typeof(AppointmentContext))]
     partial class AppointmentContextModelSnapshot : ModelSnapshot
