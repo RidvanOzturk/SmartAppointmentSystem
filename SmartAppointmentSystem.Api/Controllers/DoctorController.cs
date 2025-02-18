@@ -20,6 +20,16 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         var getDoc = await doctorUserService.GetDoctorById(doctorId);
         return Ok(getDoc);
     }
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetDoctorByIdAsync(Guid id)
+    {
+        var getDocById = await doctorUserService.GetDoctorById(id);
+        if (getDocById == null) 
+        { 
+            return NotFound("Doctor not found!");
+        }
+        return Ok(getDocById);
+    }
     [HttpPost]
     public async Task<IActionResult> CreateDoctorUserAsync([FromBody] DoctorUserRequestModel doctorUserRequest)
     {
