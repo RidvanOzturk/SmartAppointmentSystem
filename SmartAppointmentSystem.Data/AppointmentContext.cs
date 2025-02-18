@@ -21,17 +21,13 @@ namespace SmartAppointmentSystem.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Tüm entity configuration'ları uygula (AppointmentConfiguration dahil)
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            // Veritabanı sağlayıcısını al
             var provider = this.Database.ProviderName;
-            Console.WriteLine("Database Provider: " + provider); // Debug amaçlı
+            Console.WriteLine("Database Provider: " + provider); 
 
-            // Eğer PostgreSQL değilse (SQL Server gibi) "uuid" ayarını kaldır
             if (!string.IsNullOrEmpty(provider) && !provider.Contains("Npgsql"))
             {
-                // Appointment entity'sindeki ilgili sütunların tipini sıfırlıyoruz
                 modelBuilder.Entity<Appointment>().Property(a => a.Id).HasColumnType(null);
                 modelBuilder.Entity<Appointment>().Property(a => a.DoctorId).HasColumnType(null);
                 modelBuilder.Entity<Appointment>().Property(a => a.PatientId).HasColumnType(null);
