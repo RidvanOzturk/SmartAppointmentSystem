@@ -15,8 +15,8 @@ public class TimeSlotService(AppointmentContext context) : ITimeSlotService
         {
             return false;
         }
-        var tsEntity = timeSlotRequestDTO.Map();
-        var addTimeSlot = await context.TimeSlots.AddAsync(tsEntity);
+        var timeSlotEntity = timeSlotRequestDTO.Map();
+        var addTimeSlot = await context.TimeSlots.AddAsync(timeSlotEntity);
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
@@ -29,10 +29,7 @@ public class TimeSlotService(AppointmentContext context) : ITimeSlotService
     }
     public async Task<List<TimeSlot>> AvailableTimeSlotDoctor(Guid id)
     {
-        var availableTimeSlots = await context.TimeSlots.ToListAsync();
-            //.Where(ts => ts.DoctorId == id && !context.Appointments
-            //.Any(a => a.TimeSlotId == ts.Id))
-            //.ToListAsync();
+        var availableTimeSlots = await context.TimeSlots.Where(ts => ts.DoctorId == id && ts.AvailableFrom < ts.AvailableTo).ToListAsync();
         return availableTimeSlots;
     }
     public async Task<TimeSlot> GetTimeSlotById(Guid id)

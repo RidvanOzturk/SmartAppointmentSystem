@@ -84,6 +84,8 @@ public static class MapperExtensions
         {
             Id = Guid.NewGuid(),
             DoctorId = timeSlotRequest.DoctorId,
+            AvailableDay = timeSlotRequest.AvailableDay,
+            AppointmentFrequency = timeSlotRequest.AppointmentFrequency,
             AvailableFrom = timeSlotRequest.AvailableFrom,
             AvailableTo = timeSlotRequest.AvailableTo,
         };
@@ -91,6 +93,8 @@ public static class MapperExtensions
     public static void Map(this TimeSlotRequestDTO source, TimeSlot target)
     {
         target.AvailableFrom = source.AvailableFrom;
+        target.AppointmentFrequency = source.AppointmentFrequency;
+        target.AvailableDay = source.AvailableDay;
         target.AvailableTo = source.AvailableTo;
         target.DoctorId = source.DoctorId;
     }
