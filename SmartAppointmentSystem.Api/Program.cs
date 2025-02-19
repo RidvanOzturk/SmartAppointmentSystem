@@ -26,12 +26,9 @@ else
         options.UseNpgsql(connectionString, b => b.MigrationsAssembly("SmartAppointmentSystem.Data")));
 }
 
-
-
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IPatientUserService, PatientUserService>();
 builder.Services.AddScoped<IDoctorUserService, DoctorUserService>();
-builder.Services.AddScoped<IProcessService, ProcessService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<ITimeSlotService, TimeSlotService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
@@ -39,7 +36,6 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddValidatorsFromAssemblyContaining<PatientUserValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<AppointmentValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<TimeSlotValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<ProcessValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<RatingValidator>();
 
 builder.Services.AddControllers();

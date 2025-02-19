@@ -98,20 +98,4 @@ public static class MapperExtensions
         target.AvailableTo = source.AvailableTo;
         target.DoctorId = source.DoctorId;
     }
-    public static Process Map(this ProcessRequestDTO processRequest)
-    {
-        return new Process
-        {
-            Id = Guid.NewGuid(),
-            Name = processRequest.Name,
-            Duration = processRequest.Duration,
-            DoctorId = processRequest.DoctorId
-        };
-    }
-    public static void Map(this ProcessRequestDTO source, Process target)
-    {
-        target.DoctorId = source.DoctorId;
-        target.Duration = source.Duration;
-        target.Name = source.Name;
-    }
 }

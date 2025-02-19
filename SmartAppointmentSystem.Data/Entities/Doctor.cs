@@ -14,6 +14,5 @@ public class Doctor
 
     public ICollection<Appointment> Appointments { get; set; }
     public ICollection<Rating> Ratings { get; set; }
-    public ICollection<Process> Processes { get; set; }
     public ICollection<TimeSlot> TimeSlots { get; set; }
 }

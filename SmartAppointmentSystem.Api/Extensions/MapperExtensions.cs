@@ -42,20 +42,13 @@ public static class MapperExtensions
         return new TimeSlotRequestDTO
         {
             DoctorId = value.DoctorId,
-            ProcessId = value.ProcessId,
+            AvailableDay = value.AvailableDay,
+            AppointmentFrequency = value.AppointmentFrequency,
             AvailableFrom = value.AvailableFrom,
             AvailableTo = value.AvailableTo,
         };
     }
-    public static ProcessRequestDTO Map(this ProcessRequestModel value)
-    {
-        return new ProcessRequestDTO
-        {
-            Name = value.Name,
-            Duration = value.Duration,
-            DoctorId = value.DoctorId
-        };
-    }
+
     public static DoctorUserRequestDTO Map(this DoctorUserRequestModel value)
     {
         return new DoctorUserRequestDTO

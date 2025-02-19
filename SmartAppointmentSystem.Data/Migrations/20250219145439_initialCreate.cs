@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace SmartAppointmentSystem.Data.Migrations.Local
+namespace SmartAppointmentSystem.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateForLocalhost : Migration
+    public partial class initialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -93,26 +93,6 @@ namespace SmartAppointmentSystem.Data.Migrations.Local
                 });
 
             migrationBuilder.CreateTable(
-                name: "Processes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    Duration = table.Column<int>(type: "int", nullable: false),
-                    DoctorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Processes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Processes_Doctors_DoctorId",
-                        column: x => x.DoctorId,
-                        principalTable: "Doctors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Ratings",
                 columns: table => new
                 {
@@ -149,8 +129,7 @@ namespace SmartAppointmentSystem.Data.Migrations.Local
                     AvailableFrom = table.Column<TimeSpan>(type: "time", nullable: false),
                     AvailableTo = table.Column<TimeSpan>(type: "time", nullable: false),
                     AvailableDay = table.Column<int>(type: "int", nullable: false),
-                    AppointmentFrequency = table.Column<int>(type: "int", nullable: false),
-                    ProcessId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    AppointmentFrequency = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -161,11 +140,6 @@ namespace SmartAppointmentSystem.Data.Migrations.Local
                         principalTable: "Doctors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_TimeSlots_Processes_ProcessId",
-                        column: x => x.ProcessId,
-                        principalTable: "Processes",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -184,11 +158,6 @@ namespace SmartAppointmentSystem.Data.Migrations.Local
                 column: "BranchId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Processes_DoctorId",
-                table: "Processes",
-                column: "DoctorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Ratings_DoctorId",
                 table: "Ratings",
                 column: "DoctorId");
@@ -202,11 +171,6 @@ namespace SmartAppointmentSystem.Data.Migrations.Local
                 name: "IX_TimeSlots_DoctorId",
                 table: "TimeSlots",
                 column: "DoctorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TimeSlots_ProcessId",
-                table: "TimeSlots",
-                column: "ProcessId");
         }
 
         /// <inheritdoc />
@@ -223,9 +187,6 @@ namespace SmartAppointmentSystem.Data.Migrations.Local
 
             migrationBuilder.DropTable(
                 name: "Patients");
-
-            migrationBuilder.DropTable(
-                name: "Processes");
 
             migrationBuilder.DropTable(
                 name: "Doctors");

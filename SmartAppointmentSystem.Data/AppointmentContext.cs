@@ -14,7 +14,6 @@ namespace SmartAppointmentSystem.Data
 
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
-        public DbSet<Process> Processes { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<TimeSlot> TimeSlots { get; set; }
@@ -33,8 +32,6 @@ namespace SmartAppointmentSystem.Data
                 modelBuilder.Entity<Appointment>().Property(a => a.PatientId).HasColumnType(null);
                 modelBuilder.Entity<Doctor>().Property(a => a.Id).HasColumnType(null);
                 modelBuilder.Entity<Patient>().Property(a => a.Id).HasColumnType(null);
-                modelBuilder.Entity<Process>().Property(a => a.Id).HasColumnType(null);
-                modelBuilder.Entity<Process>().Property(a => a.DoctorId).HasColumnType(null);
                 modelBuilder.Entity<Rating>().Property(a => a.Id).HasColumnType(null);
                 modelBuilder.Entity<Rating>().Property(a => a.DoctorId).HasColumnType(null);
                 modelBuilder.Entity<Rating>().Property(a => a.PatientId).HasColumnType(null);

@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartAppointmentSystem.Data;
 
 #nullable disable
 
-namespace SmartAppointmentSystem.Data.Migrations.Local
+namespace SmartAppointmentSystem.Data.Migrations
 {
     [DbContext(typeof(AppointmentContext))]
-    [Migration("20250218185849_InitialCreateForLocalhost")]
-    partial class InitialCreateForLocalhost
+    partial class AppointmentContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,30 +149,6 @@ namespace SmartAppointmentSystem.Data.Migrations.Local
                     b.ToTable("Patients", (string)null);
                 });
 
-            modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.Process", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("DoctorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Duration")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DoctorId");
-
-                    b.ToTable("Processes", (string)null);
-                });
-
             modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.Rating", b =>
                 {
                     b.Property<Guid>("Id")
@@ -229,14 +202,9 @@ namespace SmartAppointmentSystem.Data.Migrations.Local
                     b.Property<Guid>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ProcessId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DoctorId");
-
-                    b.HasIndex("ProcessId");
 
                     b.ToTable("TimeSlots", (string)null);
                 });
@@ -271,17 +239,6 @@ namespace SmartAppointmentSystem.Data.Migrations.Local
                     b.Navigation("Branch");
                 });
 
-            modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.Process", b =>
-                {
-                    b.HasOne("SmartAppointmentSystem.Data.Entities.Doctor", "Doctor")
-                        .WithMany("Processes")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Doctor");
-                });
-
             modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.Rating", b =>
                 {
                     b.HasOne("SmartAppointmentSystem.Data.Entities.Doctor", "Doctor")
@@ -309,18 +266,12 @@ namespace SmartAppointmentSystem.Data.Migrations.Local
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SmartAppointmentSystem.Data.Entities.Process", null)
-                        .WithMany("TimeSlots")
-                        .HasForeignKey("ProcessId");
-
                     b.Navigation("Doctor");
                 });
 
             modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.Doctor", b =>
                 {
                     b.Navigation("Appointments");
-
-                    b.Navigation("Processes");
 
                     b.Navigation("Ratings");
 
@@ -332,11 +283,6 @@ namespace SmartAppointmentSystem.Data.Migrations.Local
                     b.Navigation("Appointments");
 
                     b.Navigation("Ratings");
-                });
-
-            modelBuilder.Entity("SmartAppointmentSystem.Data.Entities.Process", b =>
-                {
-                    b.Navigation("TimeSlots");
                 });
 #pragma warning restore 612, 618
         }
