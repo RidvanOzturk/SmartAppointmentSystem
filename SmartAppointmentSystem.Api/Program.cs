@@ -20,7 +20,11 @@ if (builder.Environment.IsDevelopment())
     builder.Services.AddDbContext<AppointmentContext>(options =>
         options.UseSqlServer(connectionString, b => b.MigrationsAssembly("SmartAppointmentSystem.Data")));
 }
-
+else
+{
+    builder.Services.AddDbContext<AppointmentContext>(options =>
+        options.UseNpgsql(connectionString, b => b.MigrationsAssembly("SmartAppointmentSystem.Data")));
+}
 
 
 
