@@ -26,9 +26,19 @@ public class PatientController(IPatientUserService userPatientService) : Control
 
         if (user == null)
         {
-            return NotFound();
+            return NotFound("Patient not found");
         }
 
+        return Ok(user);
+    }
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUserByIdAsync(Guid id)
+    {
+        var user = await userPatientService.GetUserByIdAsync(id);
+        if (user == null)
+        {
+            return NotFound("Patient not found");
+        }
         return Ok(user);
     }
 

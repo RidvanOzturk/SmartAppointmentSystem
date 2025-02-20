@@ -11,12 +11,6 @@ namespace SmartAppointmentSystem.Api.Controllers;
 [ApiController]
 public class AppointmentController(IAppointmentService appointmentService) : ControllerBase
 {
-    [HttpGet("healthcheck")]
-    public IActionResult HealthCheck()
-    {
-        return Ok("Working properly!!!");
-    }
-
     [HttpPost]
     public async Task<IActionResult> CreateAppointmentAsync([FromBody] AppointmentRequestModel requestModel)
     {
@@ -64,6 +58,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
 
         return Ok(appointments);
     }
+
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAppointmentAsync([FromRoute] Guid id, AppointmentRequestModel request)
     {
@@ -78,6 +73,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
         var app = await appointmentService.UpdateAppointmentById(id, appointmentMapping);
         return Ok(app);
     }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAppointmentAsync([FromRoute] Guid id)
     {

@@ -21,7 +21,7 @@ public static class MapperExtensions
         {
             DoctorId = value.DoctorId,
             PatientId = value.PatientId,
-            TimeSlotId = value.TimeSlotId,
+            Time = value.Time,
             Notes = value.Notes,
             Status = value.Status,
         };

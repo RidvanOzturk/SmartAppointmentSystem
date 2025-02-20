@@ -8,7 +8,7 @@ namespace SmartAppointmentSystem.Api.Models.Validators
         {
             RuleFor(x => x.Status).NotEmpty().NotNull();
             RuleFor(x=>x.DoctorId).NotEmpty().NotNull();
-            RuleFor(x=>x.TimeSlotId).NotNull().NotEmpty();
+            RuleFor(x => x.Time).NotNull().Must(time => time > DateTime.Now);
             RuleFor(x => x.Notes).Null().Empty();
         }
     }
