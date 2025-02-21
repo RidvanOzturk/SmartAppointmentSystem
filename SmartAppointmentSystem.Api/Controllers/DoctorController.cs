@@ -30,6 +30,18 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         }
         return Ok(getDocById);
     }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> GetDoctorBySearchAsync([FromQuery] string query)
+    {
+        var doctors = await doctorUserService.SearchDoctorsName(query);
+        if (doctors == null || doctors.Count < 1) 
+        {
+            return NotFound("There is no doctor like "+$"{query}");
+        }
+        return Ok(doctors);
+    }
+
     [HttpPost]
     public async Task<IActionResult> CreateDoctorUserAsync([FromBody] DoctorUserRequestModel doctorUserRequest)
     {

@@ -27,6 +27,7 @@ else
 }
 
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IBranchService, BranchService>();
 builder.Services.AddScoped<IPatientUserService, PatientUserService>();
 builder.Services.AddScoped<IDoctorUserService, DoctorUserService>();
 builder.Services.AddScoped<IRatingService, RatingService>();

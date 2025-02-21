@@ -8,6 +8,7 @@ public interface IDoctorUserService
     Task<Doctor> GetDoctorById(Guid id);
     Task<List<Doctor>> GetAllDoctors();
     Task<bool> CreateDoctor(DoctorUserRequestDTO requestDTO);
+    Task<List<Doctor>> SearchDoctorsName(string query);
     Task<UserResponseModel> LoginUserAsync(DoctorUserLoginRequestDTO request);
     Task<bool> UpdateDoctorById(Guid id, DoctorUserRequestDTO requestDTO);
     Task<bool> DeleteDoctorById(Guid id);

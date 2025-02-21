@@ -13,6 +13,7 @@ namespace SmartAppointmentSystem.Data
         }
 
         public DbSet<Patient> Patients { get; set; }
+        public DbSet<Branch> Branches { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Rating> Ratings { get; set; }

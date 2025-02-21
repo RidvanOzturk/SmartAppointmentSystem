@@ -29,6 +29,17 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
+    public async Task<List<Doctor>> SearchDoctorsName(string query)
+    {
+        if (string.IsNullOrEmpty(query))
+        {
+            return await context.Doctors.ToListAsync();    
+        }
+        var searchDoctorsName = await context.Doctors
+            .Where(d => EF.Functions.Like(d.Name, $"%{query}%"))
+            .ToListAsync();
+        return searchDoctorsName;
+    }
 
     public async Task<UserResponseModel> LoginUserAsync(DoctorUserLoginRequestDTO request)
     {
