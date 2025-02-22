@@ -9,7 +9,7 @@ namespace SmartAppointmentSystem.Business.Implementations;
 
 public class TimeSlotService(AppointmentContext context) : ITimeSlotService
 {
-    public async Task<bool> CreateTimeSlot(TimeSlotRequestDTO timeSlotRequestDTO)
+    public async Task<bool> CreateTimeSlotAsync(TimeSlotRequestDTO timeSlotRequestDTO)
     {
         if (timeSlotRequestDTO == null)
         {
@@ -20,40 +20,40 @@ public class TimeSlotService(AppointmentContext context) : ITimeSlotService
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
-    public async Task<List<TimeSlot>> GetDoctorTimeSlots(Guid id)
+    public async Task<List<TimeSlot>> GetDoctorTimeSlotsAsync(Guid id)
     {
         var getDoctorTS = await context.TimeSlots
             .Where(x=>x.DoctorId == id)
             .ToListAsync();
         return getDoctorTS;
     }
-    public async Task<List<TimeSlot>> AvailableTimeSlotDoctor(Guid id)
+    public async Task<List<TimeSlot>> AvailableTimeSlotDoctorAsync(Guid id)
     {
         var availableTimeSlots = await context.TimeSlots.Where(ts => ts.DoctorId == id && ts.AvailableFrom < ts.AvailableTo).ToListAsync();
         return availableTimeSlots;
     }
-    public async Task<TimeSlot> GetTimeSlotById(Guid id)
+    public async Task<TimeSlot> GetTimeSlotByIdAsync(Guid id)
     {
         var getTimeSlot = await context.TimeSlots
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id);
         return getTimeSlot;
     }
-    public async Task<List<TimeSlot>> GetAllTimeSlots()
+    public async Task<List<TimeSlot>> GetAllTimeSlotsAsync()
     {
         var getAll = await context.TimeSlots
             .AsNoTracking()
             .ToListAsync();
         return getAll;
     }
-    public async Task<bool> UpdateTimeSlotById(Guid id, TimeSlotRequestDTO timeSlotRequestDTO)
+    public async Task<bool> UpdateTimeSlotByIdAsync(Guid id, TimeSlotRequestDTO timeSlotRequestDTO)
     {
         var TimeSlotId = await context.TimeSlots.FirstOrDefaultAsync(x => x.Id == id);
         timeSlotRequestDTO.Map(TimeSlotId);
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
-    public async Task<bool> DeleteTimeSlotById(Guid id)
+    public async Task<bool> DeleteTimeSlotByIdAsync(Guid id)
     {
         var deletedId = await context.TimeSlots.FirstOrDefaultAsync(x => x.Id == id);
         context.TimeSlots.Remove(deletedId);

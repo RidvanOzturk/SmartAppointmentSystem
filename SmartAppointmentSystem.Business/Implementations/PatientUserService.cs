@@ -58,7 +58,7 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id);
     }
-    public async Task<bool> DeleteUserById(Guid id)
+    public async Task<bool> DeleteUserByIdAsync(Guid id)
     {
         var user = await context.Patients.FirstOrDefaultAsync(x => x.Id == id);
         if (user == null)

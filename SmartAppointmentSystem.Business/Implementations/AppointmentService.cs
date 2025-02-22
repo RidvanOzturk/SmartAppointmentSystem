@@ -9,21 +9,21 @@ namespace SmartAppointmentSystem.Business.Implementations;
 
 public class AppointmentService(AppointmentContext context) : IAppointmentService
 {
-    public async Task<bool> CreateAppointment(AppointmentRequestDTO appointmentRequestDTO)
+    public async Task<bool> CreateAppointmentAsync(AppointmentRequestDTO appointmentRequestDTO)
     {
         var appointment = appointmentRequestDTO.Map();
         await context.Appointments.AddAsync(appointment);
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
-    public async Task<List<Appointment>> GetAllAppointments()
+    public async Task<List<Appointment>> GetAllAppointmentsAsync()
     {
         var allApp = await context.Appointments
             .AsNoTracking()
             .ToListAsync();
         return allApp;
     }
-    public async Task<List<Appointment>> GetUserAppointments(Guid id)
+    public async Task<List<Appointment>> GetUserAppointmentsAsync(Guid id)
     {
         var gelUserAppointments = await context.Appointments
             .AsNoTracking()
@@ -31,14 +31,14 @@ public class AppointmentService(AppointmentContext context) : IAppointmentServic
             .ToListAsync();
         return gelUserAppointments;
     }
-    public async Task<Appointment> GetAppointmentsById(Guid id)
+    public async Task<Appointment> GetAppointmentsByIdAsync(Guid id)
     {
         var app = context.Appointments
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id);
         return await app;
     }
-    public async Task<bool> DeleteAppointmentById(Guid id)
+    public async Task<bool> DeleteAppointmentByIdAsync(Guid id)
     {
         var app = await context.Appointments.FirstOrDefaultAsync(x => x.Id == id);
         if (app == null)
@@ -49,7 +49,7 @@ public class AppointmentService(AppointmentContext context) : IAppointmentServic
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
-    public async Task<bool> UpdateAppointmentById(Guid id, AppointmentRequestDTO appointmentRequestDTO)
+    public async Task<bool> UpdateAppointmentByIdAsync(Guid id, AppointmentRequestDTO appointmentRequestDTO)
     {
         var appId = await context.Appointments.FirstOrDefaultAsync(x => x.Id == id);
         appointmentRequestDTO.Map(appId);

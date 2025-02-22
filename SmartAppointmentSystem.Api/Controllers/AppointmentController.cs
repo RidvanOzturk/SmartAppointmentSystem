@@ -15,7 +15,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     public async Task<IActionResult> CreateAppointmentAsync([FromBody] AppointmentRequestModel requestModel)
     {
         var fill = requestModel.Map();
-        var gettingFilled = await appointmentService.CreateAppointment(fill);
+        var gettingFilled = await appointmentService.CreateAppointmentAsync(fill);
         if (!gettingFilled)
         {
             return StatusCode(500, "Appointment could not create");
@@ -25,7 +25,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     [HttpGet("all")]
     public async Task<IActionResult> GetAllAppointmentsAsync()
     {
-        var getAllApp = await appointmentService.GetAllAppointments();
+        var getAllApp = await appointmentService.GetAllAppointmentsAsync();
         if (getAllApp.Count < 1 || getAllApp == null)
         {
             return NotFound("There is no appointment.");
@@ -36,7 +36,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAppointmentAsync(Guid id)
     {
-        var getAppo = await appointmentService.GetAppointmentsById(id);
+        var getAppo = await appointmentService.GetAppointmentsByIdAsync(id);
         if (getAppo == null)
         {
             return NotFound();
@@ -49,7 +49,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     public async Task<IActionResult> GetUserAppointmentsAsync()
     {
         var userId = HttpContext.User.GetUserId();
-        var appointments = await appointmentService.GetUserAppointments(userId);
+        var appointments = await appointmentService.GetUserAppointmentsAsync(userId);
 
         if (appointments == null || !appointments.Any())
         {
@@ -62,7 +62,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAppointmentAsync([FromRoute] Guid id, AppointmentRequestModel request)
     {
-        var appointmentId = await appointmentService.GetAppointmentsById(id);
+        var appointmentId = await appointmentService.GetAppointmentsByIdAsync(id);
 
         if (appointmentId == null)
         {
@@ -70,14 +70,14 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
         }
 
         var appointmentMapping = request.Map();
-        var app = await appointmentService.UpdateAppointmentById(id, appointmentMapping);
+        var app = await appointmentService.UpdateAppointmentByIdAsync(id, appointmentMapping);
         return Ok(app);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAppointmentAsync([FromRoute] Guid id)
     {
-        var app = await appointmentService.DeleteAppointmentById(id);
+        var app = await appointmentService.DeleteAppointmentByIdAsync(id);
         if (!app)
         {
             return BadRequest();

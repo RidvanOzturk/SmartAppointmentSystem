@@ -4,5 +4,5 @@ namespace SmartAppointmentSystem.Business.Contracts;
 
 public interface IBranchService
 {
-    Task<List<Branch>> GetBranchesSearch(string query);
+    Task<List<Branch>> GetBranchesSearchAsync(string query);
 }

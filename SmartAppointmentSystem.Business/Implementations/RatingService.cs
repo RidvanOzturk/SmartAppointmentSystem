@@ -10,21 +10,21 @@ namespace SmartAppointmentSystem.Business.Implementations;
 
 public class RatingService(AppointmentContext context) : IRatingService
 {
-    public async Task<bool> CreateRating(RatingRequestDTO ratingRequestDTO)
+    public async Task<bool> CreateRatingAsync(RatingRequestDTO ratingRequestDTO)
     {
         var ratingEntity = ratingRequestDTO.Map();
         var rating = context.Ratings.AddAsync(ratingEntity);
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
-    public async Task<List<Rating>> GetAllRatings()
+    public async Task<List<Rating>> GetAllRatingsAsync()
     {
         var getAll = await context.Ratings
             .AsNoTracking()
             .ToListAsync();
         return getAll;
     }
-    public async Task<Rating> GetRatingById(Guid id)
+    public async Task<Rating> GetRatingByIdAsync(Guid id)
     {
         var rating = await context.Ratings
             .AsNoTracking()
@@ -35,14 +35,14 @@ public class RatingService(AppointmentContext context) : IRatingService
         }
         return rating;
     }
-    public async Task<bool> UpdateRatingById(Guid id, RatingRequestDTO ratingRequestDTO)
+    public async Task<bool> UpdateRatingByIdAsync(Guid id, RatingRequestDTO ratingRequestDTO)
     {
         var ratingId = await context.Ratings.FirstOrDefaultAsync(x => x.Id == id);
         ratingRequestDTO.Map(ratingId);
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
-    public async Task<bool> DeleteRatingById(Guid id)
+    public async Task<bool> DeleteRatingByIdAsync(Guid id)
     {
         var ratingId = await context.Ratings.FirstOrDefaultAsync(x => x.Id == id);
         context.Remove(ratingId);

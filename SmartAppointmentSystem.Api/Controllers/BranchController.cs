@@ -9,9 +9,9 @@ namespace SmartAppointmentSystem.Api.Controllers
     {
 
         [HttpGet("search")]
-        public async Task<IActionResult> GetBranchBySearchAsync([FromQuery] string query)
+        public async Task<IActionResult> GetBranchBySearch([FromQuery] string query)
         {
-            var branches = await branchService.GetBranchesSearch(query);
+            var branches = await branchService.GetBranchesSearchAsync(query);
             if (branches == null || branches.Count <1)
             {
                 return NotFound("There is no branches like " + $"{query}");

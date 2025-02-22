@@ -14,16 +14,16 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
 {
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> GetDoctorUserAsync()
+    public async Task<IActionResult> GetDoctorUser()
     {
         var doctorId = HttpContext.User.GetUserId();
-        var getDoc = await doctorUserService.GetDoctorById(doctorId);
+        var getDoc = await doctorUserService.GetDoctorByIdAsync(doctorId);
         return Ok(getDoc);
     }
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetDoctorByIdAsync(Guid id)
+    public async Task<IActionResult> GetDoctorById(Guid id)
     {
-        var getDocById = await doctorUserService.GetDoctorById(id);
+        var getDocById = await doctorUserService.GetDoctorByIdAsync(id);
         if (getDocById == null) 
         { 
             return NotFound("Doctor not found!");
@@ -42,9 +42,9 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
     }
 
     [HttpGet("search")]
-    public async Task<IActionResult> GetDoctorBySearchAsync([FromQuery] string query)
+    public async Task<IActionResult> GetDoctorBySearch([FromQuery] string query)
     {
-        var doctors = await doctorUserService.SearchDoctorsName(query);
+        var doctors = await doctorUserService.SearchDoctorsNameAsync(query);
         if (doctors == null || doctors.Count < 1) 
         {
             return NotFound("There is no doctor like "+$"{query}");
@@ -53,21 +53,21 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateDoctorUserAsync([FromBody] DoctorUserRequestModel doctorUserRequest)
+    public async Task<IActionResult> CreateDoctorUser([FromBody] DoctorUserRequestModel doctorUserRequest)
     {
         var mapping = doctorUserRequest.Map();
-        var createDoc = await doctorUserService.CreateDoctor(mapping);
+        var createDoc = await doctorUserService.CreateDoctorAsync(mapping);
         return Ok(createDoc);
     }
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllDoctorsAsync()
+    public async Task<IActionResult> GetAllDoctors()
     {
-        var getAllDoc = await doctorUserService.GetAllDoctors();
+        var getAllDoc = await doctorUserService.GetAllDoctorsAsync();
         return Ok(getAllDoc);
     }
 
     [HttpPost("DoctorUserLogin")]
-    public async Task<ActionResult<DoctorUserLoginRequestModel>> LoginUserAsync([FromBody] DoctorUserLoginRequestModel request)
+    public async Task<ActionResult<DoctorUserLoginRequestModel>> LoginUser([FromBody] DoctorUserLoginRequestModel request)
     {
         var user = request.Map();
         var result = await doctorUserService.LoginUserAsync(user);
@@ -81,19 +81,19 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
 
     [AllowAnonymous]
     [HttpPut]
-    public async Task<IActionResult> UpdateDoctorUserAsync([FromBody] DoctorUserRequestModel doctorUserRequest)
+    public async Task<IActionResult> UpdateDoctorUser([FromBody] DoctorUserRequestModel doctorUserRequest)
     {
         var mapping = doctorUserRequest.Map();
         var doctorId = HttpContext.User.GetUserId();
-        var updateDoc = await doctorUserService.UpdateDoctorById(doctorId, mapping);
+        var updateDoc = await doctorUserService.UpdateDoctorByIdAsync(doctorId, mapping);
         return Ok(updateDoc);
     }
 
     [Authorize(Roles = "Doctor")]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteDoctorUserAsync([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteDoctorUser([FromRoute] Guid id)
     {
-        var deleteDoc = await doctorUserService.DeleteDoctorById(id);
+        var deleteDoc = await doctorUserService.DeleteDoctorByIdAsync(id);
         return Ok("Deleted");
     }
 }

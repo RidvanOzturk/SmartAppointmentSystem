@@ -7,7 +7,7 @@ namespace SmartAppointmentSystem.Business.Implementations;
 
 public class BranchService(AppointmentContext context) : IBranchService
 {
-    public async Task<List<Branch>> GetBranchesSearch(string query)
+    public async Task<List<Branch>> GetBranchesSearchAsync(string query)
     {
         if (string.IsNullOrEmpty(query))
         {

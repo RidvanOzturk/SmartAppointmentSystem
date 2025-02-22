@@ -18,7 +18,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
 {
     [Authorize(Roles = "Patient", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet]
-    public async Task<IActionResult> GetUserAsync()
+    public async Task<IActionResult> GetUser()
     {
         var userId = HttpContext.User.GetUserId();
 
@@ -32,7 +32,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
         return Ok(user);
     }
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetUserByIdAsync(Guid id)
+    public async Task<IActionResult> GetUserById(Guid id)
     {
         var user = await userPatientService.GetUserByIdAsync(id);
         if (user == null)
@@ -45,7 +45,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
 
     [HttpPost("PatientUserLogin")]
     [AllowAnonymous]
-    public async Task<ActionResult<PatientUserRequestModel>> LoginUserAsync([FromBody] PatientUserRequestModel request)
+    public async Task<ActionResult<PatientUserRequestModel>> LoginUser([FromBody] PatientUserRequestModel request)
     {
         var user = request.Map();
         var result = await userPatientService.LoginUserAsync(user);
@@ -58,7 +58,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
     }
 
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllUsersAsync()
+    public async Task<IActionResult> GetAllUsers()
     {
         var users = await userPatientService.GetUsersAsync();
         if (users.Count < 1 || users == null)
@@ -70,7 +70,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
 
 
     [HttpPost]
-    public async Task<IActionResult> CreatePatientUserAsync(PatientUserRequestModel request, [FromServices] IValidator<PatientUserRequestModel> validator)
+    public async Task<IActionResult> CreatePatientUser(PatientUserRequestModel request, [FromServices] IValidator<PatientUserRequestModel> validator)
     {
         var fluent = await validator.ValidateAsync(request);
         if (!fluent.IsValid)
@@ -87,7 +87,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdatePatientUserAsync([FromRoute] Guid id, PatientUserRequestModel request)
+    public async Task<IActionResult> UpdatePatientUser([FromRoute] Guid id, PatientUserRequestModel request)
     {
         var userId = await userPatientService.GetUserByIdAsync(id);
 
@@ -102,9 +102,9 @@ public class PatientController(IPatientUserService userPatientService) : Control
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeletePatientUserAsync([FromRoute] Guid id)
+    public async Task<IActionResult> DeletePatientUser([FromRoute] Guid id)
     {
-        var user = await userPatientService.DeleteUserById(id);
+        var user = await userPatientService.DeleteUserByIdAsync(id);
         if (!user)
         {
             return BadRequest();

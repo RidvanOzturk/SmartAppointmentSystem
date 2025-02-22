@@ -12,17 +12,17 @@ namespace SmartAppointmentSystem.Api.Controllers;
 public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateTimeSlotAsync([FromBody] TimeSlotRequestModel timeSlotRequest)
+    public async Task<IActionResult> CreateTimeSlot([FromBody] TimeSlotRequestModel timeSlotRequest)
     {
         var mapping = timeSlotRequest.Map();
-        var timeSlot = await timeSlotService.CreateTimeSlot(mapping);
+        var timeSlot = await timeSlotService.CreateTimeSlotAsync(mapping);
 
         return Ok(timeSlot);
     }
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetTimeSlotAsync(Guid id)
+    public async Task<IActionResult> GetTimeSlot(Guid id)
     {
-        var getTimeSlot = await timeSlotService.GetTimeSlotById(id);
+        var getTimeSlot = await timeSlotService.GetTimeSlotByIdAsync(id);
         if (getTimeSlot == null)
         {
             return NotFound();
@@ -30,9 +30,9 @@ public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBa
         return Ok(getTimeSlot);
     }
     [HttpGet("doctorTimeSlots/{id}")]
-    public async Task<IActionResult> GetDoctorTimeSlotsAsync(Guid id)
+    public async Task<IActionResult> GetDoctorTimeSlots(Guid id)
     {
-        var getDoctorTs = await timeSlotService.GetDoctorTimeSlots(id);
+        var getDoctorTs = await timeSlotService.GetDoctorTimeSlotsAsync(id);
         if (getDoctorTs == null)
         {
             return NotFound();
@@ -40,9 +40,9 @@ public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBa
         return Ok(getDoctorTs);
     }
     [HttpGet("availablets/{id}")]
-    public async Task<IActionResult> AvailableTimeSlotsDoctorAsync(Guid id)
+    public async Task<IActionResult> AvailableTimeSlotsDoctor(Guid id)
     {
-        var getSuitApp = await timeSlotService.AvailableTimeSlotDoctor(id);
+        var getSuitApp = await timeSlotService.AvailableTimeSlotDoctorAsync(id);
         if (getSuitApp == null)
         {
             return NotFound();
@@ -51,9 +51,9 @@ public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBa
     }
 
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllTimeSlotsAsync()
+    public async Task<IActionResult> GetAllTimeSlots()
     {
-        var getAll = await timeSlotService.GetAllTimeSlots();
+        var getAll = await timeSlotService.GetAllTimeSlotsAsync();
         if (getAll == null)
         {
             return BadRequest();
@@ -61,21 +61,21 @@ public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBa
         return Ok(getAll);
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateTimeSlotAsync([FromRoute] Guid id, TimeSlotRequestModel timeSlotRequest)
+    public async Task<IActionResult> UpdateTimeSlot([FromRoute] Guid id, TimeSlotRequestModel timeSlotRequest)
     {
-        var getId = await timeSlotService.GetTimeSlotById(id);
+        var getId = await timeSlotService.GetTimeSlotByIdAsync(id);
         if (getId == null)
         {
             return NotFound();
         }
         var mapping = timeSlotRequest.Map();
-        var timeSlot = await timeSlotService.UpdateTimeSlotById(id, mapping);
+        var timeSlot = await timeSlotService.UpdateTimeSlotByIdAsync(id, mapping);
         return Ok(timeSlot);
     }
     [HttpDelete]
-    public async Task<IActionResult> DeleteTimeSlotAsync([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteTimeSlot([FromRoute] Guid id)
     {
-        var delete = await timeSlotService.DeleteTimeSlotById(id);
+        var delete = await timeSlotService.DeleteTimeSlotByIdAsync(id);
         if (!delete)
         {
             return NotFound();

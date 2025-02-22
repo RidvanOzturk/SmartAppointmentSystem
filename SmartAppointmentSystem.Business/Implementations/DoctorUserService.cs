@@ -10,12 +10,12 @@ namespace SmartAppointmentSystem.Business.Implementations;
 
 public class DoctorUserService(AppointmentContext context, ITokenService tokenService) : IDoctorUserService
 {
-    public async Task<Doctor> GetDoctorById(Guid id)
+    public async Task<Doctor> GetDoctorByIdAsync(Guid id)
     {
         var getDoc = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
         return getDoc;
     }
-    public async Task<List<Doctor>> GetAllDoctors()
+    public async Task<List<Doctor>> GetAllDoctorsAsync()
     {
         var getAllDoc = await context.Doctors.ToListAsync();
         return getAllDoc;
@@ -41,7 +41,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         }).ToList();
         return result;
     }
-    public async Task<bool> CreateDoctor(DoctorUserRequestDTO requestDTO)
+    public async Task<bool> CreateDoctorAsync(DoctorUserRequestDTO requestDTO)
     {
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password);
         var doctorEntity = requestDTO.Map();
@@ -50,7 +50,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
-    public async Task<List<Doctor>> SearchDoctorsName(string query)
+    public async Task<List<Doctor>> SearchDoctorsNameAsync(string query)
     {
         if (string.IsNullOrEmpty(query))
         {
@@ -83,14 +83,14 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             AuthToken = generatedToken.Token
         };
     }
-    public async Task<bool> UpdateDoctorById(Guid id, DoctorUserRequestDTO requestDTO)
+    public async Task<bool> UpdateDoctorByIdAsync(Guid id, DoctorUserRequestDTO requestDTO)
     {
         var docId = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
         requestDTO.Map(docId);
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
-    public async Task<bool> DeleteDoctorById(Guid id)
+    public async Task<bool> DeleteDoctorByIdAsync(Guid id)
     {
         var docId = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
         context.Doctors.Remove(docId);

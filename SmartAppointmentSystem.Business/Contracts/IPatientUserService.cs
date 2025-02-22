@@ -14,5 +14,5 @@ public interface IPatientUserService
     public Task<UserResponseModel> LoginUserAsync(PatientUserRequestDTO request);
     Task<List<Patient>> GetUsersAsync();
     Task<Patient> GetUserByIdAsync(Guid id);
-    Task<bool> DeleteUserById(Guid id);
+    Task<bool> DeleteUserByIdAsync(Guid id);
 }
