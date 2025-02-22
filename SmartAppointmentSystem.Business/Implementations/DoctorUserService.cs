@@ -20,6 +20,27 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         var getAllDoc = await context.Doctors.ToListAsync();
         return getAllDoc;
     }
+    public async Task<List<DoctorsRatingDTO>> GetTopRatedDoctorsAsync()
+    {
+        var queryResult = await context.Doctors
+        .Include(d => d.Ratings)
+        .Select(d => new
+        {
+            Doctor = d,
+            AverageRating = d.Ratings.Any() ? d.Ratings.Average(r => r.Score) : 0
+        })
+        .OrderByDescending(x => x.AverageRating)
+        .ToListAsync();
+
+        var result = queryResult.Select(x =>
+        {
+            var dto = new DoctorsRatingDTO();
+            dto.Map(x.Doctor); 
+            dto.AverageRating = Math.Round(x.AverageRating, 2); 
+            return dto;
+        }).ToList();
+        return result;
+    }
     public async Task<bool> CreateDoctor(DoctorUserRequestDTO requestDTO)
     {
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password);
@@ -33,7 +54,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
     {
         if (string.IsNullOrEmpty(query))
         {
-            return await context.Doctors.ToListAsync();    
+            return await context.Doctors.ToListAsync();
         }
         var searchDoctorsName = await context.Doctors
             .Where(d => EF.Functions.Like(d.Name, $"%{query}%"))
@@ -71,7 +92,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
     }
     public async Task<bool> DeleteDoctorById(Guid id)
     {
-        var docId = await context.Doctors.FirstOrDefaultAsync(x=>x.Id == id);
+        var docId = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
         context.Doctors.Remove(docId);
         var changes = await context.SaveChangesAsync();
         return changes > 0;

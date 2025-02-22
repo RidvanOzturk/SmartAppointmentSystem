@@ -30,6 +30,16 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         }
         return Ok(getDocById);
     }
+    [HttpGet("toprated")]
+    public async Task<IActionResult> GetTopRatedDoctors()
+    {
+        var doctors = await doctorUserService.GetTopRatedDoctorsAsync();
+        if (doctors.Count < 1 || doctors == null)
+        {
+            return NotFound("There are no doctors with ratings.");
+        }
+        return Ok(doctors);
+    }
 
     [HttpGet("search")]
     public async Task<IActionResult> GetDoctorBySearchAsync([FromQuery] string query)

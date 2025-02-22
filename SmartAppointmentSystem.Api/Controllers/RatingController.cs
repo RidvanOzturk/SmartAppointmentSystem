@@ -28,7 +28,7 @@ public class RatingController(IRatingService ratingService) : ControllerBase
         }
         return Ok(getAllRatings);
     }
-
+ 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetRatingAsync(Guid id)
     {

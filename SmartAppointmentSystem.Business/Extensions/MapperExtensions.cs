@@ -64,6 +64,14 @@ public static class MapperExtensions
             BranchId = doctorUserRequest.BranchId,
         };
     }
+    public static void Map(this DoctorsRatingDTO target, Doctor source)
+    {
+        target.Id = source.Id;
+        target.Name = source.Name;
+        target.Email = source.Email;
+        target.Description = source.Description;
+        target.BranchId = source.BranchId;
+    }
     public static void Map(this DoctorUserRequestDTO source, Doctor target)
     {
         target.PasswordHash = source.Password;
