@@ -23,13 +23,17 @@ public class TimeSlotService(AppointmentContext context) : ITimeSlotService
     public async Task<List<TimeSlot>> GetDoctorTimeSlotsAsync(Guid id)
     {
         var getDoctorTS = await context.TimeSlots
+            .AsNoTracking()
             .Where(x=>x.DoctorId == id)
             .ToListAsync();
         return getDoctorTS;
     }
     public async Task<List<TimeSlot>> AvailableTimeSlotDoctorAsync(Guid id)
     {
-        var availableTimeSlots = await context.TimeSlots.Where(ts => ts.DoctorId == id && ts.AvailableFrom < ts.AvailableTo).ToListAsync();
+        var availableTimeSlots = await context.TimeSlots
+            .AsNoTracking()
+            .Where(ts => ts.DoctorId == id && ts.AvailableFrom < ts.AvailableTo)
+            .ToListAsync();
         return availableTimeSlots;
     }
     public async Task<TimeSlot> GetTimeSlotByIdAsync(Guid id)

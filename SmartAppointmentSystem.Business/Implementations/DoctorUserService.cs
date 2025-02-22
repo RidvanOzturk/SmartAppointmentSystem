@@ -12,12 +12,16 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
 {
     public async Task<Doctor> GetDoctorByIdAsync(Guid id)
     {
-        var getDoc = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
+        var getDoc = await context.Doctors.
+            AsNoTracking().
+            FirstOrDefaultAsync(x => x.Id == id);
         return getDoc;
     }
     public async Task<List<Doctor>> GetAllDoctorsAsync()
     {
-        var getAllDoc = await context.Doctors.ToListAsync();
+        var getAllDoc = await context.Doctors.
+            AsNoTracking().
+            ToListAsync();
         return getAllDoc;
     }
     public async Task<List<DoctorsRatingDTO>> GetTopRatedDoctorsAsync()
@@ -57,6 +61,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             return await context.Doctors.ToListAsync();
         }
         var searchDoctorsName = await context.Doctors
+            .AsNoTracking()
             .Where(d => EF.Functions.Like(d.Name, $"%{query}%"))
             .ToListAsync();
         return searchDoctorsName;

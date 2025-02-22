@@ -18,5 +18,16 @@ namespace SmartAppointmentSystem.Api.Controllers
             }
             return Ok(branches);
         }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllBranches()
+        {
+            var branches = await branchService.GetAllBranchesAsync();
+            if (branches == null || branches.Count<1)
+            {
+                return NotFound();
+            }
+            return Ok(branches);
+        }
     }
 }

@@ -14,8 +14,13 @@ public class BranchService(AppointmentContext context) : IBranchService
             return await context.Branches.ToListAsync();
         }
         var branches = await context.Branches
+            .AsNoTracking()
             .Where(d => EF.Functions.Like(d.Title, $"%{query}%"))
             .ToListAsync();
         return branches;
+    }
+    public async Task<List<Branch>> GetAllBranchesAsync()
+    {
+        return await context.Branches.AsNoTracking().ToListAsync();
     }
 }
