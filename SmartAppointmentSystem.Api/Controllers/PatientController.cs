@@ -43,7 +43,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
     }
 
 
-    [HttpPost("PatientUserLogin")]
+    [HttpPost("login")]
     [AllowAnonymous]
     public async Task<ActionResult<PatientUserRequestModel>> LoginUser([FromBody] PatientUserRequestModel request)
     {
@@ -69,7 +69,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
     }
 
 
-    [HttpPost]
+    [HttpPost("signup")]
     public async Task<IActionResult> CreatePatientUser(PatientUserRequestModel request, [FromServices] IValidator<PatientUserRequestModel> validator)
     {
         var fluent = await validator.ValidateAsync(request);

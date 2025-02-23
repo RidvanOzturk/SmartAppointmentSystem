@@ -29,7 +29,7 @@ public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBa
         }
         return Ok(getTimeSlot);
     }
-    [HttpGet("doctorTimeSlots/{id}")]
+    [HttpGet("doctor-timeslot/{id}")]
     public async Task<IActionResult> GetDoctorTimeSlots(Guid id)
     {
         var getDoctorTs = await timeSlotService.GetDoctorTimeSlotsAsync(id);
@@ -39,7 +39,7 @@ public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBa
         }
         return Ok(getDoctorTs);
     }
-    [HttpGet("availablets/{id}")]
+    [HttpGet("avaliable-doctor-timeslot/{id}")]
     public async Task<IActionResult> AvailableTimeSlotsDoctor(Guid id)
     {
         var getSuitApp = await timeSlotService.AvailableTimeSlotDoctorAsync(id);
@@ -72,7 +72,7 @@ public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBa
         var timeSlot = await timeSlotService.UpdateTimeSlotByIdAsync(id, mapping);
         return Ok(timeSlot);
     }
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTimeSlot([FromRoute] Guid id)
     {
         var delete = await timeSlotService.DeleteTimeSlotByIdAsync(id);

@@ -52,7 +52,7 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         return Ok(doctors);
     }
 
-    [HttpPost]
+    [HttpPost("signup")]
     public async Task<IActionResult> CreateDoctorUser([FromBody] DoctorUserRequestModel doctorUserRequest)
     {
         var mapping = doctorUserRequest.Map();
@@ -66,7 +66,7 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         return Ok(getAllDoc);
     }
 
-    [HttpPost("DoctorUserLogin")]
+    [HttpPost("login")]
     public async Task<ActionResult<DoctorUserLoginRequestModel>> LoginUser([FromBody] DoctorUserLoginRequestModel request)
     {
         var user = request.Map();

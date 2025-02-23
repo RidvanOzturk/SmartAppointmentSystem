@@ -12,7 +12,7 @@ namespace SmartAppointmentSystem.Api.Controllers;
 public class AppointmentController(IAppointmentService appointmentService) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateAppointmentAsync([FromBody] AppointmentRequestModel requestModel)
+    public async Task<IActionResult> CreateAppointment([FromBody] AppointmentRequestModel requestModel)
     {
         var fill = requestModel.Map();
         var gettingFilled = await appointmentService.CreateAppointmentAsync(fill);
@@ -23,7 +23,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
         return Ok(gettingFilled);
     }
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllAppointmentsAsync()
+    public async Task<IActionResult> GetAllAppointments()
     {
         var getAllApp = await appointmentService.GetAllAppointmentsAsync();
         if (getAllApp.Count < 1 || getAllApp == null)
@@ -34,7 +34,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetAppointmentAsync(Guid id)
+    public async Task<IActionResult> GetAppointment(Guid id)
     {
         var getAppo = await appointmentService.GetAppointmentsByIdAsync(id);
         if (getAppo == null)
@@ -45,8 +45,8 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     }
 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [HttpGet("apps")]
-    public async Task<IActionResult> GetUserAppointmentsAsync()
+    [HttpGet("patient-appointments")]
+    public async Task<IActionResult> GetPatientsAppointments()
     {
         var userId = HttpContext.User.GetUserId();
         var appointments = await appointmentService.GetUserAppointmentsAsync(userId);
@@ -60,7 +60,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAppointmentAsync([FromRoute] Guid id, AppointmentRequestModel request)
+    public async Task<IActionResult> UpdateAppointment([FromRoute] Guid id, AppointmentRequestModel request)
     {
         var appointmentId = await appointmentService.GetAppointmentsByIdAsync(id);
 
@@ -75,7 +75,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteAppointmentAsync([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteAppointment([FromRoute] Guid id)
     {
         var app = await appointmentService.DeleteAppointmentByIdAsync(id);
         if (!app)
