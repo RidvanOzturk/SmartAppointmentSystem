@@ -22,16 +22,8 @@ namespace SmartAppointmentSystem.Data
             var connectionString = configuration.GetConnectionString("AppointmentContext");
             var optionsBuilder = new DbContextOptionsBuilder<AppointmentContext>();
 
-            if (env.Equals("Development", StringComparison.OrdinalIgnoreCase))
-            {
-                optionsBuilder.UseSqlServer(connectionString,
-                    b => b.MigrationsAssembly("SmartAppointmentSystem.Data"));
-            }
-            else
-            {
-                optionsBuilder.UseNpgsql(connectionString,
-                    b => b.MigrationsAssembly("SmartAppointmentSystem.Data"));
-            }
+            optionsBuilder.UseNpgsql(connectionString,
+                b => b.MigrationsAssembly("SmartAppointmentSystem.Data"));
 
             return new AppointmentContext(optionsBuilder.Options);
         }

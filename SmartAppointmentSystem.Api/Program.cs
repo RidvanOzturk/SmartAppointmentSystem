@@ -15,16 +15,9 @@ builder.Configuration.AddEnvironmentVariables();
 var connectionString = builder.Configuration.GetConnectionString("AppointmentContext");
 
 
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDbContext<AppointmentContext>(options =>
-        options.UseSqlServer(connectionString, b => b.MigrationsAssembly("SmartAppointmentSystem.Data")));
-}
-else
-{
-    builder.Services.AddDbContext<AppointmentContext>(options =>
-        options.UseNpgsql(connectionString, b => b.MigrationsAssembly("SmartAppointmentSystem.Data")));
-}
+builder.Services.AddDbContext<AppointmentContext>(options =>
+    options.UseNpgsql(connectionString, b => b.MigrationsAssembly("SmartAppointmentSystem.Data")));
+
 
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IBranchService, BranchService>();

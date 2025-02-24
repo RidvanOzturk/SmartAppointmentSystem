@@ -22,25 +22,6 @@ namespace SmartAppointmentSystem.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-            var provider = this.Database.ProviderName;
-            Console.WriteLine("Database Provider: " + provider); 
-
-            if (!string.IsNullOrEmpty(provider) && !provider.Contains("Npgsql"))
-            {
-                modelBuilder.Entity<Appointment>().Property(a => a.Id).HasColumnType(null);
-                modelBuilder.Entity<Appointment>().Property(a => a.DoctorId).HasColumnType(null);
-                modelBuilder.Entity<Appointment>().Property(a => a.PatientId).HasColumnType(null);
-                modelBuilder.Entity<Doctor>().Property(a => a.Id).HasColumnType(null);
-                modelBuilder.Entity<Patient>().Property(a => a.Id).HasColumnType(null);
-                modelBuilder.Entity<Rating>().Property(a => a.Id).HasColumnType(null);
-                modelBuilder.Entity<Rating>().Property(a => a.DoctorId).HasColumnType(null);
-                modelBuilder.Entity<Rating>().Property(a => a.PatientId).HasColumnType(null);
-                modelBuilder.Entity<TimeSlot>().Property(a => a.Id).HasColumnType(null);
-                modelBuilder.Entity<TimeSlot>().Property(a => a.DoctorId).HasColumnType(null);
-
-            }
-
             base.OnModelCreating(modelBuilder);
         }
 
