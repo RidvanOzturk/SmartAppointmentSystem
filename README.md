@@ -44,9 +44,9 @@ The application is built with a clean separation of concerns, with distinct laye
   dotnet build
   dotnet run
 
-## Usage
 
-  #API Endpoints:
+## Usage
+  API Endpoints:
 
 Use the provided endpoints to create, read, update, and delete appointments and doctor records.
 Example: GET /api/doctors/all returns a list of all doctors.
