@@ -37,15 +37,16 @@ The application is built with a clean separation of concerns, with distinct laye
   ```bash
   dotnet ef migrations add InitialCreate
   dotnet ef database update
-
-3. **Build and Run**
+  ```
+  
+ 3. **Build and Run**
 
   ```bash
   dotnet build
   dotnet run
+  ```
 
-
-## Usage
+ 4. **Usage**
   API Endpoints:
 
 Use the provided endpoints to create, read, update, and delete appointments and doctor records.
