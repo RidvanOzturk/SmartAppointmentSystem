@@ -8,7 +8,7 @@ public interface IDoctorUserService
     Task<Doctor> GetDoctorByIdAsync(Guid id);
     Task<List<Doctor>> GetAllDoctorsAsync();
     Task<List<DoctorsRatingDTO>> GetTopRatedDoctorsAsync();
-    Task<Doctor> GetDoctorWithMostAppointmentsAsync();
+    Task<List<Doctor>> GetDoctorWithMostAppointmentsAsync();
     Task<bool> CreateDoctorAsync(DoctorUserRequestDTO requestDTO);
     Task<List<Doctor>> SearchDoctorsNameAsync(string query);
     Task<UserResponseModel> LoginUserAsync(DoctorUserLoginRequestDTO request);

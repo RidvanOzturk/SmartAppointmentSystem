@@ -24,12 +24,12 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             ToListAsync();
         return getAllDoc;
     }
-    public async Task<Doctor> GetDoctorWithMostAppointmentsAsync()
+    public async Task<List<Doctor>> GetDoctorWithMostAppointmentsAsync()
     {
         var getDoctor = await context.Doctors.
             AsNoTracking().
             OrderByDescending(x=>x.Appointments.Count).
-            FirstOrDefaultAsync();
+            ToListAsync();
         return getDoctor;
     }
     public async Task<List<DoctorsRatingDTO>> GetTopRatedDoctorsAsync()
