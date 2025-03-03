@@ -12,10 +12,10 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
 {
     public async Task<Doctor> GetDoctorByIdAsync(Guid id)
     {
-        var getDoc = await context.Doctors.
+        var getDoctor = await context.Doctors.
             AsNoTracking().
             FirstOrDefaultAsync(x => x.Id == id);
-        return getDoc;
+        return getDoctor;
     }
     public async Task<List<Doctor>> GetAllDoctorsAsync()
     {
@@ -23,6 +23,14 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             AsNoTracking().
             ToListAsync();
         return getAllDoc;
+    }
+    public async Task<Doctor> GetDoctorWithMostAppointmentsAsync()
+    {
+        var getDoctor = await context.Doctors.
+            AsNoTracking().
+            OrderByDescending(x=>x.Appointments.Count).
+            FirstOrDefaultAsync();
+        return getDoctor;
     }
     public async Task<List<DoctorsRatingDTO>> GetTopRatedDoctorsAsync()
     {
@@ -90,15 +98,15 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
     }
     public async Task<bool> UpdateDoctorByIdAsync(Guid id, DoctorUserRequestDTO requestDTO)
     {
-        var docId = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
-        requestDTO.Map(docId);
+        var doctorId = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
+        requestDTO.Map(doctorId);
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }
     public async Task<bool> DeleteDoctorByIdAsync(Guid id)
     {
-        var docId = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
-        context.Doctors.Remove(docId);
+        var doctorId = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
+        context.Doctors.Remove(doctorId);
         var changes = await context.SaveChangesAsync();
         return changes > 0;
     }

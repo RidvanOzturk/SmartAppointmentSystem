@@ -20,6 +20,7 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         var getDoc = await doctorUserService.GetDoctorByIdAsync(doctorId);
         return Ok(getDoc);
     }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetDoctorById(Guid id)
     {
@@ -30,6 +31,7 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         }
         return Ok(getDocById);
     }
+
     [HttpGet("toprated")]
     public async Task<IActionResult> GetTopRatedDoctors()
     {
@@ -39,6 +41,17 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
             return NotFound("There are no doctors with ratings.");
         }
         return Ok(doctors);
+    }
+
+    [HttpGet("most-appointment")]
+    public async Task<IActionResult> GetMostAppointmentDoctor()
+    {
+        var doctor = await doctorUserService.GetDoctorWithMostAppointmentsAsync();
+        if (doctor == null)
+        {
+            return NotFound("There are no doctors with most appointmnet");
+        }
+        return Ok(doctor);
     }
 
     [HttpGet("search")]
@@ -59,6 +72,7 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         var createDoc = await doctorUserService.CreateDoctorAsync(mapping);
         return Ok(createDoc);
     }
+
     [HttpGet("all")]
     public async Task<IActionResult> GetAllDoctors()
     {
