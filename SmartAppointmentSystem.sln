@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35521.163
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartAppointmentSystem.Api", "SmartAppointmentSystem.Api\SmartAppointmentSystem.Api.csproj", "{165979DF-8E7C-4981-A93C-1A216AC8A1E7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0DC88193-3FCC-44D3-B466-0BF20D55526C} = {0DC88193-3FCC-44D3-B466-0BF20D55526C}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartAppointmentSystem.Data", "SmartAppointmentSystem.Data\SmartAppointmentSystem.Data.csproj", "{7236B4F0-F0B3-4F2A-98F4-29B5C3A5421D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartAppointmentSystem.Business", "SmartAppointmentSystem.Business\SmartAppointmentSystem.Business.csproj", "{0DC88193-3FCC-44D3-B466-0BF20D55526C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7236B4F0-F0B3-4F2A-98F4-29B5C3A5421D} = {7236B4F0-F0B3-4F2A-98F4-29B5C3A5421D}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{165979DF-8E7C-4981-A93C-1A216AC8A1E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{165979DF-8E7C-4981-A93C-1A216AC8A1E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{165979DF-8E7C-4981-A93C-1A216AC8A1E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{165979DF-8E7C-4981-A93C-1A216AC8A1E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7236B4F0-F0B3-4F2A-98F4-29B5C3A5421D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7236B4F0-F0B3-4F2A-98F4-29B5C3A5421D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7236B4F0-F0B3-4F2A-98F4-29B5C3A5421D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7236B4F0-F0B3-4F2A-98F4-29B5C3A5421D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DC88193-3FCC-44D3-B466-0BF20D55526C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DC88193-3FCC-44D3-B466-0BF20D55526C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DC88193-3FCC-44D3-B466-0BF20D55526C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DC88193-3FCC-44D3-B466-0BF20D55526C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

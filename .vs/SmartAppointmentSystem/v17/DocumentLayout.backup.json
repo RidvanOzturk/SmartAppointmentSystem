@@ -1,12 +1,241 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{165979DF-8E7C-4981-A93C-1A216AC8A1E7}|SmartAppointmentSystem.Api\\SmartAppointmentSystem.Api.csproj|c:\\users\\oztur\\source\\repos\\smartappointmentsystem\\smartappointmentsystem.api\\controllers\\doctorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{165979DF-8E7C-4981-A93C-1A216AC8A1E7}|SmartAppointmentSystem.Api\\SmartAppointmentSystem.Api.csproj|solutionrelative:smartappointmentsystem.api\\controllers\\doctorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|c:\\users\\oztur\\source\\repos\\smartappointmentsystem\\smartappointmentsystem.business\\implementations\\doctoruserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|solutionrelative:smartappointmentsystem.business\\implementations\\doctoruserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|c:\\users\\oztur\\source\\repos\\smartappointmentsystem\\smartappointmentsystem.business\\implementations\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|solutionrelative:smartappointmentsystem.business\\implementations\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|c:\\users\\oztur\\source\\repos\\smartappointmentsystem\\smartappointmentsystem.business\\implementations\\patientuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|solutionrelative:smartappointmentsystem.business\\implementations\\patientuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{165979DF-8E7C-4981-A93C-1A216AC8A1E7}|SmartAppointmentSystem.Api\\SmartAppointmentSystem.Api.csproj|c:\\users\\oztur\\source\\repos\\smartappointmentsystem\\smartappointmentsystem.api\\controllers\\patientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{165979DF-8E7C-4981-A93C-1A216AC8A1E7}|SmartAppointmentSystem.Api\\SmartAppointmentSystem.Api.csproj|solutionrelative:smartappointmentsystem.api\\controllers\\patientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|c:\\users\\oztur\\source\\repos\\smartappointmentsystem\\smartappointmentsystem.business\\dtos\\generatetokenrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|solutionrelative:smartappointmentsystem.business\\dtos\\generatetokenrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{165979DF-8E7C-4981-A93C-1A216AC8A1E7}|SmartAppointmentSystem.Api\\SmartAppointmentSystem.Api.csproj|c:\\users\\oztur\\source\\repos\\smartappointmentsystem\\smartappointmentsystem.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{165979DF-8E7C-4981-A93C-1A216AC8A1E7}|SmartAppointmentSystem.Api\\SmartAppointmentSystem.Api.csproj|solutionrelative:smartappointmentsystem.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|c:\\users\\oztur\\source\\repos\\smartappointmentsystem\\smartappointmentsystem.business\\implementations\\appointmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|solutionrelative:smartappointmentsystem.business\\implementations\\appointmentservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|c:\\users\\oztur\\source\\repos\\smartappointmentsystem\\smartappointmentsystem.business\\implementations\\ratingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|solutionrelative:smartappointmentsystem.business\\implementations\\ratingservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{165979DF-8E7C-4981-A93C-1A216AC8A1E7}|SmartAppointmentSystem.Api\\SmartAppointmentSystem.Api.csproj|c:\\users\\oztur\\source\\repos\\smartappointmentsystem\\smartappointmentsystem.api\\controllers\\timeslotcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{165979DF-8E7C-4981-A93C-1A216AC8A1E7}|SmartAppointmentSystem.Api\\SmartAppointmentSystem.Api.csproj|solutionrelative:smartappointmentsystem.api\\controllers\\timeslotcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|c:\\users\\oztur\\source\\repos\\smartappointmentsystem\\smartappointmentsystem.business\\contracts\\itimeslotservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|solutionrelative:smartappointmentsystem.business\\contracts\\itimeslotservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|c:\\users\\oztur\\source\\repos\\smartappointmentsystem\\smartappointmentsystem.business\\contracts\\ipatientuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|solutionrelative:smartappointmentsystem.business\\contracts\\ipatientuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|c:\\users\\oztur\\source\\repos\\smartappointmentsystem\\smartappointmentsystem.business\\contracts\\idoctoruserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|solutionrelative:smartappointmentsystem.business\\contracts\\idoctoruserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 8,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "GenerateTokenRequestDTO.cs",
+              "DocumentMoniker": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\DTOs\\GenerateTokenRequestDTO.cs",
+              "RelativeDocumentMoniker": "SmartAppointmentSystem.Business\\DTOs\\GenerateTokenRequestDTO.cs",
+              "ToolTip": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\DTOs\\GenerateTokenRequestDTO.cs",
+              "RelativeToolTip": "SmartAppointmentSystem.Business\\DTOs\\GenerateTokenRequestDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-05T19:08:49.768Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TokenService.cs",
+              "DocumentMoniker": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Implementations\\TokenService.cs",
+              "RelativeDocumentMoniker": "SmartAppointmentSystem.Business\\Implementations\\TokenService.cs",
+              "ToolTip": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Implementations\\TokenService.cs",
+              "RelativeToolTip": "SmartAppointmentSystem.Business\\Implementations\\TokenService.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAAwB0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-05T18:28:55.813Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "RatingService.cs",
+              "DocumentMoniker": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Implementations\\RatingService.cs",
+              "RelativeDocumentMoniker": "SmartAppointmentSystem.Business\\Implementations\\RatingService.cs",
+              "ToolTip": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Implementations\\RatingService.cs",
+              "RelativeToolTip": "SmartAppointmentSystem.Business\\Implementations\\RatingService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-05T18:27:56.843Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PatientUserService.cs",
+              "DocumentMoniker": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Implementations\\PatientUserService.cs",
+              "RelativeDocumentMoniker": "SmartAppointmentSystem.Business\\Implementations\\PatientUserService.cs",
+              "ToolTip": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Implementations\\PatientUserService.cs",
+              "RelativeToolTip": "SmartAppointmentSystem.Business\\Implementations\\PatientUserService.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAtwCIAAACaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-05T18:27:52.565Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DoctorUserService.cs",
+              "DocumentMoniker": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Implementations\\DoctorUserService.cs",
+              "RelativeDocumentMoniker": "SmartAppointmentSystem.Business\\Implementations\\DoctorUserService.cs",
+              "ToolTip": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Implementations\\DoctorUserService.cs",
+              "RelativeToolTip": "SmartAppointmentSystem.Business\\Implementations\\DoctorUserService.cs",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAYwFwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-05T18:23:26.336Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AppointmentService.cs",
+              "DocumentMoniker": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Implementations\\AppointmentService.cs",
+              "RelativeDocumentMoniker": "SmartAppointmentSystem.Business\\Implementations\\AppointmentService.cs",
+              "ToolTip": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Implementations\\AppointmentService.cs",
+              "RelativeToolTip": "SmartAppointmentSystem.Business\\Implementations\\AppointmentService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADIAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-05T18:22:33.981Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "TimeSlotController.cs",
+              "DocumentMoniker": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Api\\Controllers\\TimeSlotController.cs",
+              "RelativeDocumentMoniker": "SmartAppointmentSystem.Api\\Controllers\\TimeSlotController.cs",
+              "ToolTip": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Api\\Controllers\\TimeSlotController.cs",
+              "RelativeToolTip": "SmartAppointmentSystem.Api\\Controllers\\TimeSlotController.cs",
+              "ViewState": "AgIAADQAAAAAAAAAAAAcwD4AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-05T18:15:51.019Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "PatientController.cs",
+              "DocumentMoniker": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Api\\Controllers\\PatientController.cs",
+              "RelativeDocumentMoniker": "SmartAppointmentSystem.Api\\Controllers\\PatientController.cs",
+              "ToolTip": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Api\\Controllers\\PatientController.cs",
+              "RelativeToolTip": "SmartAppointmentSystem.Api\\Controllers\\PatientController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-05T17:44:40.862Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DoctorController.cs",
+              "DocumentMoniker": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Api\\Controllers\\DoctorController.cs",
+              "RelativeDocumentMoniker": "SmartAppointmentSystem.Api\\Controllers\\DoctorController.cs",
+              "ToolTip": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Api\\Controllers\\DoctorController.cs",
+              "RelativeToolTip": "SmartAppointmentSystem.Api\\Controllers\\DoctorController.cs",
+              "ViewState": "AgIAAEYAAAAAAAAAAAAYwFQAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-05T18:46:41.508Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Api\\appsettings.json",
+              "RelativeDocumentMoniker": "SmartAppointmentSystem.Api\\appsettings.json",
+              "ToolTip": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Api\\appsettings.json",
+              "RelativeToolTip": "SmartAppointmentSystem.Api\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-03-05T18:29:14.712Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ITimeSlotService.cs",
+              "DocumentMoniker": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Contracts\\ITimeSlotService.cs",
+              "RelativeDocumentMoniker": "SmartAppointmentSystem.Business\\Contracts\\ITimeSlotService.cs",
+              "ToolTip": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Contracts\\ITimeSlotService.cs",
+              "RelativeToolTip": "SmartAppointmentSystem.Business\\Contracts\\ITimeSlotService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAABcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-05T18:15:42.277Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "IPatientUserService.cs",
+              "DocumentMoniker": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Contracts\\IPatientUserService.cs",
+              "RelativeDocumentMoniker": "SmartAppointmentSystem.Business\\Contracts\\IPatientUserService.cs",
+              "ToolTip": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Contracts\\IPatientUserService.cs",
+              "RelativeToolTip": "SmartAppointmentSystem.Business\\Contracts\\IPatientUserService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAABbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-05T18:13:59.725Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "IDoctorUserService.cs",
+              "DocumentMoniker": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Contracts\\IDoctorUserService.cs",
+              "RelativeDocumentMoniker": "SmartAppointmentSystem.Business\\Contracts\\IDoctorUserService.cs",
+              "ToolTip": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Contracts\\IDoctorUserService.cs",
+              "RelativeToolTip": "SmartAppointmentSystem.Business\\Contracts\\IDoctorUserService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAABQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-05T17:57:01.302Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
