@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smartappointmentsystem-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: smartappointmentsystem
+  template:
+    metadata:
+      labels:
+        app: smartappointmentsystem
+    spec:
+      containers:
+      - name: smartappointmentsystem
+        image: ridvanozturk/smartappointmentsystem:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Development"
+        - name: ASPNETCORE_URLS
+          value: "http://+:80"
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mssql-secret
+              key: SA_PASSWORD
