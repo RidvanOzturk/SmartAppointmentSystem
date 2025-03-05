@@ -65,8 +65,8 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
             return NotFound();
         }
 
-        var UpdateAppointment = request.Map();
-        await appointmentService.UpdateAppointmentByIdAsync(id, UpdateAppointment, cancellationToken);
+        var updateAppointment = request.Map();
+        await appointmentService.UpdateAppointmentByIdAsync(id, updateAppointment, cancellationToken);
         return Ok();
     }
 
