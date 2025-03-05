@@ -12,76 +12,68 @@ namespace SmartAppointmentSystem.Api.Controllers;
 public class AppointmentController(IAppointmentService appointmentService) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateAppointment([FromBody] AppointmentRequestModel requestModel)
+    public async Task<IActionResult> CreateAppointment([FromBody] AppointmentRequestModel requestModel, CancellationToken cancellationToken = default)
     {
-        var fill = requestModel.Map();
-        var gettingFilled = await appointmentService.CreateAppointmentAsync(fill);
-        if (!gettingFilled)
-        {
-            return StatusCode(500, "Appointment could not create");
-        }
-        return Ok(gettingFilled);
+        var appointment = requestModel.Map();
+        await appointmentService.CreateAppointmentAsync(appointment, cancellationToken);
+        return Ok();
     }
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllAppointments()
+    public async Task<IActionResult> GetAllAppointments(CancellationToken cancellationToken = default)
     {
-        var getAllApp = await appointmentService.GetAllAppointmentsAsync();
-        if (getAllApp.Count < 1 || getAllApp == null)
-        {
-            return NotFound("There is no appointment.");
-        }
-        return Ok(getAllApp);
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetAppointment(Guid id)
-    {
-        var getAppo = await appointmentService.GetAppointmentsByIdAsync(id);
-        if (getAppo == null)
+        var appointments = await appointmentService.GetAllAppointmentsAsync(cancellationToken);
+        if (appointments.Count == 0)
         {
             return NotFound();
         }
-        return Ok(getAppo);
+        return Ok(appointments);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetAppointment(Guid id, CancellationToken cancellationToken = default)
+    {
+        var appointment = await appointmentService.GetAppointmentsByIdAsync(id, cancellationToken);
+        if (appointment == null)
+        {
+            return NotFound();
+        }
+        return Ok(appointment);
     }
 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("patient-appointments")]
-    public async Task<IActionResult> GetPatientsAppointments()
+    public async Task<IActionResult> GetPatientsAppointments(CancellationToken cancellationToken = default)
     {
         var userId = HttpContext.User.GetUserId();
-        var appointments = await appointmentService.GetUserAppointmentsAsync(userId);
+        var appointments = await appointmentService.GetUserAppointmentsAsync(userId, cancellationToken);
 
-        if (appointments == null || !appointments.Any())
+        if (appointments.Count != 0)
         {
-            return NotFound("There is no appointment.");
+            return NotFound();
         }
 
         return Ok(appointments);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAppointment([FromRoute] Guid id, AppointmentRequestModel request)
+    public async Task<IActionResult> UpdateAppointment([FromRoute] Guid id, AppointmentRequestModel request, CancellationToken cancellationToken = default)
     {
-        var appointmentId = await appointmentService.GetAppointmentsByIdAsync(id);
+        var appointment = await appointmentService.GetAppointmentsByIdAsync(id, cancellationToken);
 
-        if (appointmentId == null)
+        if (appointment == null)
         {
             return NotFound();
         }
 
-        var appointmentMapping = request.Map();
-        var app = await appointmentService.UpdateAppointmentByIdAsync(id, appointmentMapping);
-        return Ok(app);
+        var UpdateAppointment = request.Map();
+        await appointmentService.UpdateAppointmentByIdAsync(id, UpdateAppointment, cancellationToken);
+        return Ok();
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteAppointment([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteAppointment([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {
-        var app = await appointmentService.DeleteAppointmentByIdAsync(id);
-        if (!app)
-        {
-            return BadRequest();
-        }
-        return Ok("Deleted Appoinment");
+        var app = await appointmentService.DeleteAppointmentByIdAsync(id, cancellationToken);
+        return Ok();
     }
 }
