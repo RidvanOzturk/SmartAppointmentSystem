@@ -11,7 +11,6 @@ namespace SmartAppointmentSystem.Data
             : base(options)
         {
         }
-
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Branch> Branches { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
@@ -24,7 +23,5 @@ namespace SmartAppointmentSystem.Data
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(modelBuilder);
         }
-
-
     }
 }

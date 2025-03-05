@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartAppointmentSystem.Api.Extensions;
 using SmartAppointmentSystem.Api.Models;
@@ -85,7 +83,7 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
     {
         var doctorEntity = request.Map();
         var doctor = await doctorUserService.LoginUserAsync(doctorEntity, cancellationToken);
-        if (doctor.AuthenticateResult == false)
+        if (!doctor.AuthenticateResult)
         {
             return NotFound();
         }
@@ -97,17 +95,27 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
     [HttpPut]
     public async Task<IActionResult> UpdateDoctorUser([FromBody] DoctorUserRequestModel doctorUserRequest , CancellationToken cancellationToken)
     {
-        var doctorEntity = doctorUserRequest.Map();
         var doctorId = HttpContext.User.GetUserId();
-        var doctor = await doctorUserService.UpdateDoctorByIdAsync(doctorId, doctorEntity, cancellationToken);
-        return Ok(doctor);
+        var isDoctorExist = await doctorUserService.IsDoctorExistAsync(doctorId, cancellationToken);
+        if (!isDoctorExist)
+        {
+            return NotFound();
+        }
+        var doctorEntity = doctorUserRequest.Map();
+        await doctorUserService.UpdateDoctorByIdAsync(doctorId, doctorEntity, cancellationToken);
+        return Ok();
     }
 
     [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDoctorUser([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var doctor = await doctorUserService.DeleteDoctorByIdAsync(id, cancellationToken);
+        var isDoctorExist = await doctorUserService.IsDoctorExistAsync(id, cancellationToken);
+        if (!isDoctorExist)
+        {
+            return NotFound();
+        }
+        await doctorUserService.DeleteDoctorByIdAsync(id, cancellationToken);
         return Ok();
     }
 }

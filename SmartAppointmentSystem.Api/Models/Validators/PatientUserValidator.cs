@@ -1,7 +1,4 @@
 ﻿using FluentValidation;
-using FluentValidation.Validators;
-using SmartAppointmentSystem.Data.Entities;
-using System.ComponentModel.DataAnnotations;
 namespace SmartAppointmentSystem.Api.Models.Validators;
 
 public class PatientUserValidator : AbstractValidator<PatientUserRequestModel>

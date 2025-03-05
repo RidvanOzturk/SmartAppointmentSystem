@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SmartAppointmentSystem.Api.Extensions;
 using SmartAppointmentSystem.Api.Models;
 using SmartAppointmentSystem.Business.Contracts;
-using SmartAppointmentSystem.Business.Implementations;
 
 namespace SmartAppointmentSystem.Api.Controllers;
 
@@ -38,14 +36,11 @@ public class RatingController(IRatingService ratingService) : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateRating([FromRoute] Guid id, RatingRequestModel request, CancellationToken cancellationToken)
     {
-        //same ask
-        var ratingId = await ratingService.GetRatingByIdAsync(id, cancellationToken);
-
-        if (ratingId == null)
+        var isRatingExist = await ratingService.isRatingExistAsync(id, cancellationToken);
+        if (!isRatingExist)
         {
             return NotFound();
         }
-
         var rating = request.Map();
         await ratingService.UpdateRatingByIdAsync(id, rating, cancellationToken);
         return Ok();
@@ -53,6 +48,11 @@ public class RatingController(IRatingService ratingService) : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteRating([FromRoute] Guid id, CancellationToken cancellationToken)
     {
+        var isRatingExist = await ratingService.isRatingExistAsync(id, cancellationToken);
+        if (!isRatingExist)
+        {
+            return NotFound();
+        }
         await ratingService.DeleteRatingByIdAsync(id, cancellationToken);
         return Ok();
     }

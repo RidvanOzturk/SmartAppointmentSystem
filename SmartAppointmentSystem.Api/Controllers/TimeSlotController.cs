@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SmartAppointmentSystem.Api.Extensions;
 using SmartAppointmentSystem.Api.Models;
 using SmartAppointmentSystem.Business.Contracts;
-using SmartAppointmentSystem.Business.Implementations;
 
 namespace SmartAppointmentSystem.Api.Controllers;
 
@@ -53,18 +51,13 @@ public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBa
     public async Task<IActionResult> GetAllTimeSlots(CancellationToken cancellationToken)
     {
         var timeSlots = await timeSlotService.GetAllTimeSlotsAsync(cancellationToken);
-        if (timeSlots == null)
-        {
-            return BadRequest();
-        }
         return Ok(timeSlots);
     }
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTimeSlot([FromRoute] Guid id, TimeSlotRequestModel timeSlotRequest, CancellationToken cancellationToken)
     {
-        //
-        var timeSlot = await timeSlotService.GetTimeSlotByIdAsync(id, cancellationToken);
-        if (timeSlot == null)
+        var isTimeSlotExist = await timeSlotService.IsTimeSlotExistAsync(id, cancellationToken);
+        if (!isTimeSlotExist)
         {
             return NotFound();
         }
@@ -75,6 +68,11 @@ public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBa
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTimeSlot([FromRoute] Guid id, CancellationToken cancellationToken)
     {
+        var isTimeSlotExist = await timeSlotService.IsTimeSlotExistAsync(id, cancellationToken);
+        if (!isTimeSlotExist)
+        {
+            return NotFound();
+        }
         await timeSlotService.DeleteTimeSlotByIdAsync(id, cancellationToken);
         return Ok();
     }

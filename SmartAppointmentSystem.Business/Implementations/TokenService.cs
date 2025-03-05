@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using SmartAppointmentSystem.Business.Contracts;
 using SmartAppointmentSystem.Business.DTOs;
 using System.IdentityModel.Tokens.Jwt;
@@ -6,7 +7,7 @@ using System.Security.Claims;
 using System.Text;
 namespace SmartAppointmentSystem.Business.Implementations;
 
-public class TokenService : ITokenService
+public class TokenService(IConfiguration configuration) : ITokenService
 {
     public Task<GenerateTokenResponseDTO> GenerateToken(GenerateTokenRequestDTO request)
     {
@@ -15,6 +16,8 @@ public class TokenService : ITokenService
         {
             throw new Exception("JWT Secret Key not found.");
         }
+        int tokenExpiryMinutes = configuration.GetValue<int>("TokenSettings:ExpiresInMinutes");
+
         SymmetricSecurityKey symmetricSecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
         var dateTimeNow = DateTime.UtcNow;
 
@@ -27,7 +30,6 @@ public class TokenService : ITokenService
                 new Claim(ClaimTypes.Role, request.Role)
             },
             notBefore: dateTimeNow,
-            expires: dateTimeNow.AddMinutes(300),
             signingCredentials: new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)
         );
 

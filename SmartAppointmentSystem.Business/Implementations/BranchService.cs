@@ -11,13 +11,12 @@ public class BranchService(AppointmentContext context) : IBranchService
     {
         if (string.IsNullOrEmpty(query))
         {
-            return await context.Branches.ToListAsync();
+            return await context.Branches.ToListAsync(cancellationToken);
         }
-        var branches = await context.Branches
+        return await context.Branches
             .AsNoTracking()
             .Where(d => EF.Functions.Like(d.Title, $"%{query}%"))
             .ToListAsync(cancellationToken);
-        return branches;
     }
     public async Task<List<Branch>> GetAllBranchesAsync(CancellationToken cancellationToken)
     {

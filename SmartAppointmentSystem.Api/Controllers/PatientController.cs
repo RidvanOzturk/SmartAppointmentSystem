@@ -4,11 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartAppointmentSystem.Api.Extensions;
 using SmartAppointmentSystem.Api.Models;
-using SmartAppointmentSystem.Api.Models.Validators;
 using SmartAppointmentSystem.Business.Contracts;
 using SmartAppointmentSystem.Business.Implementations;
-using SmartAppointmentSystem.Data.Entities;
-using System.ComponentModel.DataAnnotations;
 
 namespace SmartAppointmentSystem.Api.Controllers;
 
@@ -42,7 +39,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
     {
         var patient = request.Map();
         var result = await userPatientService.LoginUserAsync(patient, cancellationToken);
-        if (result.AuthenticateResult == false)
+        if (!result.AuthenticateResult)
         {
             return NotFound();
         }
@@ -64,11 +61,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
     [HttpPost("signup")]
     public async Task<IActionResult> CreatePatientUser(PatientUserRequestModel request, [FromServices] IValidator<PatientUserRequestModel> validator, CancellationToken cancellationToken)
     {
-        var fluent = await validator.ValidateAsync(request);
-        if (!fluent.IsValid)
-        {
-            return BadRequest();
-        }
+        
         var patient = request.Map();
         await userPatientService.RegisterAsync(patient, cancellationToken);
         return Ok();
@@ -77,6 +70,11 @@ public class PatientController(IPatientUserService userPatientService) : Control
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePatientUser([FromRoute] Guid id, CancellationToken cancellationToken)
     {
+        var isPatientExist = await userPatientService.IsPatientExistAsync(id, cancellationToken);
+        if (!isPatientExist)
+        {
+            return NotFound();
+        }
         await userPatientService.DeleteUserByIdAsync(id, cancellationToken);
         return Ok();
     }

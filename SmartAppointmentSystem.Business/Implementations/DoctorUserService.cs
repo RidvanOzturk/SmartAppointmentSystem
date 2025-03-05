@@ -12,25 +12,22 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
 {
     public async Task<Doctor> GetDoctorByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var doctor = await context.Doctors
+        return await context.Doctors
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        return doctor;
     }
     public async Task<List<Doctor>> GetAllDoctorsAsync(CancellationToken cancellationToken)
     {
-        var doctors = await context.Doctors
+        return await context.Doctors
             .AsNoTracking()
             .ToListAsync(cancellationToken);
-        return doctors;
     }
     public async Task<List<Doctor>> GetDoctorsWithMostAppointmentsAsync(CancellationToken cancellationToken)
     {
-        var doctors = await context.Doctors
+        return await context.Doctors
             .AsNoTracking()
             .OrderByDescending(x=>x.Appointments.Count)
             .ToListAsync(cancellationToken);
-        return doctors;
     }
     public async Task<List<DoctorsRatingDTO>> GetTopRatedDoctorsAsync(CancellationToken cancellationToken)
     {
@@ -58,20 +55,21 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password);
         var doctorEntity = requestDTO.Map();
         doctorEntity.PasswordHash = hashedPassword;
-        await context.Doctors.AddAsync(doctorEntity, cancellationToken);
+        await context.Doctors
+            .AddAsync(doctorEntity, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
     }
     public async Task<List<Doctor>> SearchDoctorsNameAsync(string query, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(query))
         {
-            return await context.Doctors.ToListAsync(cancellationToken);
+            return await context.Doctors
+                .ToListAsync(cancellationToken);
         }
-        var doctorsName = await context.Doctors
+        return await context.Doctors
             .AsNoTracking()
             .Where(d => EF.Functions.Like(d.Name, $"%{query}%"))
             .ToListAsync(cancellationToken);
-        return doctorsName;
     }
 
     public async Task<UserResponseModel> LoginUserAsync(DoctorUserLoginRequestDTO request, CancellationToken cancellationToken)
@@ -81,7 +79,8 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             throw new ArgumentNullException(nameof(request));
         }
 
-        var user = await context.Doctors.FirstOrDefaultAsync(x => x.Name == request.Name, cancellationToken);
+        var user = await context.Doctors
+            .FirstOrDefaultAsync(x => x.Name == request.Name, cancellationToken);
         if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
         {
             throw new UnauthorizedAccessException("Kullanıcı adı veya şifre yanlış.");
@@ -95,18 +94,23 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             AuthToken = generatedToken.Token
         };
     }
-    public async Task<bool> UpdateDoctorByIdAsync(Guid id, DoctorUserRequestDTO requestDTO, CancellationToken cancellationToken)
+    public async Task UpdateDoctorByIdAsync(Guid id, DoctorUserRequestDTO requestDTO, CancellationToken cancellationToken)
     {
-        var doctor = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var doctor = await context.Doctors
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         requestDTO.Map(doctor);
-        var changes = await context.SaveChangesAsync(cancellationToken);
-        return changes > 0;
+        await context.SaveChangesAsync(cancellationToken);
     }
-    public async Task<bool> DeleteDoctorByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task DeleteDoctorByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var doctor = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        context.Doctors.Remove(doctor);
-        var changes = await context.SaveChangesAsync(cancellationToken);
-        return changes > 0;
+        context.Doctors
+            .Remove(doctor);
+        await context.SaveChangesAsync(cancellationToken);
     }
+    public async Task<bool> IsDoctorExistAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await context.Doctors
+            .AnyAsync(x=> x.Id == id, cancellationToken);
+    } 
 }

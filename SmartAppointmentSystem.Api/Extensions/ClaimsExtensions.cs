@@ -10,14 +10,14 @@ public static class ClaimsExtensions
         var userId = Guid.Parse(userIdValue);
         return userId;
     }
+
     public static string GetName(this ClaimsPrincipal user)
     {
         return user.Claims.FirstOrDefault(x => x.Type == "Name")?.Value;
     }
+
     public static string GetEmail(this ClaimsPrincipal user)
     {
         return user.Claims.FirstOrDefault(x => x.Type == "Mail")?.Value;
     }
- 
-
 }
