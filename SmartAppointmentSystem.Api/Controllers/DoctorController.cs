@@ -85,7 +85,7 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         var doctor = await doctorUserService.LoginUserAsync(doctorEntity, cancellationToken);
         if (!doctor.AuthenticateResult)
         {
-            return NotFound();
+            return BadRequest();
         }
 
         return Ok(doctor);

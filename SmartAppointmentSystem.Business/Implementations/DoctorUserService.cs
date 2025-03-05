@@ -83,10 +83,15 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             .FirstOrDefaultAsync(x => x.Name == request.Name, cancellationToken);
         if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
         {
-            throw new UnauthorizedAccessException("Kullanıcı adı veya şifre yanlış.");
+            return new UserResponseModel
+            {
+                AuthenticateResult = false,
+                AuthToken = null,
+                AccessTokenExpireDate = null,
+            };
         }
 
-        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO { UserId = user.Id, Name = user.Name, Mail = user.Email, Role = "Doctor" });
+        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO { UserId = user.Id, Name = user.Name, Mail = user.Email});
         return new UserResponseModel
         {
             AccessTokenExpireDate = generatedToken.TokenExpireDate,

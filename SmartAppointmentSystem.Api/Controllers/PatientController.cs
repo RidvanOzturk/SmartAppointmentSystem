@@ -13,7 +13,7 @@ namespace SmartAppointmentSystem.Api.Controllers;
 [ApiController]
 public class PatientController(IPatientUserService userPatientService) : Controller
 {
-    [Authorize(Roles = "Patient", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet]
     public async Task<IActionResult> GetUser(CancellationToken cancellationToken)
     {
@@ -41,7 +41,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
         var result = await userPatientService.LoginUserAsync(patient, cancellationToken);
         if (!result.AuthenticateResult)
         {
-            return NotFound();
+            return BadRequest();
         }
 
         return Ok(result);

@@ -29,10 +29,15 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
             .FirstOrDefaultAsync(x => x.Name == request.Name, cancellationToken);
         if (patient == null || !BCrypt.Net.BCrypt.Verify(request.Password, patient.PasswordHash))
         {
-            throw new UnauthorizedAccessException("Kullanıcı adı veya şifre yanlış.");
+            return new UserResponseModel
+            {
+                AccessTokenExpireDate = null,
+                AuthenticateResult = false,
+                AuthToken = null
+            };
         }
 
-        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO { UserId = patient.Id, Name = patient.Name, Mail = patient.Email, Role = "Patient" });
+        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO { UserId = patient.Id, Name = patient.Name, Mail = patient.Email });
         return new UserResponseModel
         {
             AccessTokenExpireDate = generatedToken.TokenExpireDate,
