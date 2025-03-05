@@ -5,11 +5,11 @@ namespace SmartAppointmentSystem.Business.Contracts;
 
 public interface ITimeSlotService
 {
-    Task<bool> CreateTimeSlotAsync(TimeSlotRequestDTO timeSlotRequestDTO);
-    Task<TimeSlot> GetTimeSlotByIdAsync(Guid id);
-    Task<List<TimeSlot>> AvailableTimeSlotDoctorAsync(Guid id);
-    Task<List<TimeSlot>> GetDoctorTimeSlotsAsync(Guid id);
-    Task<List<TimeSlot>> GetAllTimeSlotsAsync();
-    Task<bool> UpdateTimeSlotByIdAsync(Guid id, TimeSlotRequestDTO timeSlotRequestDTO);
-    Task<bool> DeleteTimeSlotByIdAsync(Guid id);
+    Task CreateTimeSlotAsync(TimeSlotRequestDTO timeSlotRequestDTO, CancellationToken cancellationToken);
+    Task<TimeSlot> GetTimeSlotByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<List<TimeSlot>> AvailableTimeSlotDoctorAsync(Guid id, CancellationToken cancellationToken);
+    Task<List<TimeSlot>> GetDoctorTimeSlotsAsync(Guid id, CancellationToken cancellationToken);
+    Task<List<TimeSlot>> GetAllTimeSlotsAsync(CancellationToken cancellationToken);
+    Task UpdateTimeSlotByIdAsync(Guid id, TimeSlotRequestDTO timeSlotRequestDTO, CancellationToken cancellationToken);
+    Task DeleteTimeSlotByIdAsync(Guid id, CancellationToken cancellationToken);
 }

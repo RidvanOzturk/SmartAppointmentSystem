@@ -37,25 +37,19 @@ public class AppointmentService(AppointmentContext context) : IAppointmentServic
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         return await appointment;
     }
-    public async Task<bool> DeleteAppointmentByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task DeleteAppointmentByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var deletedAppointment = await context.Appointments
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        if (deletedAppointment == null)
-        {
-            throw new Exception("There is no Appointment");
-        }
         context.Appointments.Remove(deletedAppointment);
-        var changes = await context.SaveChangesAsync(cancellationToken);
-        return changes > 0;
+        await context.SaveChangesAsync(cancellationToken);
     }
-    public async Task<bool> UpdateAppointmentByIdAsync(Guid id, AppointmentRequestDTO appointmentRequestDTO, CancellationToken cancellationToken)
+    public async Task UpdateAppointmentByIdAsync(Guid id, AppointmentRequestDTO appointmentRequestDTO, CancellationToken cancellationToken)
     {
         var updatedAppointment = await context.Appointments
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         appointmentRequestDTO.Map(updatedAppointment);
-        var changes = await context.SaveChangesAsync(cancellationToken);
-        return changes > 0;
+        await context.SaveChangesAsync(cancellationToken);
     }
 
 }

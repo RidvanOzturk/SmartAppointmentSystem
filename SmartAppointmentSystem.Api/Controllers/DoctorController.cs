@@ -14,100 +14,100 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
 {
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> GetDoctorUser()
+    public async Task<IActionResult> GetDoctorUser(CancellationToken cancellationToken)
     {
         var doctorId = HttpContext.User.GetUserId();
-        var getDoc = await doctorUserService.GetDoctorByIdAsync(doctorId);
-        return Ok(getDoc);
+        var doctor = await doctorUserService.GetDoctorByIdAsync(doctorId, cancellationToken);
+        return Ok(doctor);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetDoctorById(Guid id)
+    public async Task<IActionResult> GetDoctorById(Guid id, CancellationToken cancellationToken)
     {
-        var getDocById = await doctorUserService.GetDoctorByIdAsync(id);
-        if (getDocById == null) 
+        var doctor = await doctorUserService.GetDoctorByIdAsync(id, cancellationToken);
+        if (doctor == null) 
         { 
-            return NotFound("Doctor not found!");
+            return NotFound();
         }
-        return Ok(getDocById);
+        return Ok(doctor);
     }
 
-    [HttpGet("toprated")]
-    public async Task<IActionResult> GetTopRatedDoctors()
+    [HttpGet("top-rated")]
+    public async Task<IActionResult> GetTopRatedDoctors(CancellationToken cancellationToken)
     {
-        var doctors = await doctorUserService.GetTopRatedDoctorsAsync();
-        if (doctors.Count < 1 || doctors == null)
+        var doctors = await doctorUserService.GetTopRatedDoctorsAsync(cancellationToken);
+        if (doctors.Count == 0)
         {
-            return NotFound("There are no doctors with ratings.");
+            return NotFound();
         }
         return Ok(doctors);
     }
 
     [HttpGet("most-appointment")]
-    public async Task<IActionResult> GetMostAppointmentDoctor()
+    public async Task<IActionResult> GetMostAppointmentDoctor(CancellationToken cancellationToken)
     {
-        var doctor = await doctorUserService.GetDoctorWithMostAppointmentsAsync();
+        var doctor = await doctorUserService.GetDoctorsWithMostAppointmentsAsync(cancellationToken);
         if (doctor == null)
         {
-            return NotFound("There are no doctors with most appointmnet");
+            return NotFound();
         }
         return Ok(doctor);
     }
 
     [HttpGet("search")]
-    public async Task<IActionResult> GetDoctorBySearch([FromQuery] string query)
+    public async Task<IActionResult> GetDoctorBySearch([FromQuery] string query, CancellationToken cancellationToken)
     {
-        var doctors = await doctorUserService.SearchDoctorsNameAsync(query);
-        if (doctors == null || doctors.Count < 1) 
+        var doctors = await doctorUserService.SearchDoctorsNameAsync(query, cancellationToken);
+        if (doctors.Count == 0) 
         {
-            return NotFound("There is no doctor like "+$"{query}");
+            return NotFound();
         }
         return Ok(doctors);
     }
 
     [HttpPost("signup")]
-    public async Task<IActionResult> CreateDoctorUser([FromBody] DoctorUserRequestModel doctorUserRequest)
+    public async Task<IActionResult> CreateDoctorUser([FromBody] DoctorUserRequestModel doctorUserRequest, CancellationToken cancellationToken)
     {
-        var mapping = doctorUserRequest.Map();
-        var createDoc = await doctorUserService.CreateDoctorAsync(mapping);
-        return Ok(createDoc);
+        var doctor = doctorUserRequest.Map();
+        await doctorUserService.CreateDoctorAsync(doctor, cancellationToken);
+        return Ok();
     }
 
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllDoctors()
+    public async Task<IActionResult> GetAllDoctors(CancellationToken cancellationToken)
     {
-        var getAllDoc = await doctorUserService.GetAllDoctorsAsync();
-        return Ok(getAllDoc);
+        var doctors = await doctorUserService.GetAllDoctorsAsync(cancellationToken);
+        return Ok(doctors);
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<DoctorUserLoginRequestModel>> LoginUser([FromBody] DoctorUserLoginRequestModel request)
+    public async Task<ActionResult<DoctorUserLoginRequestModel>> LoginUser([FromBody] DoctorUserLoginRequestModel request, CancellationToken cancellationToken)
     {
-        var user = request.Map();
-        var result = await doctorUserService.LoginUserAsync(user);
-        if (result.AuthenticateResult == false)
+        var doctorEntity = request.Map();
+        var doctor = await doctorUserService.LoginUserAsync(doctorEntity, cancellationToken);
+        if (doctor.AuthenticateResult == false)
         {
             return NotFound();
         }
 
-        return Ok(result);
+        return Ok(doctor);
     }
 
     [AllowAnonymous]
     [HttpPut]
-    public async Task<IActionResult> UpdateDoctorUser([FromBody] DoctorUserRequestModel doctorUserRequest)
+    public async Task<IActionResult> UpdateDoctorUser([FromBody] DoctorUserRequestModel doctorUserRequest , CancellationToken cancellationToken)
     {
-        var mapping = doctorUserRequest.Map();
+        var doctorEntity = doctorUserRequest.Map();
         var doctorId = HttpContext.User.GetUserId();
-        var updateDoc = await doctorUserService.UpdateDoctorByIdAsync(doctorId, mapping);
-        return Ok(updateDoc);
+        var doctor = await doctorUserService.UpdateDoctorByIdAsync(doctorId, doctorEntity, cancellationToken);
+        return Ok(doctor);
     }
 
-    [Authorize(Roles = "Doctor")]
+    [Authorize]
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteDoctorUser([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteDoctorUser([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var deleteDoc = await doctorUserService.DeleteDoctorByIdAsync(id);
-        return Ok("Deleted");
+        var doctor = await doctorUserService.DeleteDoctorByIdAsync(id, cancellationToken);
+        return Ok();
     }
 }

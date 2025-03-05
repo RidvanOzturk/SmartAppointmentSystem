@@ -12,75 +12,71 @@ namespace SmartAppointmentSystem.Api.Controllers;
 public class TimeSlotController(ITimeSlotService timeSlotService) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateTimeSlot([FromBody] TimeSlotRequestModel timeSlotRequest)
+    public async Task<IActionResult> CreateTimeSlot([FromBody] TimeSlotRequestModel timeSlotRequest, CancellationToken cancellationToken)
     {
-        var mapping = timeSlotRequest.Map();
-        var timeSlot = await timeSlotService.CreateTimeSlotAsync(mapping);
-
-        return Ok(timeSlot);
+        var timeSlot = timeSlotRequest.Map();
+        await timeSlotService.CreateTimeSlotAsync(timeSlot, cancellationToken);
+        return Ok();
     }
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetTimeSlot(Guid id)
+    public async Task<IActionResult> GetTimeSlot(Guid id, CancellationToken cancellationToken)
     {
-        var getTimeSlot = await timeSlotService.GetTimeSlotByIdAsync(id);
-        if (getTimeSlot == null)
+        var timeSlot = await timeSlotService.GetTimeSlotByIdAsync(id, cancellationToken);
+        if (timeSlot == null)
         {
             return NotFound();
         }
-        return Ok(getTimeSlot);
+        return Ok(timeSlot);
     }
     [HttpGet("doctor-timeslot/{id}")]
-    public async Task<IActionResult> GetDoctorTimeSlots(Guid id)
+    public async Task<IActionResult> GetDoctorTimeSlots(Guid id, CancellationToken cancellationToken)
     {
-        var getDoctorTs = await timeSlotService.GetDoctorTimeSlotsAsync(id);
-        if (getDoctorTs == null)
+        var timeSlot = await timeSlotService.GetDoctorTimeSlotsAsync(id, cancellationToken);
+        if (timeSlot == null)
         {
             return NotFound();
         }
-        return Ok(getDoctorTs);
+        return Ok(timeSlot);
     }
     [HttpGet("avaliable-doctor-timeslot/{id}")]
-    public async Task<IActionResult> AvailableTimeSlotsDoctor(Guid id)
+    public async Task<IActionResult> AvailableTimeSlotsDoctor(Guid id, CancellationToken cancellationToken)
     {
-        var getSuitApp = await timeSlotService.AvailableTimeSlotDoctorAsync(id);
-        if (getSuitApp == null)
+        var timeSlots = await timeSlotService.AvailableTimeSlotDoctorAsync(id, cancellationToken);
+        if (timeSlots == null)
         {
             return NotFound();
         }
-        return Ok(getSuitApp);
+        return Ok(timeSlots);
     }
 
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllTimeSlots()
+    public async Task<IActionResult> GetAllTimeSlots(CancellationToken cancellationToken)
     {
-        var getAll = await timeSlotService.GetAllTimeSlotsAsync();
-        if (getAll == null)
+        var timeSlots = await timeSlotService.GetAllTimeSlotsAsync(cancellationToken);
+        if (timeSlots == null)
         {
             return BadRequest();
         }
-        return Ok(getAll);
+        return Ok(timeSlots);
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateTimeSlot([FromRoute] Guid id, TimeSlotRequestModel timeSlotRequest)
+    public async Task<IActionResult> UpdateTimeSlot([FromRoute] Guid id, TimeSlotRequestModel timeSlotRequest, CancellationToken cancellationToken)
     {
-        var getId = await timeSlotService.GetTimeSlotByIdAsync(id);
-        if (getId == null)
+        //
+        var timeSlot = await timeSlotService.GetTimeSlotByIdAsync(id, cancellationToken);
+        if (timeSlot == null)
         {
             return NotFound();
         }
-        var mapping = timeSlotRequest.Map();
-        var timeSlot = await timeSlotService.UpdateTimeSlotByIdAsync(id, mapping);
-        return Ok(timeSlot);
+        var updateTimeSlot = timeSlotRequest.Map();
+        await timeSlotService.UpdateTimeSlotByIdAsync(id, updateTimeSlot, cancellationToken);
+        return Ok();
     }
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteTimeSlot([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteTimeSlot([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var delete = await timeSlotService.DeleteTimeSlotByIdAsync(id);
-        if (!delete)
-        {
-            return NotFound();
-        }
-        return Ok(delete);
+        await timeSlotService.DeleteTimeSlotByIdAsync(id, cancellationToken);
+        return Ok();
     }
 
 }

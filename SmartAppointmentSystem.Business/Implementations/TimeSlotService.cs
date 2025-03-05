@@ -9,59 +9,52 @@ namespace SmartAppointmentSystem.Business.Implementations;
 
 public class TimeSlotService(AppointmentContext context) : ITimeSlotService
 {
-    public async Task<bool> CreateTimeSlotAsync(TimeSlotRequestDTO timeSlotRequestDTO)
+    public async Task CreateTimeSlotAsync(TimeSlotRequestDTO timeSlotRequestDTO, CancellationToken cancellationToken)
     {
-        if (timeSlotRequestDTO == null)
-        {
-            return false;
-        }
-        var timeSlotEntity = timeSlotRequestDTO.Map();
-        var addTimeSlot = await context.TimeSlots.AddAsync(timeSlotEntity);
-        var changes = await context.SaveChangesAsync();
-        return changes > 0;
+        var timeSlot = timeSlotRequestDTO.Map();
+        await context.TimeSlots.AddAsync(timeSlot, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
-    public async Task<List<TimeSlot>> GetDoctorTimeSlotsAsync(Guid id)
+    public async Task<List<TimeSlot>> GetDoctorTimeSlotsAsync(Guid id, CancellationToken cancellationToken)
     {
-        var getDoctorTS = await context.TimeSlots
+        var timeSlot = await context.TimeSlots
             .AsNoTracking()
             .Where(x=>x.DoctorId == id)
-            .ToListAsync();
-        return getDoctorTS;
+            .ToListAsync(cancellationToken);
+        return timeSlot;
     }
-    public async Task<List<TimeSlot>> AvailableTimeSlotDoctorAsync(Guid id)
+    public async Task<List<TimeSlot>> AvailableTimeSlotDoctorAsync(Guid id, CancellationToken cancellationToken)
     {
-        var availableTimeSlots = await context.TimeSlots
+        var timeSlot = await context.TimeSlots
             .AsNoTracking()
             .Where(ts => ts.DoctorId == id && ts.AvailableFrom < ts.AvailableTo)
-            .ToListAsync();
-        return availableTimeSlots;
+            .ToListAsync(cancellationToken);
+        return timeSlot;
     }
-    public async Task<TimeSlot> GetTimeSlotByIdAsync(Guid id)
+    public async Task<TimeSlot> GetTimeSlotByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var getTimeSlot = await context.TimeSlots
+        var timeSlot = await context.TimeSlots
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == id);
-        return getTimeSlot;
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        return timeSlot;
     }
-    public async Task<List<TimeSlot>> GetAllTimeSlotsAsync()
+    public async Task<List<TimeSlot>> GetAllTimeSlotsAsync(CancellationToken cancellationToken)
     {
-        var getAll = await context.TimeSlots
+        var timeSlots = await context.TimeSlots
             .AsNoTracking()
-            .ToListAsync();
-        return getAll;
+            .ToListAsync(cancellationToken);
+        return timeSlots;
     }
-    public async Task<bool> UpdateTimeSlotByIdAsync(Guid id, TimeSlotRequestDTO timeSlotRequestDTO)
+    public async Task UpdateTimeSlotByIdAsync(Guid id, TimeSlotRequestDTO timeSlotRequestDTO, CancellationToken cancellationToken)
     {
-        var TimeSlotId = await context.TimeSlots.FirstOrDefaultAsync(x => x.Id == id);
-        timeSlotRequestDTO.Map(TimeSlotId);
-        var changes = await context.SaveChangesAsync();
-        return changes > 0;
+        var timeSlot = await context.TimeSlots.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        timeSlotRequestDTO.Map(timeSlot);
+        await context.SaveChangesAsync(cancellationToken);
     }
-    public async Task<bool> DeleteTimeSlotByIdAsync(Guid id)
+    public async Task DeleteTimeSlotByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var deletedId = await context.TimeSlots.FirstOrDefaultAsync(x => x.Id == id);
-        context.TimeSlots.Remove(deletedId);
-        var changes = await context.SaveChangesAsync();
-        return changes > 0;
+        var timeSlot = await context.TimeSlots.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        context.TimeSlots.Remove(timeSlot);
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

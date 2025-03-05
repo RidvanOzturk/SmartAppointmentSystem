@@ -58,6 +58,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAppointment([FromRoute] Guid id, AppointmentRequestModel request, CancellationToken cancellationToken = default)
     {
+        //is this line required? ask
         var appointment = await appointmentService.GetAppointmentsByIdAsync(id, cancellationToken);
 
         if (appointment == null)
@@ -73,7 +74,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAppointment([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {
-        var app = await appointmentService.DeleteAppointmentByIdAsync(id, cancellationToken);
+        await appointmentService.DeleteAppointmentByIdAsync(id, cancellationToken);
         return Ok();
     }
 }

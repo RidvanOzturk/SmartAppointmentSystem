@@ -16,31 +16,29 @@ namespace SmartAppointmentSystem.Business.Implementations;
 
 public class PatientUserService(AppointmentContext context, ITokenService tokenService) : IPatientUserService
 {
-    public async Task<bool> RegisterAsync(PatientUserRequestDTO requestDTO)
+    public async Task RegisterAsync(PatientUserRequestDTO requestDTO, CancellationToken cancellationToken)
     {
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password);
-        var user = requestDTO.Map();
-        user.PasswordHash = hashedPassword;
-
-        await context.Patients.AddAsync(user);
-        var changes = await context.SaveChangesAsync();
-        return changes > 0;
+        var patient = requestDTO.Map();
+        patient.PasswordHash = hashedPassword;
+        await context.Patients.AddAsync(patient, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<UserResponseModel> LoginUserAsync(PatientUserRequestDTO request)
+    public async Task<UserResponseModel> LoginUserAsync(PatientUserRequestDTO request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Password))
         {
             throw new ArgumentNullException(nameof(request));
         }
 
-        var user = await context.Patients.FirstOrDefaultAsync(x => x.Name == request.Name);
-        if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+        var patient = await context.Patients.FirstOrDefaultAsync(x => x.Name == request.Name, cancellationToken);
+        if (patient == null || !BCrypt.Net.BCrypt.Verify(request.Password, patient.PasswordHash))
         {
             throw new UnauthorizedAccessException("Kullanıcı adı veya şifre yanlış.");
         }
 
-        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO { UserId = user.Id, Name = user.Name, Mail = user.Email, Role = "Patient" });
+        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO { UserId = patient.Id, Name = patient.Name, Mail = patient.Email, Role = "Patient" });
         return new UserResponseModel
         {
             AccessTokenExpireDate = generatedToken.TokenExpireDate,
@@ -48,26 +46,23 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
             AuthToken = generatedToken.Token
         };
     }
-    public async Task<List<Patient>> GetUsersAsync()
-    {
-        return await context.Patients.AsNoTracking().ToListAsync();
-    }
-    public async Task<Patient> GetUserByIdAsync(Guid id)
+    public async Task<List<Patient>> GetUsersAsync(CancellationToken cancellationToken)
     {
         return await context.Patients
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .ToListAsync(cancellationToken);
     }
-    public async Task<bool> DeleteUserByIdAsync(Guid id)
+    public async Task<Patient> GetUserByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var user = await context.Patients.FirstOrDefaultAsync(x => x.Id == id);
-        if (user == null)
-        {
-            throw new Exception("Kullanıcı bulunamadı.");
-        }
+        return await context.Patients
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+    }
+    public async Task DeleteUserByIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var patient = await context.Patients.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
-        context.Patients.Remove(user);
-        var changes = await context.SaveChangesAsync();
-        return changes > 0;
+        context.Patients.Remove(patient);
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

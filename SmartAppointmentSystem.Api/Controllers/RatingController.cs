@@ -12,51 +12,48 @@ namespace SmartAppointmentSystem.Api.Controllers;
 public class RatingController(IRatingService ratingService) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> CreateRating([FromBody] RatingRequestModel requestModel)
+    public async Task<IActionResult> CreateRating([FromBody] RatingRequestModel requestModel, CancellationToken cancellationToken)
     {
-        var mapping = requestModel.Map();
-        var rating = await ratingService.CreateRatingAsync(mapping);
-        return Ok(rating);
+        var rating = requestModel.Map();
+        await ratingService.CreateRatingAsync(rating, cancellationToken);
+        return Ok();
     }
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllRatings()
+    public async Task<IActionResult> GetAllRatings(CancellationToken cancellationToken)
     {
-        var getAllRatings = await ratingService.GetAllRatingsAsync();
-        if (getAllRatings.Count < 1 || getAllRatings == null)
+        var ratings = await ratingService.GetAllRatingsAsync(cancellationToken);
+        if (ratings.Count == 0)
         {
-            return NotFound("There is no ratings.");
+            return NotFound();
         }
-        return Ok(getAllRatings);
+        return Ok(ratings);
     }
  
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetRating(Guid id)
+    public async Task<IActionResult> GetRating(Guid id, CancellationToken cancellationToken)
     {
-        var getRat = await ratingService.GetRatingByIdAsync(id);
-        return Ok(getRat);
+        var rating = await ratingService.GetRatingByIdAsync(id, cancellationToken);
+        return Ok(rating);
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateRating([FromRoute] Guid id, RatingRequestModel request)
+    public async Task<IActionResult> UpdateRating([FromRoute] Guid id, RatingRequestModel request, CancellationToken cancellationToken)
     {
-        var ratingId = await ratingService.GetRatingByIdAsync(id);
+        //same ask
+        var ratingId = await ratingService.GetRatingByIdAsync(id, cancellationToken);
 
         if (ratingId == null)
         {
             return NotFound();
         }
 
-        var mapping = request.Map();
-        var rating = await ratingService.UpdateRatingByIdAsync(id, mapping);
-        return Ok(rating);
+        var rating = request.Map();
+        await ratingService.UpdateRatingByIdAsync(id, rating, cancellationToken);
+        return Ok();
     }
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteRating([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteRating([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var delRat = await ratingService.DeleteRatingByIdAsync(id);
-        if (!delRat)
-        {
-            return NotFound();
-        }
-        return Ok(delRat);
+        await ratingService.DeleteRatingByIdAsync(id, cancellationToken);
+        return Ok();
     }
 }

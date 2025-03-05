@@ -18,37 +18,30 @@ public class PatientController(IPatientUserService userPatientService) : Control
 {
     [Authorize(Roles = "Patient", AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet]
-    public async Task<IActionResult> GetUser()
+    public async Task<IActionResult> GetUser(CancellationToken cancellationToken)
     {
-        var userId = HttpContext.User.GetUserId();
-
-        var user = await userPatientService.GetUserByIdAsync(userId);
-
-        if (user == null)
-        {
-            return NotFound("Patient not found");
-        }
-
-        return Ok(user);
+        var patientId = HttpContext.User.GetUserId();
+        await userPatientService.GetUserByIdAsync(patientId, cancellationToken);
+        return Ok();
     }
+
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetUserById(Guid id)
+    public async Task<IActionResult> GetUserById(Guid id, CancellationToken cancellationToken)
     {
-        var user = await userPatientService.GetUserByIdAsync(id);
-        if (user == null)
+        var patient = await userPatientService.GetUserByIdAsync(id, cancellationToken);
+        if (patient == null)
         {
-            return NotFound("Patient not found");
+            return NotFound();
         }
-        return Ok(user);
+        return Ok(patient);
     }
-
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<ActionResult<PatientUserRequestModel>> LoginUser([FromBody] PatientUserRequestModel request)
+    public async Task<ActionResult<PatientUserRequestModel>> LoginUser([FromBody] PatientUserRequestModel request, CancellationToken cancellationToken)
     {
-        var user = request.Map();
-        var result = await userPatientService.LoginUserAsync(user);
+        var patient = request.Map();
+        var result = await userPatientService.LoginUserAsync(patient, cancellationToken);
         if (result.AuthenticateResult == false)
         {
             return NotFound();
@@ -58,57 +51,33 @@ public class PatientController(IPatientUserService userPatientService) : Control
     }
 
     [HttpGet("all")]
-    public async Task<IActionResult> GetAllUsers()
+    public async Task<IActionResult> GetAllPatients(CancellationToken cancellationToken)
     {
-        var users = await userPatientService.GetUsersAsync();
-        if (users.Count < 1 || users == null)
+        var patients = await userPatientService.GetUsersAsync(cancellationToken);
+        if (patients.Count == 0)
         {
             return BadRequest();
         }
-        return Ok(users);
+        return Ok(patients);
     }
 
-
     [HttpPost("signup")]
-    public async Task<IActionResult> CreatePatientUser(PatientUserRequestModel request, [FromServices] IValidator<PatientUserRequestModel> validator)
+    public async Task<IActionResult> CreatePatientUser(PatientUserRequestModel request, [FromServices] IValidator<PatientUserRequestModel> validator, CancellationToken cancellationToken)
     {
         var fluent = await validator.ValidateAsync(request);
         if (!fluent.IsValid)
         {
             return BadRequest();
         }
-        var user = request.Map();
-        var gettingUser = await userPatientService.RegisterAsync(user);
-        if (!gettingUser)
-        {
-            return BadRequest("User invalid");
-        }
-        return Ok(request);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdatePatientUser([FromRoute] Guid id, PatientUserRequestModel request)
-    {
-        var userId = await userPatientService.GetUserByIdAsync(id);
-
-        if (userId == null)
-        {
-            return NotFound();
-        }
-
-        var user = request.Map();
-
-        return Ok(user);
+        var patient = request.Map();
+        await userPatientService.RegisterAsync(patient, cancellationToken);
+        return Ok();
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeletePatientUser([FromRoute] Guid id)
+    public async Task<IActionResult> DeletePatientUser([FromRoute] Guid id, CancellationToken cancellationToken)
     {
-        var user = await userPatientService.DeleteUserByIdAsync(id);
-        if (!user)
-        {
-            return BadRequest();
-        }
+        await userPatientService.DeleteUserByIdAsync(id, cancellationToken);
         return Ok();
     }
 }

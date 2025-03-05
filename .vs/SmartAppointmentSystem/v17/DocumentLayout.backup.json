@@ -1,12 +1,71 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|c:\\users\\oztur\\source\\repos\\smartappointmentsystem\\smartappointmentsystem.business\\implementations\\patientuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|solutionrelative:smartappointmentsystem.business\\implementations\\patientuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|c:\\users\\oztur\\source\\repos\\smartappointmentsystem\\smartappointmentsystem.business\\contracts\\ipatientuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0DC88193-3FCC-44D3-B466-0BF20D55526C}|SmartAppointmentSystem.Business\\SmartAppointmentSystem.Business.csproj|solutionrelative:smartappointmentsystem.business\\contracts\\ipatientuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{165979DF-8E7C-4981-A93C-1A216AC8A1E7}|SmartAppointmentSystem.Api\\SmartAppointmentSystem.Api.csproj|c:\\users\\oztur\\source\\repos\\smartappointmentsystem\\smartappointmentsystem.api\\controllers\\patientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{165979DF-8E7C-4981-A93C-1A216AC8A1E7}|SmartAppointmentSystem.Api\\SmartAppointmentSystem.Api.csproj|solutionrelative:smartappointmentsystem.api\\controllers\\patientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PatientUserService.cs",
+              "DocumentMoniker": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Implementations\\PatientUserService.cs",
+              "RelativeDocumentMoniker": "SmartAppointmentSystem.Business\\Implementations\\PatientUserService.cs",
+              "ToolTip": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Implementations\\PatientUserService.cs",
+              "RelativeToolTip": "SmartAppointmentSystem.Business\\Implementations\\PatientUserService.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAiwDkAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-05T14:49:22.711Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IPatientUserService.cs",
+              "DocumentMoniker": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Contracts\\IPatientUserService.cs",
+              "RelativeDocumentMoniker": "SmartAppointmentSystem.Business\\Contracts\\IPatientUserService.cs",
+              "ToolTip": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Business\\Contracts\\IPatientUserService.cs",
+              "RelativeToolTip": "SmartAppointmentSystem.Business\\Contracts\\IPatientUserService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-05T14:49:21.29Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PatientController.cs",
+              "DocumentMoniker": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Api\\Controllers\\PatientController.cs",
+              "RelativeDocumentMoniker": "SmartAppointmentSystem.Api\\Controllers\\PatientController.cs",
+              "ToolTip": "C:\\Users\\oztur\\source\\repos\\SmartAppointmentSystem\\SmartAppointmentSystem.Api\\Controllers\\PatientController.cs",
+              "RelativeToolTip": "SmartAppointmentSystem.Api\\Controllers\\PatientController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABcAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-05T14:49:19.499Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

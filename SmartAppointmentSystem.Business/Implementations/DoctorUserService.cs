@@ -10,39 +10,39 @@ namespace SmartAppointmentSystem.Business.Implementations;
 
 public class DoctorUserService(AppointmentContext context, ITokenService tokenService) : IDoctorUserService
 {
-    public async Task<Doctor> GetDoctorByIdAsync(Guid id)
+    public async Task<Doctor> GetDoctorByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var getDoctor = await context.Doctors.
-            AsNoTracking().
-            FirstOrDefaultAsync(x => x.Id == id);
-        return getDoctor;
+        var doctor = await context.Doctors
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        return doctor;
     }
-    public async Task<List<Doctor>> GetAllDoctorsAsync()
+    public async Task<List<Doctor>> GetAllDoctorsAsync(CancellationToken cancellationToken)
     {
-        var getAllDoc = await context.Doctors.
-            AsNoTracking().
-            ToListAsync();
-        return getAllDoc;
+        var doctors = await context.Doctors
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+        return doctors;
     }
-    public async Task<List<Doctor>> GetDoctorWithMostAppointmentsAsync()
+    public async Task<List<Doctor>> GetDoctorsWithMostAppointmentsAsync(CancellationToken cancellationToken)
     {
-        var getDoctor = await context.Doctors.
-            AsNoTracking().
-            OrderByDescending(x=>x.Appointments.Count).
-            ToListAsync();
-        return getDoctor;
+        var doctors = await context.Doctors
+            .AsNoTracking()
+            .OrderByDescending(x=>x.Appointments.Count)
+            .ToListAsync(cancellationToken);
+        return doctors;
     }
-    public async Task<List<DoctorsRatingDTO>> GetTopRatedDoctorsAsync()
+    public async Task<List<DoctorsRatingDTO>> GetTopRatedDoctorsAsync(CancellationToken cancellationToken)
     {
         var queryResult = await context.Doctors
-        .Include(d => d.Ratings)
-        .Select(d => new
+            .Include(d => d.Ratings)
+            .Select(d => new
         {
             Doctor = d,
             AverageRating = d.Ratings.Any() ? d.Ratings.Average(r => r.Score) : 0
         })
-        .OrderByDescending(x => x.AverageRating)
-        .ToListAsync();
+            .OrderByDescending(x => x.AverageRating)
+            .ToListAsync(cancellationToken);
 
         var result = queryResult.Select(x =>
         {
@@ -53,36 +53,35 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         }).ToList();
         return result;
     }
-    public async Task<bool> CreateDoctorAsync(DoctorUserRequestDTO requestDTO)
+    public async Task CreateDoctorAsync(DoctorUserRequestDTO requestDTO, CancellationToken cancellationToken)
     {
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password);
         var doctorEntity = requestDTO.Map();
         doctorEntity.PasswordHash = hashedPassword;
-        var createDoc = await context.Doctors.AddAsync(doctorEntity);
-        var changes = await context.SaveChangesAsync();
-        return changes > 0;
+        await context.Doctors.AddAsync(doctorEntity, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
-    public async Task<List<Doctor>> SearchDoctorsNameAsync(string query)
+    public async Task<List<Doctor>> SearchDoctorsNameAsync(string query, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(query))
         {
-            return await context.Doctors.ToListAsync();
+            return await context.Doctors.ToListAsync(cancellationToken);
         }
-        var searchDoctorsName = await context.Doctors
+        var doctorsName = await context.Doctors
             .AsNoTracking()
             .Where(d => EF.Functions.Like(d.Name, $"%{query}%"))
-            .ToListAsync();
-        return searchDoctorsName;
+            .ToListAsync(cancellationToken);
+        return doctorsName;
     }
 
-    public async Task<UserResponseModel> LoginUserAsync(DoctorUserLoginRequestDTO request)
+    public async Task<UserResponseModel> LoginUserAsync(DoctorUserLoginRequestDTO request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Password))
         {
             throw new ArgumentNullException(nameof(request));
         }
 
-        var user = await context.Doctors.FirstOrDefaultAsync(x => x.Name == request.Name);
+        var user = await context.Doctors.FirstOrDefaultAsync(x => x.Name == request.Name, cancellationToken);
         if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
         {
             throw new UnauthorizedAccessException("Kullanıcı adı veya şifre yanlış.");
@@ -96,18 +95,18 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             AuthToken = generatedToken.Token
         };
     }
-    public async Task<bool> UpdateDoctorByIdAsync(Guid id, DoctorUserRequestDTO requestDTO)
+    public async Task<bool> UpdateDoctorByIdAsync(Guid id, DoctorUserRequestDTO requestDTO, CancellationToken cancellationToken)
     {
-        var doctorId = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
-        requestDTO.Map(doctorId);
-        var changes = await context.SaveChangesAsync();
+        var doctor = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        requestDTO.Map(doctor);
+        var changes = await context.SaveChangesAsync(cancellationToken);
         return changes > 0;
     }
-    public async Task<bool> DeleteDoctorByIdAsync(Guid id)
+    public async Task<bool> DeleteDoctorByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var doctorId = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
-        context.Doctors.Remove(doctorId);
-        var changes = await context.SaveChangesAsync();
+        var doctor = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        context.Doctors.Remove(doctor);
+        var changes = await context.SaveChangesAsync(cancellationToken);
         return changes > 0;
     }
 }

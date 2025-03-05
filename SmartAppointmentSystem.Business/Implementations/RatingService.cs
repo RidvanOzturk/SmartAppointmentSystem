@@ -10,43 +10,36 @@ namespace SmartAppointmentSystem.Business.Implementations;
 
 public class RatingService(AppointmentContext context) : IRatingService
 {
-    public async Task<bool> CreateRatingAsync(RatingRequestDTO ratingRequestDTO)
+    public async Task CreateRatingAsync(RatingRequestDTO ratingRequestDTO, CancellationToken cancellationToken)
     {
-        var ratingEntity = ratingRequestDTO.Map();
-        var rating = context.Ratings.AddAsync(ratingEntity);
-        var changes = await context.SaveChangesAsync();
-        return changes > 0;
+        var rating = ratingRequestDTO.Map();
+        await context.Ratings.AddAsync(rating, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
-    public async Task<List<Rating>> GetAllRatingsAsync()
+    public async Task<List<Rating>> GetAllRatingsAsync(CancellationToken cancellationToken)
     {
-        var getAll = await context.Ratings
+        var ratings = await context.Ratings
             .AsNoTracking()
-            .ToListAsync();
-        return getAll;
+            .ToListAsync(cancellationToken);
+        return ratings;
     }
-    public async Task<Rating> GetRatingByIdAsync(Guid id)
+    public async Task<Rating> GetRatingByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var rating = await context.Ratings
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == id);
-        if (rating == null) 
-        { 
-            return null;
-        }
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         return rating;
     }
-    public async Task<bool> UpdateRatingByIdAsync(Guid id, RatingRequestDTO ratingRequestDTO)
+    public async Task UpdateRatingByIdAsync(Guid id, RatingRequestDTO ratingRequestDTO, CancellationToken cancellationToken)
     {
-        var ratingId = await context.Ratings.FirstOrDefaultAsync(x => x.Id == id);
-        ratingRequestDTO.Map(ratingId);
-        var changes = await context.SaveChangesAsync();
-        return changes > 0;
+        var rating = await context.Ratings.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        ratingRequestDTO.Map(rating);
+        await context.SaveChangesAsync(cancellationToken);
     }
-    public async Task<bool> DeleteRatingByIdAsync(Guid id)
+    public async Task DeleteRatingByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var ratingId = await context.Ratings.FirstOrDefaultAsync(x => x.Id == id);
-        context.Remove(ratingId);
-        var changes = await context.SaveChangesAsync();
-        return changes > 0;
+        var rating = await context.Ratings.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        context.Remove(rating);
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

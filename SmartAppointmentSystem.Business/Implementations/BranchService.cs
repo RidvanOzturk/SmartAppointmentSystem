@@ -7,7 +7,7 @@ namespace SmartAppointmentSystem.Business.Implementations;
 
 public class BranchService(AppointmentContext context) : IBranchService
 {
-    public async Task<List<Branch>> GetBranchesSearchAsync(string query)
+    public async Task<List<Branch>> GetBranchesSearchAsync(string query, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(query))
         {
@@ -16,11 +16,11 @@ public class BranchService(AppointmentContext context) : IBranchService
         var branches = await context.Branches
             .AsNoTracking()
             .Where(d => EF.Functions.Like(d.Title, $"%{query}%"))
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
         return branches;
     }
-    public async Task<List<Branch>> GetAllBranchesAsync()
+    public async Task<List<Branch>> GetAllBranchesAsync(CancellationToken cancellationToken)
     {
-        return await context.Branches.AsNoTracking().ToListAsync();
+        return await context.Branches.AsNoTracking().ToListAsync(cancellationToken);
     }
 }

@@ -10,9 +10,9 @@ namespace SmartAppointmentSystem.Business.Contracts;
 
 public interface IRatingService
 {
-    Task<bool> CreateRatingAsync(RatingRequestDTO ratingRequestDTO);
-    Task<Rating> GetRatingByIdAsync(Guid id);
-    Task<bool> UpdateRatingByIdAsync(Guid id, RatingRequestDTO ratingRequestDTO);
-    Task<bool> DeleteRatingByIdAsync(Guid id);
-    Task<List<Rating>> GetAllRatingsAsync();
+    Task CreateRatingAsync(RatingRequestDTO ratingRequestDTO, CancellationToken cancellationToken);
+    Task<Rating> GetRatingByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task UpdateRatingByIdAsync(Guid id, RatingRequestDTO ratingRequestDTO, CancellationToken cancellationToken);
+    Task DeleteRatingByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<List<Rating>> GetAllRatingsAsync(CancellationToken cancellationToken);
 }
