@@ -22,7 +22,12 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
     {
         if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Password))
         {
-            throw new ArgumentNullException(nameof(request));
+            return new UserResponseModel
+            {
+                AccessTokenExpireDate = null,
+                AuthenticateResult = false,
+                AuthToken = null
+            };
         }
 
         var patient = await context.Patients

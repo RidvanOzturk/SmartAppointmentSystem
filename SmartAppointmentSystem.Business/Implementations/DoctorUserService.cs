@@ -76,7 +76,12 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
     {
         if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Password))
         {
-            throw new ArgumentNullException(nameof(request));
+            return new UserResponseModel
+            {
+                AccessTokenExpireDate = null,
+                AuthenticateResult = false,
+                AuthToken = null
+            };
         }
 
         var user = await context.Doctors
