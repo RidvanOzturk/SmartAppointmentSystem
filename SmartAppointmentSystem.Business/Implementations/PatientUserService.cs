@@ -18,9 +18,9 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<UserResponseModel> LoginUserAsync(PatientUserRequestDTO request, CancellationToken cancellationToken)
+    public async Task<UserResponseModel> LoginUserAsync(PatientUserLoginRequestDTO request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Password))
+        if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
         {
             return new UserResponseModel
             {
@@ -31,7 +31,7 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
         }
 
         var patient = await context.Patients
-            .FirstOrDefaultAsync(x => x.Name == request.Name, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
         if (patient == null || !BCrypt.Net.BCrypt.Verify(request.Password, patient.PasswordHash))
         {
             return new UserResponseModel

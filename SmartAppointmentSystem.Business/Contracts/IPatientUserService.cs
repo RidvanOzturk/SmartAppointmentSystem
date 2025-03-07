@@ -11,7 +11,7 @@ namespace SmartAppointmentSystem.Business.Contracts;
 public interface IPatientUserService
 {
     Task RegisterAsync(PatientUserRequestDTO requestDTO, CancellationToken cancellationToken = default);
-    public Task<UserResponseModel> LoginUserAsync(PatientUserRequestDTO request ,CancellationToken cancellationToken = default);
+    public Task<UserResponseModel> LoginUserAsync(PatientUserLoginRequestDTO request ,CancellationToken cancellationToken = default);
     Task<List<Patient>> GetUsersAsync(CancellationToken cancellationToken = default);
     Task<Patient> GetUserByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task DeleteUserByIdAsync(Guid id, CancellationToken cancellationToken = default);

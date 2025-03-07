@@ -74,7 +74,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
 
     public async Task<UserResponseModel> LoginUserAsync(DoctorUserLoginRequestDTO request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Password))
+        if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
         {
             return new UserResponseModel
             {
@@ -85,7 +85,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         }
 
         var user = await context.Doctors
-            .FirstOrDefaultAsync(x => x.Name == request.Name, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
         if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
         {
             return new UserResponseModel

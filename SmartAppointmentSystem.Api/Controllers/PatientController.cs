@@ -35,7 +35,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<ActionResult<PatientUserRequestModel>> LoginUser([FromBody] PatientUserRequestModel request, CancellationToken cancellationToken)
+    public async Task<ActionResult<PatientUserRequestModel>> LoginUser([FromBody] PatientUserLoginRequestModel request, CancellationToken cancellationToken)
     {
         var patientEntity = request.Map();
         var patient = await userPatientService.LoginUserAsync(patientEntity, cancellationToken);
