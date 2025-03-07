@@ -64,7 +64,7 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
     }
 
     [HttpPost("signup")]
-    public async Task<IActionResult> CreateDoctorUser([FromBody] DoctorUserRequestModel doctorUserRequest, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateDoctorUser([FromBody] DoctorUserSignUpRequestModel doctorUserRequest, CancellationToken cancellationToken)
     {
         var doctor = doctorUserRequest.Map();
         await doctorUserService.CreateDoctorAsync(doctor, cancellationToken);

@@ -60,6 +60,15 @@ public static class MapperExtensions
             Description = value.Description,
         };
     }
+    public static DoctorUserSignUpRequestDTO Map(this DoctorUserSignUpRequestModel value)
+    {
+        return new DoctorUserSignUpRequestDTO
+        {
+            Email = value.Email,
+            Name = value.Name,
+            Password = value.Password
+        };
+    }
     public static DoctorUserLoginRequestDTO Map(this DoctorUserLoginRequestModel value)
     {
         return new DoctorUserLoginRequestDTO

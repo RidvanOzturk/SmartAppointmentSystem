@@ -25,15 +25,18 @@ namespace SmartAppointmentSystem.Data.Configurations
                 .IsRequired();
 
             builder.Property(d => d.Description)
-                .HasMaxLength(500);
+                .HasMaxLength(500)
+                .IsRequired(false);
 
             builder.Property(d => d.Image)
-                .HasMaxLength(200);
+                .HasMaxLength(200)
+                .IsRequired(false);
 
-           
+
             builder.HasOne(d => d.Branch)
                 .WithMany()
                 .HasForeignKey(d => d.BranchId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

@@ -50,7 +50,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         }).ToList();
         return result;
     }
-    public async Task CreateDoctorAsync(DoctorUserRequestDTO requestDTO, CancellationToken cancellationToken)
+    public async Task CreateDoctorAsync(DoctorUserSignUpRequestDTO requestDTO, CancellationToken cancellationToken)
     {
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password);
         var doctorEntity = requestDTO.Map();

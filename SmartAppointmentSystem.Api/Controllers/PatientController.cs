@@ -61,7 +61,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
     [HttpPost("signup")]
     public async Task<IActionResult> CreatePatientUser(PatientUserRequestModel request, [FromServices] IValidator<PatientUserRequestModel> validator, CancellationToken cancellationToken)
     {
-        
+        //validator will be added
         var patient = request.Map();
         await userPatientService.RegisterAsync(patient, cancellationToken);
         return Ok();
