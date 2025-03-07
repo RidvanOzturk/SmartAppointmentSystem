@@ -29,6 +29,24 @@ namespace SmartAppointmentSystem.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Logs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Request = table.Column<string>(type: "text", nullable: false),
+                    Headers = table.Column<string>(type: "text", nullable: false),
+                    Endpoint = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    HttpMethod = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
+                    Response = table.Column<string>(type: "text", nullable: false),
+                    Ip = table.Column<string>(type: "character varying(45)", maxLength: 45, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Logs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Patients",
                 columns: table => new
                 {
@@ -50,9 +68,9 @@ namespace SmartAppointmentSystem.Data.Migrations
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
                     Image = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    BranchId = table.Column<int>(type: "integer", nullable: false)
+                    BranchId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -179,6 +197,9 @@ namespace SmartAppointmentSystem.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Appointments");
+
+            migrationBuilder.DropTable(
+                name: "Logs");
 
             migrationBuilder.DropTable(
                 name: "Ratings");

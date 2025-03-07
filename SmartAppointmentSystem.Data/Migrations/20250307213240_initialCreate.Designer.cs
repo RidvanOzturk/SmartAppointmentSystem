@@ -12,8 +12,8 @@ using SmartAppointmentSystem.Data;
 namespace SmartAppointmentSystem.Data.Migrations
 {
     [DbContext(typeof(AppointmentContext))]
-    [Migration("20250228160852_addedLogEntity")]
-    partial class addedLogEntity
+    [Migration("20250307213240_initialCreate")]
+    partial class initialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,11 +94,10 @@ namespace SmartAppointmentSystem.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("BranchId")
+                    b.Property<int?>("BranchId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
@@ -277,8 +276,7 @@ namespace SmartAppointmentSystem.Data.Migrations
                     b.HasOne("SmartAppointmentSystem.Data.Entities.Branch", "Branch")
                         .WithMany()
                         .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Branch");
                 });
