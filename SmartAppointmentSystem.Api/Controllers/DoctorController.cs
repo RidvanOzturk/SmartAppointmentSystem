@@ -63,6 +63,12 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         return Ok(doctors);
     }
 
+    [HttpPost("doctor-settings")]
+    public async Task<IActionResult> DoctorProfileSettings([FromBody] DoctorUserRequestModel doctorUserRequest, CancellationToken cancellationToken)
+    {
+        return Ok(doctorUserRequest);
+    }
+
     [HttpPost("signup")]
     public async Task<IActionResult> CreateDoctorUser([FromBody] DoctorUserSignUpRequestModel doctorUserRequest, CancellationToken cancellationToken)
     {
