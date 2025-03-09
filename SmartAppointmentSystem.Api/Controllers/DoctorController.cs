@@ -63,12 +63,6 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         return Ok(doctors);
     }
 
-    [HttpPost("doctor-settings")]
-    public async Task<IActionResult> DoctorProfileSettings([FromBody] DoctorUserRequestModel doctorUserRequest, CancellationToken cancellationToken)
-    {
-        return Ok(doctorUserRequest);
-    }
-
     [HttpPost("signup")]
     public async Task<IActionResult> CreateDoctorUser([FromBody] DoctorUserSignUpRequestModel doctorUserRequest, CancellationToken cancellationToken)
     {
@@ -98,17 +92,17 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
     }
 
     [AllowAnonymous]
-    [HttpPut]
-    public async Task<IActionResult> UpdateDoctorUser([FromBody] DoctorUserRequestModel doctorUserRequest , CancellationToken cancellationToken)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateDoctorUser([FromRoute] Guid id, DoctorUserRequestModel doctorUserRequest , CancellationToken cancellationToken)
     {
-        var doctorId = HttpContext.User.GetUserId();
-        var isDoctorExist = await doctorUserService.IsDoctorExistAsync(doctorId, cancellationToken);
+        // var doctorId = HttpContext.User.GetUserId();
+        var isDoctorExist = await doctorUserService.IsDoctorExistAsync(id, cancellationToken);
         if (!isDoctorExist)
         {
             return NotFound();
         }
         var doctorEntity = doctorUserRequest.Map();
-        await doctorUserService.UpdateDoctorByIdAsync(doctorId, doctorEntity, cancellationToken);
+        await doctorUserService.UpdateDoctorByIdAsync(id, doctorEntity, cancellationToken);
         return Ok();
     }
 

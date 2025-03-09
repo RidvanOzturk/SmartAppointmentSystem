@@ -1,7 +1,7 @@
 ﻿namespace SmartAppointmentSystem.Business.DTOs;
 
-public record GenerateTokenResponseDTO
-(
-     string Token,
-     DateTime TokenExpireDate
-);
+public class GenerateTokenResponseDTO
+{
+   public string Token { get; set; }
+   public DateTime TokenExpireDate { get; set; }
+};
