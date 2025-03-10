@@ -58,7 +58,7 @@ public static class MapperExtensions
 
     public static DoctorUserSignUpRequestDTO Map(this DoctorUserSignUpRequestModel value)
     {
-        return new DoctorUserSignUpRequestDTO(value.Email, value.Name, value.Password);
+        return new DoctorUserSignUpRequestDTO(value.Name, value.Email, value.Password);
     }
 
     public static DoctorUserLoginRequestDTO Map(this DoctorUserLoginRequestModel value)

@@ -93,7 +93,7 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
 
     [AllowAnonymous]
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateDoctorUser([FromRoute] Guid id, DoctorUserRequestModel doctorUserRequest , CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateDoctorUser([FromRoute] Guid id, [FromBody] DoctorUserRequestModel doctorUserRequest , CancellationToken cancellationToken)
     {
         // var doctorId = HttpContext.User.GetUserId();
         var isDoctorExist = await doctorUserService.IsDoctorExistAsync(id, cancellationToken);
