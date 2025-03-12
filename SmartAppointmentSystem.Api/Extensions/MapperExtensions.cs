@@ -1,6 +1,5 @@
 ﻿using SmartAppointmentSystem.Api.Models;
 using SmartAppointmentSystem.Business.DTOs;
-using SmartAppointmentSystem.Data.Entities;
 
 namespace SmartAppointmentSystem.Api.Extensions;
 
@@ -69,5 +68,25 @@ public static class MapperExtensions
     public static PatientUserLoginRequestDTO Map(this PatientUserLoginRequestModel value)
     {
         return new PatientUserLoginRequestDTO(value.Email, value.Password);
+    }
+    public static LogDTO ToLogDTO(this HttpContext context)
+    {
+        var request = context.Request;
+        var endpoint = request.Path.ToString();
+        var method = request.Method;
+        var ip = context.Connection.RemoteIpAddress?.ToString() ?? "Unknown";
+        var headers = string.Join("\n", request.Headers.Select(h => $"{h.Key}: {h.Value}"));
+        var statusCode = context.Response.StatusCode.ToString();
+
+        return new LogDTO(
+            Guid.NewGuid(),
+            $"{method} {endpoint}",
+            headers,
+            endpoint,
+            method,
+            statusCode,
+            ip,
+            DateTime.UtcNow
+        );
     }
 }

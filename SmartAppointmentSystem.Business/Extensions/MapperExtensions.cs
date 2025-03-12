@@ -1,10 +1,5 @@
 ﻿using SmartAppointmentSystem.Business.DTOs;
 using SmartAppointmentSystem.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartAppointmentSystem.Business.Extensions;
 
@@ -108,6 +103,20 @@ public static class MapperExtensions
             AppointmentFrequency = timeSlotRequest.AppointmentFrequency,
             AvailableFrom = timeSlotRequest.AvailableFrom,
             AvailableTo = timeSlotRequest.AvailableTo,
+        };
+    }
+    public static Log Map(this LogDTO logDTO)
+    {
+        return new Log
+        {
+            Id = Guid.NewGuid(),
+            Request = logDTO.Request,
+            Endpoint = logDTO.Endpoint,
+            Headers = logDTO.Headers,
+            Ip = logDTO.Ip,
+            HttpMethod = logDTO.HttpMethod,
+            Response = logDTO.Response,
+            CreatedAt = logDTO.CreatedAt,
         };
     }
     public static void Map(this TimeSlotRequestDTO source, TimeSlot target)

@@ -5,6 +5,7 @@ using SmartAppointmentSystem.Business.Implementations;
 using SmartAppointmentSystem.Data;
 using FluentValidation;
 using SmartAppointmentSystem.Api.Extensions;
+using SmartAppointmentSystem.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,7 @@ builder.Services.AddScoped<IDoctorUserService, DoctorUserService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<ITimeSlotService, TimeSlotService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ILoggingService, LoggingService>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<PatientUserValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<AppointmentValidator>();
@@ -43,7 +45,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
+app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
