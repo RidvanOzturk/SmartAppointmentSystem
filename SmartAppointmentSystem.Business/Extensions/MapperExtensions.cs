@@ -111,11 +111,11 @@ public static class MapperExtensions
         {
             Id = Guid.NewGuid(),
             Request = logDTO.Request,
-            Endpoint = logDTO.Endpoint,
             Headers = logDTO.Headers,
-            Ip = logDTO.Ip,
+            Endpoint = logDTO.Endpoint,
             HttpMethod = logDTO.HttpMethod,
             Response = logDTO.Response,
+            Ip = logDTO.Ip,
             CreatedAt = logDTO.CreatedAt,
         };
     }

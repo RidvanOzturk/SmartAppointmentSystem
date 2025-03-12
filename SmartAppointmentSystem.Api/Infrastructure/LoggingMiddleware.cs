@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using SmartAppointmentSystem.Api.Extensions;
+﻿using SmartAppointmentSystem.Api.Extensions;
 using SmartAppointmentSystem.Business.Contracts;
-using System;
-using System.Threading.Tasks;
 
 namespace SmartAppointmentSystem.Api.Middlewares
 {

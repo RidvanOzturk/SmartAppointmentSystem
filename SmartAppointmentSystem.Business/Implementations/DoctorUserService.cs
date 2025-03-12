@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using SmartAppointmentSystem.Business.Contracts;
 using SmartAppointmentSystem.Business.DTOs;
 using SmartAppointmentSystem.Business.Extensions;
