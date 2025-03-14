@@ -6,9 +6,17 @@ using SmartAppointmentSystem.Data;
 using FluentValidation;
 using SmartAppointmentSystem.Api.Extensions;
 using SmartAppointmentSystem.Api.Middlewares;
+using Microsoft.AspNetCore.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("fixed", limiterOptions =>
+    {
+        limiterOptions.PermitLimit = 20;
+        limiterOptions.Window = TimeSpan.FromSeconds(10);
+    });
+});
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddEnvironmentVariables();
@@ -40,7 +48,7 @@ builder.Services.AddOpenApi();
 builder.Services.RegisterJWTAuthentication();
 
 var app = builder.Build();
-
+app.UseRateLimiter();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
