@@ -21,6 +21,14 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<List<Doctor>> GetNewAddedDoctors(CancellationToken cancellationToken)
+    {
+        return await context.Doctors
+            .AsNoTracking()
+            .OrderByDescending(x=> x.CreatedAt)
+            .ToListAsync(cancellationToken);
+    }
     public async Task<List<Doctor>> GetDoctorsWithMostAppointmentsAsync(CancellationToken cancellationToken)
     {
         return await context.Doctors

@@ -8,7 +8,8 @@ public class Doctor
     public string PasswordHash { get; set; }
     public string? Description { get; set; }
     public string? Image { get; set; }
-    public int? BranchId { get; set; }        
+    public int? BranchId { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public Branch Branch { get; set; }         
 

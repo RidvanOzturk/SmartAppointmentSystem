@@ -30,6 +30,13 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         return Ok(doctor);
     }
 
+    [HttpGet("new-doctors")]
+    public async Task<IActionResult> GetNewAddedDoctors(CancellationToken cancellationToken)
+    {
+        var doctor = await doctorUserService.GetNewAddedDoctors(cancellationToken);
+        return Ok(doctor);
+    }
+
     [HttpGet("top-rated")]
     public async Task<IActionResult> GetTopRatedDoctors(CancellationToken cancellationToken)
     {
