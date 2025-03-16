@@ -73,8 +73,12 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
     [HttpPost("signup")]
     public async Task<IActionResult> CreateDoctorUser([FromBody] DoctorUserSignUpRequestModel doctorUserRequest, CancellationToken cancellationToken)
     {
-        var doctor = doctorUserRequest.Map();
-        await doctorUserService.CreateDoctorAsync(doctor, cancellationToken);
+        var doctorEntity = doctorUserRequest.Map();
+        var doctor = await doctorUserService.CreateDoctorAsync(doctorEntity, cancellationToken);
+        if (doctor == false)
+        {
+            return BadRequest("The doctor is already registered.");
+        }
         return Ok();
     }
 
@@ -113,7 +117,7 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         return Ok();
     }
 
-    [Authorize]
+    //[Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDoctorUser([FromRoute] Guid id, CancellationToken cancellationToken)
     {

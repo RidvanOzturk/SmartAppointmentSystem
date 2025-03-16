@@ -10,7 +10,7 @@ public interface IDoctorUserService
     Task<List<DoctorsRatingDTO>> GetTopRatedDoctorsAsync(CancellationToken cancellationToken = default);
     Task<List<Doctor>> GetDoctorsWithMostAppointmentsAsync(CancellationToken cancellationToken = default);
     Task<List<Doctor>> GetNewAddedDoctors(CancellationToken cancellationToken = default);
-    Task CreateDoctorAsync(DoctorUserSignUpRequestDTO requestDTO, CancellationToken cancellationToken = default);
+    Task<bool> CreateDoctorAsync(DoctorUserSignUpRequestDTO requestDTO, CancellationToken cancellationToken);
     Task<List<Doctor>> SearchDoctorsNameAsync(string query, CancellationToken cancellationToken = default);
     Task<UserResponseModel> LoginUserAsync(DoctorUserLoginRequestDTO request, CancellationToken cancellationToken = default);
     Task UpdateDoctorByIdAsync(Guid id, DoctorUserRequestDTO requestDTO, CancellationToken cancellationToken = default);

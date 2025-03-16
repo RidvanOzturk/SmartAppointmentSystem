@@ -57,14 +57,22 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         }).ToList();
         return result;
     }
-    public async Task CreateDoctorAsync(DoctorUserSignUpRequestDTO requestDTO, CancellationToken cancellationToken)
+    public async Task<bool> CreateDoctorAsync(DoctorUserSignUpRequestDTO requestDTO, CancellationToken cancellationToken)
     {
-        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password);
-        var doctorEntity = requestDTO.Map();
-        doctorEntity.PasswordHash = hashedPassword;
-        await context.Doctors
-            .AddAsync(doctorEntity, cancellationToken);
-        await context.SaveChangesAsync(cancellationToken);
+        var user = await context.Doctors.FirstOrDefaultAsync(x => x.Email == requestDTO.Email, cancellationToken);
+        if (user == null)
+        {
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password);
+            var doctorEntity = requestDTO.Map();
+            doctorEntity.PasswordHash = hashedPassword;
+            await context.Doctors
+                .AddAsync(doctorEntity, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
+            return true;
+        }
+        return false;
+      
+        
     }
     public async Task<List<Doctor>> SearchDoctorsNameAsync(string query, CancellationToken cancellationToken)
     {
