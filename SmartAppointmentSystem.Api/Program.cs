@@ -48,6 +48,11 @@ builder.Services.AddOpenApi();
 builder.Services.RegisterJWTAuthentication();
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppointmentContext>();
+    dbContext.Database.Migrate();
+}
 app.UseRateLimiter();
 if (app.Environment.IsDevelopment())
 {
