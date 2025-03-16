@@ -5,8 +5,8 @@ using SmartAppointmentSystem.Business.Implementations;
 using SmartAppointmentSystem.Data;
 using FluentValidation;
 using SmartAppointmentSystem.Api.Extensions;
-using SmartAppointmentSystem.Api.Middlewares;
 using Microsoft.AspNetCore.RateLimiting;
+using SmartAppointmentSystem.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRateLimiter(options =>

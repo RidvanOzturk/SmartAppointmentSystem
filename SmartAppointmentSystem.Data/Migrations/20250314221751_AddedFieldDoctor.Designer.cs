@@ -152,7 +152,7 @@ namespace SmartAppointmentSystem.Data.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("character varying(10)");
 
-                    b.Property<string>("Ip")
+                    b.Property<string>("IP")
                         .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("character varying(45)");

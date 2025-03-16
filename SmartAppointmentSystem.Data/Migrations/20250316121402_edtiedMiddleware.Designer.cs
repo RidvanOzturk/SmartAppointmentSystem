@@ -12,8 +12,8 @@ using SmartAppointmentSystem.Data;
 namespace SmartAppointmentSystem.Data.Migrations
 {
     [DbContext(typeof(AppointmentContext))]
-    [Migration("20250307213240_initialCreate")]
-    partial class initialCreate
+    [Migration("20250316121402_edtiedMiddleware")]
+    partial class edtiedMiddleware
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -97,6 +97,9 @@ namespace SmartAppointmentSystem.Data.Migrations
                     b.Property<int?>("BranchId")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
@@ -159,6 +162,10 @@ namespace SmartAppointmentSystem.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Response")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("StatusCode")
                         .IsRequired()
                         .HasColumnType("text");
 

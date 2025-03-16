@@ -114,8 +114,9 @@ public static class MapperExtensions
             Headers = logDTO.Headers,
             Endpoint = logDTO.Endpoint,
             HttpMethod = logDTO.HttpMethod,
+            StatusCode = logDTO.StatusCode,
             Response = logDTO.Response,
-            Ip = logDTO.Ip,
+            Ip = logDTO.IP,
             CreatedAt = logDTO.CreatedAt,
         };
     }

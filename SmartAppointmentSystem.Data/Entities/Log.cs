@@ -7,6 +7,7 @@ public class Log
     public string Headers { get; set; }
     public string Endpoint { get; set; }
     public string HttpMethod { get; set; }
+    public string StatusCode { get; set; }
     public string Response { get; set; }
     public string Ip { get; set; }
     public DateTime CreatedAt { get; set; }

@@ -6,7 +6,8 @@ public record LogDTO(
        string Headers,
        string Endpoint,
        string HttpMethod,
+       string StatusCode,
        string Response,
-       string Ip,
+       string IP,
        DateTime CreatedAt
    );
