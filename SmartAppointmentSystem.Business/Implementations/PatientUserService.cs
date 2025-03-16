@@ -8,17 +8,23 @@ namespace SmartAppointmentSystem.Business.Implementations;
 
 public class PatientUserService(AppointmentContext context, ITokenService tokenService) : IPatientUserService
 {
-    public async Task RegisterAsync(PatientUserRequestDTO requestDTO, CancellationToken cancellationToken)
+    public async Task<bool> CreatePatientAsync(PatientUserRequestDTO requestDTO, CancellationToken cancellationToken)
     {
-        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password);
-        var patient = requestDTO.Map();
-        patient.PasswordHash = hashedPassword;
-        await context.Patients
-            .AddAsync(patient, cancellationToken);
-        await context.SaveChangesAsync(cancellationToken);
+        var user = await context.Patients.FirstOrDefaultAsync(x=>x.Email == requestDTO.Email);
+        if (user == null)
+        {
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password);
+            var patient = requestDTO.Map();
+            patient.PasswordHash = hashedPassword;
+            await context.Patients
+                .AddAsync(patient, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
+            return true;
+        }
+        return false;
     }
 
-    public async Task<UserResponseModel> LoginUserAsync(PatientUserLoginRequestDTO request, CancellationToken cancellationToken)
+    public async Task<UserResponseModel> LoginPatientUserAsync(PatientUserLoginRequestDTO request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
         {
@@ -50,19 +56,19 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
             AuthToken = generatedToken.Token
         };
     }
-    public async Task<List<Patient>> GetUsersAsync(CancellationToken cancellationToken)
+    public async Task<List<Patient>> GetPatientUsersAsync(CancellationToken cancellationToken)
     {
         return await context.Patients
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }
-    public async Task<Patient> GetUserByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Patient> GetPatientUserByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await context.Patients
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
-    public async Task DeleteUserByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task DeletePatientUserByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var patient = await context.Patients.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         context.Patients.Remove(patient);

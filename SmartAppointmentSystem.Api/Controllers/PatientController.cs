@@ -15,17 +15,17 @@ public class PatientController(IPatientUserService userPatientService) : Control
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet]
-    public async Task<IActionResult> GetUser(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetPatientUser(CancellationToken cancellationToken)
     {
         var patientId = HttpContext.User.GetUserId();
-        await userPatientService.GetUserByIdAsync(patientId, cancellationToken);
+        await userPatientService.GetPatientUserByIdAsync(patientId, cancellationToken);
         return Ok();
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetUserById(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetPatientUserById(Guid id, CancellationToken cancellationToken)
     {
-        var patient = await userPatientService.GetUserByIdAsync(id, cancellationToken);
+        var patient = await userPatientService.GetPatientUserByIdAsync(id, cancellationToken);
         if (patient == null)
         {
             return NotFound();
@@ -35,10 +35,10 @@ public class PatientController(IPatientUserService userPatientService) : Control
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<ActionResult<PatientUserRequestModel>> LoginUser([FromBody] PatientUserLoginRequestModel request, CancellationToken cancellationToken)
+    public async Task<ActionResult<PatientUserRequestModel>> PatientUserLogin([FromBody] PatientUserLoginRequestModel request, CancellationToken cancellationToken)
     {
         var patientEntity = request.Map();
-        var patient = await userPatientService.LoginUserAsync(patientEntity, cancellationToken);
+        var patient = await userPatientService.LoginPatientUserAsync(patientEntity, cancellationToken);
         if (!patient.AuthenticateResult)
         {
             return BadRequest();
@@ -50,7 +50,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
     [HttpGet("all")]
     public async Task<IActionResult> GetAllPatients(CancellationToken cancellationToken)
     {
-        var patients = await userPatientService.GetUsersAsync(cancellationToken);
+        var patients = await userPatientService.GetPatientUsersAsync(cancellationToken);
         if (patients.Count == 0)
         {
             return BadRequest();
@@ -62,8 +62,13 @@ public class PatientController(IPatientUserService userPatientService) : Control
     public async Task<IActionResult> CreatePatientUser(PatientUserRequestModel request, [FromServices] IValidator<PatientUserRequestModel> validator, CancellationToken cancellationToken)
     {
         //validator will be added
-        var patient = request.Map();
-        await userPatientService.RegisterAsync(patient, cancellationToken);
+
+        var patientEntity = request.Map();
+        var patient = await userPatientService.CreatePatientAsync(patientEntity, cancellationToken);
+        if (patient == false)
+        {
+            return BadRequest("The patient is already registered.");
+        }
         return Ok();
     }
 
@@ -75,7 +80,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
         {
             return NotFound();
         }
-        await userPatientService.DeleteUserByIdAsync(id, cancellationToken);
+        await userPatientService.DeletePatientUserByIdAsync(id, cancellationToken);
         return Ok();
     }
 }
