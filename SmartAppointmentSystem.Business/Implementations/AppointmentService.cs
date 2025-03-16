@@ -4,6 +4,7 @@ using SmartAppointmentSystem.Business.DTOs;
 using SmartAppointmentSystem.Business.Extensions;
 using SmartAppointmentSystem.Data;
 using SmartAppointmentSystem.Data.Entities;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SmartAppointmentSystem.Business.Implementations;
 
@@ -26,7 +27,7 @@ public class AppointmentService(AppointmentContext context) : IAppointmentServic
     {
         return await context.Appointments
             .AsNoTracking()
-            .Where(x=> x.PatientId == id)
+            .Where(x => x.PatientId == id)
             .ToListAsync(cancellationToken);
     }
     public async Task<Appointment> GetAppointmentsByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -43,6 +44,27 @@ public class AppointmentService(AppointmentContext context) : IAppointmentServic
             .Remove(deletedAppointment);
         await context.SaveChangesAsync(cancellationToken);
     }
+    public async Task<List<string>> GetAvailableTimeSlotsForDoctorAsync(Guid id, DateTime date, CancellationToken cancellationToken)
+    {
+        int dayOfWeek = (int)date.DayOfWeek;
+        var timeSlot = await context.TimeSlots
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.DoctorId == id && x.AvailableDay == dayOfWeek, cancellationToken);
+        if (timeSlot == null)
+        {
+            return new List<string>();
+        }
+        var availableSlots = new List<string>();
+        var currentSlot = timeSlot.AvailableFrom; 
+        TimeSpan frequency = TimeSpan.FromMinutes(timeSlot.AppointmentFrequency);
+        while (currentSlot + frequency <= timeSlot.AvailableTo)
+        {
+            availableSlots.Add(currentSlot.ToString(@"hh\:mm"));
+            currentSlot = currentSlot.Add(frequency);
+        }
+        return availableSlots;
+    }
+
     public async Task UpdateAppointmentByIdAsync(Guid id, AppointmentRequestDTO appointmentRequestDTO, CancellationToken cancellationToken)
     {
         var updatedAppointment = await context.Appointments

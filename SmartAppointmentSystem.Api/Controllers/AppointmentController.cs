@@ -29,6 +29,17 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
         return Ok(appointments);
     }
 
+    [HttpGet("available/{id}")]
+    public async Task<IActionResult> GetAvailableTimeSlots([FromQuery] Guid id, DateTime date, CancellationToken cancellationToken)
+    {
+        var appointmentTimeSlot = await appointmentService.GetAvailableTimeSlotsForDoctorAsync(id, date, cancellationToken);
+        if (appointmentTimeSlot.Count == 0)
+        {
+            return NotFound();
+        }
+        return Ok(appointmentTimeSlot);
+    }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAppointment(Guid id, CancellationToken cancellationToken = default)
     {

@@ -32,6 +32,9 @@ namespace SmartAppointmentSystem.Data.Configurations
                 .HasMaxLength(200)
                 .IsRequired(false);
 
+            builder.Property(d => d.CreatedAt)
+                .IsRequired();
+
 
             builder.HasOne(d => d.Branch)
                 .WithMany()
