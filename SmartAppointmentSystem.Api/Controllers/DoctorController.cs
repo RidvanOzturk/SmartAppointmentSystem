@@ -19,7 +19,7 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         return Ok(doctor);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetDoctorById(Guid id, CancellationToken cancellationToken)
     {
         var doctor = await doctorUserService.GetDoctorByIdAsync(id, cancellationToken);
@@ -99,7 +99,7 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
     }
 
     [AllowAnonymous]
-    [HttpPut("{id:guid}")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDoctorUser([FromRoute] Guid id, [FromBody] DoctorUserRequestModel doctorUserRequest , CancellationToken cancellationToken)
     {
         // var doctorId = HttpContext.User.GetUserId();
@@ -114,7 +114,7 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
     }
 
     [Authorize]
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDoctorUser([FromRoute] Guid id, CancellationToken cancellationToken)
     {
         var isDoctorExist = await doctorUserService.IsDoctorExistAsync(id, cancellationToken);
