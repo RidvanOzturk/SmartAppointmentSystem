@@ -11,22 +11,25 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
 {
     public async Task<DoctorResponseDTO> GetDoctorByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await context.Doctors
-            .AsNoTracking()
-            .Include(x=>x.Branch)
-            .Include(x=>x.Ratings)
-            .Select(x=> new DoctorResponseDTO(
-                x.Id,
-                x.Name,
-                x.Email,
-                x.Description,
-                x.Image,
-                x.BranchId,
-                x.CreatedAt,
-                x.Branch != null ? new BranchResponseDTO(x.Branch.Id, x.Branch.Title) : null,
-                FunctionExtensions.CalculateAverageRating(x.Ratings)
-                ))
-            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var doctor = await context.Doctors
+         .AsNoTracking()
+         .Include(x => x.Branch)
+         .Include(x => x.Ratings)
+         .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        if (doctor == null)
+            return null;
+        return new DoctorResponseDTO(
+             doctor.Id,
+             doctor.Name,
+             doctor.Email,
+             doctor.Description,
+             doctor.Image,
+             doctor.BranchId,
+             doctor.CreatedAt,
+             doctor.Branch != null ? new BranchResponseDTO(doctor.Branch.Id, doctor.Branch.Title) : null,
+             FunctionExtensions.CalculateAverageRating(doctor.Ratings)
+        );
     }
     public async Task<List<AllDoctorResponseDTO>> GetAllDoctorsAsync(CancellationToken cancellationToken)
     {
