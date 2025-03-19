@@ -5,7 +5,7 @@ namespace SmartAppointmentSystem.Business.Contracts;
 
 public interface IDoctorUserService
 {
-    Task<Doctor> GetDoctorByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<DoctorResponseDTO> GetDoctorByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<List<AllDoctorResponseDTO>> GetAllDoctorsAsync(CancellationToken cancellationToken = default);
     Task<List<DoctorsRatingDTO>> GetTopRatedDoctorsAsync(CancellationToken cancellationToken = default);
     Task<List<Doctor>> GetDoctorsWithMostAppointmentsAsync(CancellationToken cancellationToken = default);
