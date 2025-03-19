@@ -53,7 +53,7 @@ Use the provided endpoints to create, read, update, and delete appointments and 
 Example: GET /api/doctors/all returns a list of all doctors.
 
 Testing with Postman:
-Example: https://smartappointmentsystem.onrender.com/api/patient/signup
+Example: https://smartappointmentsystem.up.railway.app/api/doctor/all
 
 ## Deployment
 Both the API and the database have been deployed in a cloud environment. 
