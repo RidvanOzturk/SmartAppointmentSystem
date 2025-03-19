@@ -15,11 +15,23 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
-    public async Task<List<Doctor>> GetAllDoctorsAsync(CancellationToken cancellationToken)
+    public async Task<List<AllDoctorResponseDTO>> GetAllDoctorsAsync(CancellationToken cancellationToken)
     {
-        return await context.Doctors
-            .AsNoTracking()
-            .ToListAsync(cancellationToken);
+        var doctors = await context.Doctors
+                .AsNoTracking()
+                .Include(x => x.Branch)   
+                .Include(x => x.Ratings)   
+                .Select(x => new AllDoctorResponseDTO(
+                    x.Id,
+                    x.Name,
+                    x.Email,
+                    x.BranchId,
+                    x.Branch != null ? new BranchResponseDTO(x.Branch.Id, x.Branch.Title) : null,
+                    x.Ratings.Any() ? x.Ratings.Average(r => r.Score) : 0
+                ))
+                .ToListAsync(cancellationToken);
+
+        return doctors;
     }
 
     public async Task<List<Doctor>> GetNewAddedDoctors(CancellationToken cancellationToken)
