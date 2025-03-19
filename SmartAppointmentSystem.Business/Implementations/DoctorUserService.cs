@@ -9,10 +9,23 @@ namespace SmartAppointmentSystem.Business.Implementations;
 
 public class DoctorUserService(AppointmentContext context, ITokenService tokenService) : IDoctorUserService
 {
-    public async Task<Doctor> GetDoctorByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<DoctorResponseDTO> GetDoctorByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await context.Doctors
             .AsNoTracking()
+            .Include(x=>x.Branch)
+            .Include(x=>x.Ratings)
+            .Select(x=> new DoctorResponseDTO(
+                x.Id,
+                x.Name,
+                x.Email,
+                x.Description,
+                x.Image,
+                x.BranchId,
+                x.CreatedAt,
+                x.Branch != null ? new BranchResponseDTO(x.Branch.Id, x.Branch.Title) : null,
+                FunctionExtensions.CalculateAverageRating(x.Ratings)
+                ))
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
     public async Task<List<AllDoctorResponseDTO>> GetAllDoctorsAsync(CancellationToken cancellationToken)
@@ -27,7 +40,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
                     x.Email,
                     x.BranchId,
                     x.Branch != null ? new BranchResponseDTO(x.Branch.Id, x.Branch.Title) : null,
-                    x.Ratings.Any() ? x.Ratings.Average(r => r.Score) : 0
+                    FunctionExtensions.CalculateAverageRating(x.Ratings)
                 ))
                 .ToListAsync(cancellationToken);
 
@@ -55,7 +68,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             .Select(d => new
         {
             Doctor = d,
-            AverageRating = d.Ratings.Any() ? d.Ratings.Average(r => r.Score) : 0
+            AverageRating = FunctionExtensions.CalculateAverageRating(d.Ratings)
         })
             .OrderByDescending(x => x.AverageRating)
             .ToListAsync(cancellationToken);
