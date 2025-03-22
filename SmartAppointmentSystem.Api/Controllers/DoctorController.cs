@@ -23,8 +23,8 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
     public async Task<IActionResult> GetDoctorById(Guid id, CancellationToken cancellationToken)
     {
         var doctor = await doctorUserService.GetDoctorByIdAsync(id, cancellationToken);
-        if (doctor == null) 
-        { 
+        if (doctor == null)
+        {
             return NotFound();
         }
         return Ok(doctor);
@@ -60,10 +60,21 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
     }
 
     [HttpGet("search")]
-    public async Task<IActionResult> GetDoctorBySearch([FromQuery] string query, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetDoctorByNameSearch([FromQuery] string query, CancellationToken cancellationToken)
     {
         var doctors = await doctorUserService.SearchDoctorsNameAsync(query, cancellationToken);
-        if (doctors.Count == 0) 
+        if (doctors.Count == 0)
+        {
+            return NotFound();
+        }
+        return Ok(doctors);
+    }
+
+    [HttpGet("search-branch")]
+    public async Task<IActionResult> GetDoctorByBrancSearch([FromQuery] int query, CancellationToken cancellationToken)
+    {
+        var doctors = await doctorUserService.SearchDoctorsBranchAsync(query, cancellationToken);
+        if (doctors.Count == 0)
         {
             return NotFound();
         }
@@ -102,9 +113,8 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         return Ok(doctor);
     }
 
-    [AllowAnonymous]
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateDoctorUser([FromRoute] Guid id, [FromBody] DoctorUserRequestModel doctorUserRequest , CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateDoctorUser([FromRoute] Guid id, [FromBody] DoctorUserRequestModel doctorUserRequest, CancellationToken cancellationToken)
     {
         // var doctorId = HttpContext.User.GetUserId();
         var isDoctorExist = await doctorUserService.IsDoctorExistAsync(id, cancellationToken);

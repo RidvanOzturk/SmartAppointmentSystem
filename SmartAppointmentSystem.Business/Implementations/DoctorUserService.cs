@@ -107,12 +107,21 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         if (string.IsNullOrEmpty(query))
         {
             return await context.Doctors
+                .AsNoTracking()
                 .ToListAsync(cancellationToken);
         }
         return await context.Doctors
             .AsNoTracking()
             .Where(d => EF.Functions.Like(d.Name, $"%{query}%"))
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task<List<Doctor>> SearchDoctorsBranchAsync(int query, CancellationToken cancellationToken)
+    {
+      
+        return await context.Doctors.AsNoTracking()
+             .Where(x=> x.BranchId == query)
+             .ToListAsync(cancellationToken);
     }
 
     public async Task<UserResponseModel> LoginUserAsync(DoctorUserLoginRequestDTO request, CancellationToken cancellationToken)

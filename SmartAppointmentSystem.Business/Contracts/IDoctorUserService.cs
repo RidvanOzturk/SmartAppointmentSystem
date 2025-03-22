@@ -12,6 +12,7 @@ public interface IDoctorUserService
     Task<List<Doctor>> GetNewAddedDoctors(CancellationToken cancellationToken = default);
     Task<bool> CreateDoctorAsync(DoctorUserSignUpRequestDTO requestDTO, CancellationToken cancellationToken);
     Task<List<Doctor>> SearchDoctorsNameAsync(string query, CancellationToken cancellationToken = default);
+    Task<List<Doctor>> SearchDoctorsBranchAsync(int query, CancellationToken cancellationToken = default);
     Task<UserResponseModel> LoginUserAsync(DoctorUserLoginRequestDTO request, CancellationToken cancellationToken = default);
     Task UpdateDoctorByIdAsync(Guid id, DoctorUserRequestDTO requestDTO, CancellationToken cancellationToken = default);
     Task DeleteDoctorByIdAsync(Guid id, CancellationToken cancellationToken = default);

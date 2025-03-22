@@ -16,6 +16,7 @@ public class RatingController(IRatingService ratingService) : ControllerBase
         await ratingService.CreateRatingAsync(rating, cancellationToken);
         return Ok();
     }
+
     [HttpGet("all")]
     public async Task<IActionResult> GetAllRatings(CancellationToken cancellationToken)
     {
