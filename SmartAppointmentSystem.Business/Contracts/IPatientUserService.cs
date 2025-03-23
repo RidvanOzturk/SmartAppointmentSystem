@@ -13,7 +13,7 @@ public interface IPatientUserService
     Task<bool> CreatePatientAsync(PatientUserRequestDTO requestDTO, CancellationToken cancellationToken = default);
     public Task<UserResponseModel> LoginPatientUserAsync(PatientUserLoginRequestDTO request ,CancellationToken cancellationToken = default);
     Task<List<Patient>> GetPatientUsersAsync(CancellationToken cancellationToken = default);
-    Task<Patient> GetPatientUserByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<PatientResponseDTO?> GetPatientUserByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task DeletePatientUserByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> IsPatientExistAsync(Guid id, CancellationToken cancellationToken = default);
 }

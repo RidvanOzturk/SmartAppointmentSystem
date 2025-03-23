@@ -72,11 +72,24 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
         //    .ToListAsync(cancellationToken);
         return await context.Patients.ToListAsync();
     }
-    public async Task<Patient> GetPatientUserByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<PatientResponseDTO?> GetPatientUserByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await context.Patients
+        var patient = await context.Patients
             .AsNoTracking()
+            .Include(x => x.Ratings)
+            .Include(x => x.Appointments)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        if (patient == null)
+        {
+            return null;
+        }
+        return new PatientResponseDTO(
+            patient.Id,
+            patient.Name,
+            patient.Email,
+            patient.Appointments,
+            patient.Ratings
+        );
     }
     public async Task DeletePatientUserByIdAsync(Guid id, CancellationToken cancellationToken)
     {
