@@ -2,31 +2,36 @@
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace SmartAppointmentSystem.Api.Extensions;
-
-public static class ServiceExtensions
+namespace SmartAppointmentSystem.Api.Extensions
 {
-    public static void RegisterJWTAuthentication(this IServiceCollection services)
+    public static class ServiceExtensions
     {
-        var secretKey = Environment.GetEnvironmentVariable("AppSettings__Secret");
-        
-        services.AddAuthentication(x =>
+        public static void RegisterJWTAuthentication(this IServiceCollection services)
         {
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(x =>
-        {
-            x.RequireHttpsMetadata = false;
-            x.SaveToken = true;
-            x.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey)),
-                ValidateIssuer = false,
-                ValidateAudience = false
-            };
-        });
-    }
+            var secretKey = Environment.GetEnvironmentVariable("AppSettings__Secret");
 
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey)),
+
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+
+                    ValidateLifetime = true,
+
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+        }
+    }
 }

@@ -9,4 +9,5 @@ public class Patient
 
     public ICollection<Appointment> Appointments { get; set; }
     public ICollection<Rating> Ratings { get; set; }
+    public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
 }
