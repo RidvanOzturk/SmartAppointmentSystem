@@ -16,6 +16,7 @@ namespace SmartAppointmentSystem.Data
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Log> Logs { get; set; }
+        public DbSet<LogError> LogErrors { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<TimeSlot> TimeSlots { get; set; }

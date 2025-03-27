@@ -110,7 +110,6 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         {
             return BadRequest();
         }
-
         return Ok(doctor);
     }
 
@@ -140,7 +139,7 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         await doctorUserService.DeleteDoctorByIdAsync(id, cancellationToken);
         return Ok();
     }
-    [HttpPost("refresh")]
+    [HttpPost("refresh-token")]
     [AllowAnonymous]
     public async Task<IActionResult> Refresh([FromBody] RefreshRequest request, CancellationToken cancellationToken)
     {
@@ -150,6 +149,5 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
             return Unauthorized("Authorize Time Out");
         }
         return Ok(result);
-
     }
 }

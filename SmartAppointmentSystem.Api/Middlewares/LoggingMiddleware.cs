@@ -28,8 +28,8 @@ public class RequestLoggingMiddleware(RequestDelegate next, ILogger<RequestLoggi
         }
         catch (Exception ex)
         {
-            // bunu da db'de başka bir tabloya yazman lazım, mesela LogErrors, Id, ex ve CreatedAt
             logger.LogError(ex, "Log error while creating.");
+            await loggingService.LogErrorAsync(ex, context.RequestAborted);
         }
     }
 }
