@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using SmartAppointmentSystem.Api.Extensions;
 using SmartAppointmentSystem.Api.Models;
@@ -138,5 +139,17 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         }
         await doctorUserService.DeleteDoctorByIdAsync(id, cancellationToken);
         return Ok();
+    }
+    [HttpPost("refresh")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Refresh([FromBody] RefreshRequest request, CancellationToken cancellationToken)
+    {
+        var result = await doctorUserService.RefreshTokenAsync(request.RefreshToken, cancellationToken);
+        if (result == null)
+        {
+            return Unauthorized("Authorize Time Out");
+        }
+        return Ok(result);
+
     }
 }

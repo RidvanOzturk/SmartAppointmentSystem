@@ -2,10 +2,10 @@
 
 public record DoctorUserRequestDTO
 (
-     string Name,
+     string? Name,
      string Email,
-     string Password,
-     string Description,
+     string? Password,
+     string? Description,
      string? Image,
      int BranchId
 );

@@ -132,7 +132,9 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             {
                 AccessTokenExpireDate = null,
                 AuthenticateResult = false,
-                AuthToken = null
+                AuthToken = null,
+                RefreshToken = null
+
             };
         }
 
@@ -148,12 +150,30 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             };
         }
 
-        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO { UserId = user.Id, Name = user.Name, Mail = user.Email});
+        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO 
+        { 
+            UserId = user.Id,
+            Name = user.Name,
+            Mail = user.Email
+        });
+        var refreshTokenString = tokenService.GenerateRefreshTokenAsync();
+        var refreshTokenEntity = new RefreshToken
+        {
+            Token = refreshTokenString.Result,
+            Expiration = DateTime.UtcNow.AddDays(7),
+            DoctorId = user.Id, 
+            IsRevoked = false,
+            CreatedAt = DateTime.UtcNow
+        };
+        await context.RefreshTokens.AddAsync(refreshTokenEntity, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
+
         return new UserResponseModel
         {
             AccessTokenExpireDate = generatedToken.TokenExpireDate,
             AuthenticateResult = true,
-            AuthToken = generatedToken.Token
+            AuthToken = generatedToken.Token,
+            RefreshToken = refreshTokenString.Result
         };
     }
     public async Task UpdateDoctorByIdAsync(Guid id, DoctorUserRequestDTO requestDTO, CancellationToken cancellationToken)
@@ -174,5 +194,40 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
     {
         return await context.Doctors
             .AnyAsync(x=> x.Id == id, cancellationToken);
-    } 
+    }
+    public async Task<UserResponseModel> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)
+    {
+        var storedToken = await context.RefreshTokens
+            .FirstOrDefaultAsync(x => x.Token == refreshToken, cancellationToken);
+
+        if (storedToken == null || storedToken.Expiration < DateTime.UtcNow || storedToken.IsRevoked)
+        {
+            throw new Exception("Invalid or expired refresh token.");
+        }
+        var doctor = await context.Doctors
+            .FirstOrDefaultAsync(d => d.Id == storedToken.DoctorId, cancellationToken);
+        if (doctor == null)
+        {
+            throw new Exception("User not found.");
+        }
+        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO
+        {
+            UserId = doctor.Id,
+            Name = doctor.Name,
+            Mail = doctor.Email
+        });
+        var newRefreshToken = tokenService.GenerateRefreshTokenAsync();
+        storedToken.Token = newRefreshToken.Result;
+        storedToken.Expiration = DateTime.UtcNow.AddDays(7);
+        storedToken.CreatedAt = DateTime.UtcNow;
+        await context.SaveChangesAsync(cancellationToken);
+        return new UserResponseModel
+        {
+            AuthenticateResult = true,
+            AuthToken = generatedToken.Token,
+            AccessTokenExpireDate = generatedToken.TokenExpireDate,
+            RefreshToken = newRefreshToken.Result
+        };
+    }
+
 }

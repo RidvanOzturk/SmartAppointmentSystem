@@ -46,7 +46,7 @@ builder.Services.AddControllers()
     });
 builder.Services.AddOpenApi();
 builder.Services.RegisterJWTAuthentication();
-
+//builder.Services.AddAutoMapper(typeof());
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
