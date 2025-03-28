@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using SmartAppointmentSystem.Api.Extensions;
 using SmartAppointmentSystem.Api.Models;
 using SmartAppointmentSystem.Business.Contracts;
+using SmartAppointmentSystem.Business.DTOs;
+using SmartAppointmentSystem.Business.Implementations;
 
 namespace SmartAppointmentSystem.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class DoctorController(IDoctorUserService doctorUserService) : ControllerBase
+public class DoctorController(IDoctorUserService doctorUserService, IMapper mapper) : ControllerBase
 {
     [Authorize]
     [HttpGet]
@@ -116,14 +119,13 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDoctorUser([FromRoute] Guid id, [FromBody] DoctorUserRequestModel doctorUserRequest, CancellationToken cancellationToken)
     {
-        // var doctorId = HttpContext.User.GetUserId();
         var isDoctorExist = await doctorUserService.IsDoctorExistAsync(id, cancellationToken);
         if (!isDoctorExist)
         {
             return NotFound();
         }
-        var doctorEntity = doctorUserRequest.Map();
-        await doctorUserService.UpdateDoctorByIdAsync(id, doctorEntity, cancellationToken);
+        var doctorDTO = mapper.Map<DoctorUserRequestDTO>(doctorUserRequest);
+        await doctorUserService.UpdateDoctorByIdAsync(id, doctorDTO, cancellationToken);
         return Ok();
     }
 

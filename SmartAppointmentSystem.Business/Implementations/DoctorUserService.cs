@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using SmartAppointmentSystem.Business.Contracts;
 using SmartAppointmentSystem.Business.DTOs;
 using SmartAppointmentSystem.Business.Extensions;
@@ -7,7 +8,7 @@ using SmartAppointmentSystem.Data.Entities;
 
 namespace SmartAppointmentSystem.Business.Implementations;
 
-public class DoctorUserService(AppointmentContext context, ITokenService tokenService) : IDoctorUserService
+public class DoctorUserService(AppointmentContext context, ITokenService tokenService, IMapper mapper) : IDoctorUserService
 {
     public async Task<DoctorResponseDTO> GetDoctorByIdAsync(Guid id, CancellationToken cancellationToken)
     {
@@ -180,7 +181,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
     {
         var doctor = await context.Doctors
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        requestDTO.Map(doctor);
+        mapper.Map(requestDTO, doctor);
         await context.SaveChangesAsync(cancellationToken);
     }
     public async Task DeleteDoctorByIdAsync(Guid id, CancellationToken cancellationToken)
