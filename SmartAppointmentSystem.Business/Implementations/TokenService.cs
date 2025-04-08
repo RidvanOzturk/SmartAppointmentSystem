@@ -47,12 +47,13 @@ public class TokenService(IConfiguration configuration) : ITokenService
 
         return token;
     }
-     public Task<string> GenerateRefreshTokenAsync()
+    //TODO
+     public string GenerateRefreshTokenAsync()
      {
          var randomNumber = new byte[32];
          using var rng = RandomNumberGenerator.Create();
          rng.GetBytes(randomNumber);
  
-         return Task.FromResult(Convert.ToBase64String(randomNumber));
+         return Convert.ToBase64String(randomNumber);
      }
 }

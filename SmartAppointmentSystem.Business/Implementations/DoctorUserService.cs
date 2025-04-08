@@ -32,6 +32,41 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
              FunctionExtensions.CalculateAverageRating(doctor.Ratings)
         );
     }
+
+    public async Task<string?> LoginUserAsync(DoctorUserLoginRequestDTO request, CancellationToken cancellationToken)
+    {
+
+        var user = await context.Doctors
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
+
+
+        if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+        {
+            return null;
+        }
+
+        var generatedToken = tokenService.GenerateToken(new TokenRequest
+        {
+            UserId = user.Id,
+            Name = user.Name,
+            Mail = user.Email
+        });
+        var refreshTokenString = tokenService.GenerateRefreshTokenAsync();
+        var refreshTokenEntity = new RefreshToken
+        {
+            Token = refreshTokenString,
+            Expiration = DateTime.UtcNow.AddDays(7),
+            DoctorId = user.Id,
+            IsRevoked = false,
+            CreatedAt = DateTime.UtcNow
+        };
+        await context.RefreshTokens.AddAsync(refreshTokenEntity, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
+
+        return generatedToken;
+    }
+    //TODO RefreshToken
     public async Task<List<AllDoctorResponseDTO>> GetAllDoctorsAsync(CancellationToken cancellationToken)
     {
         var doctors = await context.Doctors
@@ -125,39 +160,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
              .ToListAsync(cancellationToken);
     }
 
-    public async Task<string?> LoginUserAsync(DoctorUserLoginRequestDTO request, CancellationToken cancellationToken)
-    {
-
-        var user = await context.Doctors
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
-
-
-        if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
-        {
-            return null;
-        }
-
-        var generatedToken = tokenService.GenerateToken(new TokenRequest 
-        { 
-            UserId = user.Id,
-            Name = user.Name,
-            Mail = user.Email
-        });
-        var refreshTokenString = tokenService.GenerateRefreshTokenAsync();
-        var refreshTokenEntity = new RefreshToken
-        {
-            Token = refreshTokenString,
-            Expiration = DateTime.UtcNow.AddDays(7),
-            DoctorId = user.Id, 
-            IsRevoked = false,
-            CreatedAt = DateTime.UtcNow
-        };
-        await context.RefreshTokens.AddAsync(refreshTokenEntity, cancellationToken);
-        await context.SaveChangesAsync(cancellationToken);
-
-        return generatedToken;
-    }
+    
     public async Task UpdateDoctorByIdAsync(Guid id, DoctorUserRequestDTO requestDTO, CancellationToken cancellationToken)
     {
         var doctor = await context.Doctors
@@ -177,39 +180,4 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         return await context.Doctors
             .AnyAsync(x=> x.Id == id, cancellationToken);
     }
-    public async Task<UserResponseModel> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)
-    {
-        var storedToken = await context.RefreshTokens
-            .FirstOrDefaultAsync(x => x.Token == refreshToken, cancellationToken);
-
-        if (storedToken == null || storedToken.Expiration < DateTime.UtcNow || storedToken.IsRevoked)
-        {
-            throw new Exception("Invalid or expired refresh token.");
-        }
-        var doctor = await context.Doctors
-            .FirstOrDefaultAsync(d => d.Id == storedToken.DoctorId, cancellationToken);
-        if (doctor == null)
-        {
-            throw new Exception("User not found.");
-        }
-        var generatedToken = tokenService.GenerateToken(new TokenRequest
-        {
-            UserId = doctor.Id,
-            Name = doctor.Name,
-            Mail = doctor.Email
-        });
-        var newRefreshToken = tokenService.GenerateRefreshTokenAsync();
-        storedToken.Token = newRefreshToken.Result;
-        storedToken.Expiration = DateTime.UtcNow.AddDays(7);
-        storedToken.CreatedAt = DateTime.UtcNow;
-        await context.SaveChangesAsync(cancellationToken);
-        return new UserResponseModel
-        {
-            AuthenticateResult = true,
-            AuthToken = generatedToken.Token,
-            AccessTokenExpireDate = generatedToken.TokenExpireDate,
-            RefreshToken = newRefreshToken.Result
-        };
-    }
-
 }

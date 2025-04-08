@@ -48,12 +48,12 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
             };
         }
 
-        var generatedToken = await tokenService.GenerateToken(new TokenRequest { UserId = patient.Id, Name = patient.Name, Mail = patient.Email });
+        var generatedToken = tokenService.GenerateToken(new TokenRequest { UserId = patient.Id, Name = patient.Name, Mail = patient.Email });
         return new UserResponseModel
         {
-            AccessTokenExpireDate = generatedToken.TokenExpireDate,
-            AuthenticateResult = true,
-            AuthToken = generatedToken.Token
+            //AccessTokenExpireDate = generatedToken.TokenExpireDate,
+            //AuthenticateResult = true,
+            //AuthToken = generatedToken.Token
         };
     }
     public async Task<List<Patient>> GetPatientUsersAsync(CancellationToken cancellationToken)

@@ -17,5 +17,4 @@ public interface IDoctorUserService
     Task UpdateDoctorByIdAsync(Guid id, DoctorUserRequestDTO requestDTO, CancellationToken cancellationToken = default);
     Task DeleteDoctorByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> IsDoctorExistAsync(Guid id, CancellationToken cancellationToken);
-    Task<UserResponseModel> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken);
 }

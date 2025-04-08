@@ -109,10 +109,10 @@ public class DoctorController(IDoctorUserService doctorUserService, IMapper mapp
     {
         var doctorEntity = request.Map();
         var doctor = await doctorUserService.LoginUserAsync(doctorEntity, cancellationToken);
-        if (!doctor.AuthenticateResult)
-        {
-            return BadRequest();
-        }
+        //if (!doctor.AuthenticateResult)
+        //{
+        //    return BadRequest();
+        //}
         return Ok(doctor);
     }
 
@@ -141,15 +141,15 @@ public class DoctorController(IDoctorUserService doctorUserService, IMapper mapp
         await doctorUserService.DeleteDoctorByIdAsync(id, cancellationToken);
         return Ok();
     }
-    [HttpPost("refresh-token")]
-    [AllowAnonymous]
-    public async Task<IActionResult> Refresh([FromBody] RefreshRequest request, CancellationToken cancellationToken)
-    {
-        var result = await doctorUserService.RefreshTokenAsync(request.RefreshToken, cancellationToken);
-        if (result == null)
-        {
-            return Unauthorized("Authorize Time Out");
-        }
-        return Ok(result);
-    }
+    //[HttpPost("refresh-token")]
+    //[AllowAnonymous]
+    //public async Task<IActionResult> Refresh([FromBody] RefreshRequest request, CancellationToken cancellationToken)
+    //{
+    //    var result = await doctorUserService.RefreshTokenAsync(request.RefreshToken, cancellationToken);
+    //    if (result == null)
+    //    {
+    //        return Unauthorized("Authorize Time Out");
+    //    }
+    //    return Ok(result);
+    //}
 }
