@@ -18,6 +18,6 @@ public static class ClaimsExtensions
 
     public static string GetEmail(this ClaimsPrincipal user)
     {
-        return user.Claims.FirstOrDefault(x => x.Type == "Mail")?.Value;
+        return user.Claims.FirstOrDefault(x => x.Type == "Email")?.Value;
     }
 }

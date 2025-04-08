@@ -48,7 +48,7 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
             };
         }
 
-        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO { UserId = patient.Id, Name = patient.Name, Mail = patient.Email });
+        var generatedToken = await tokenService.GenerateToken(new TokenRequest { UserId = patient.Id, Name = patient.Name, Mail = patient.Email });
         return new UserResponseModel
         {
             AccessTokenExpireDate = generatedToken.TokenExpireDate,

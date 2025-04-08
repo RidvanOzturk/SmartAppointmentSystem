@@ -1,6 +1,6 @@
 ﻿namespace SmartAppointmentSystem.Business.DTOs;
 
-public class GenerateTokenRequestDTO
+public class TokenRequest
 {
     public Guid UserId { get; set; }
     public string Name { get; set; }

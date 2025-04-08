@@ -125,33 +125,20 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
              .ToListAsync(cancellationToken);
     }
 
-    public async Task<UserResponseModel> LoginUserAsync(DoctorUserLoginRequestDTO request, CancellationToken cancellationToken)
+    public async Task<string?> LoginUserAsync(DoctorUserLoginRequestDTO request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
-        {
-            return new UserResponseModel
-            {
-                AccessTokenExpireDate = null,
-                AuthenticateResult = false,
-                AuthToken = null,
-                RefreshToken = null
-
-            };
-        }
 
         var user = await context.Doctors
+            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
+
+
         if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
         {
-            return new UserResponseModel
-            {
-                AuthenticateResult = false,
-                AuthToken = null,
-                AccessTokenExpireDate = null,
-            };
+            return null;
         }
 
-        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO 
+        var generatedToken = tokenService.GenerateToken(new TokenRequest 
         { 
             UserId = user.Id,
             Name = user.Name,
@@ -160,7 +147,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         var refreshTokenString = tokenService.GenerateRefreshTokenAsync();
         var refreshTokenEntity = new RefreshToken
         {
-            Token = refreshTokenString.Result,
+            Token = refreshTokenString,
             Expiration = DateTime.UtcNow.AddDays(7),
             DoctorId = user.Id, 
             IsRevoked = false,
@@ -169,13 +156,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         await context.RefreshTokens.AddAsync(refreshTokenEntity, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
 
-        return new UserResponseModel
-        {
-            AccessTokenExpireDate = generatedToken.TokenExpireDate,
-            AuthenticateResult = true,
-            AuthToken = generatedToken.Token,
-            RefreshToken = refreshTokenString.Result
-        };
+        return generatedToken;
     }
     public async Task UpdateDoctorByIdAsync(Guid id, DoctorUserRequestDTO requestDTO, CancellationToken cancellationToken)
     {
@@ -211,7 +192,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         {
             throw new Exception("User not found.");
         }
-        var generatedToken = await tokenService.GenerateToken(new GenerateTokenRequestDTO
+        var generatedToken = tokenService.GenerateToken(new TokenRequest
         {
             UserId = doctor.Id,
             Name = doctor.Name,

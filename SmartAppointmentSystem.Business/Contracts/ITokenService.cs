@@ -5,6 +5,6 @@ namespace SmartAppointmentSystem.Business.Contracts;
 
 public interface ITokenService
 {
-    public Task<GenerateTokenResponseDTO> GenerateToken(GenerateTokenRequestDTO request);
+    public string GenerateToken(TokenRequest request);
     Task<string> GenerateRefreshTokenAsync();
 }
