@@ -21,7 +21,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
         await userPatientService.GetPatientUserByIdAsync(patientId, cancellationToken);
         return Ok();
     }
-
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetPatientUserById(Guid id, CancellationToken cancellationToken)
     {
@@ -48,7 +48,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
 
         return Ok(patient);
     }
-
+    [Authorize]
     [HttpGet("all")]
     public async Task<IActionResult> GetAllPatients(CancellationToken cancellationToken)
     {
@@ -77,7 +77,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
 
         return Ok();
     }
-
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePatientUser([FromRoute] Guid id, CancellationToken cancellationToken)
     {

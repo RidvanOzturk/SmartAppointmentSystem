@@ -11,6 +11,7 @@ namespace SmartAppointmentSystem.Api.Controllers;
 [ApiController]
 public class AppointmentController(IAppointmentService appointmentService) : ControllerBase
 {
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> CreateAppointment([FromBody] AppointmentRequestModel requestModel, CancellationToken cancellationToken = default)
     {
@@ -18,6 +19,8 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
         await appointmentService.CreateAppointmentAsync(appointment, cancellationToken);
         return Ok();
     }
+
+    [Authorize]
     [HttpGet("all")]
     public async Task<IActionResult> GetAllAppointments(CancellationToken cancellationToken = default)
     {
@@ -29,6 +32,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
         return Ok(appointments);
     }
 
+    [Authorize]
     [HttpGet("available/{id}")]
     public async Task<IActionResult> GetAvailableTimeSlots([FromQuery] Guid id, DateTime date, CancellationToken cancellationToken)
     {
@@ -40,6 +44,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
         return Ok(appointmentTimeSlot);
     }
 
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAppointment(Guid id, CancellationToken cancellationToken = default)
     {
@@ -50,6 +55,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
         }
         return Ok(appointment);
     }
+
 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("patient-appointments")]
@@ -66,6 +72,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
         return Ok(appointments);
     }
 
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAppointment([FromRoute] Guid id, AppointmentRequestModel request, CancellationToken cancellationToken = default)
     {
@@ -79,6 +86,7 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
         return Ok();
     }
 
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAppointment([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {

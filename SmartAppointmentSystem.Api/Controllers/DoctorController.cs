@@ -109,13 +109,14 @@ public class DoctorController(IDoctorUserService doctorUserService, IMapper mapp
     {
         var doctorEntity = request.Map();
         var doctor = await doctorUserService.LoginUserAsync(doctorEntity, cancellationToken);
-        //if (!doctor.AuthenticateResult)
-        //{
-        //    return BadRequest();
-        //}
+        if (doctor == null)
+        {
+            return BadRequest();
+        }
         return Ok(doctor);
     }
 
+    [Authorize]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateDoctorUser([FromRoute] Guid id, [FromBody] DoctorUserRequestModel doctorUserRequest, CancellationToken cancellationToken)
     {
@@ -129,7 +130,7 @@ public class DoctorController(IDoctorUserService doctorUserService, IMapper mapp
         return Ok();
     }
 
-    //[Authorize]
+    [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteDoctorUser([FromRoute] Guid id, CancellationToken cancellationToken)
     {

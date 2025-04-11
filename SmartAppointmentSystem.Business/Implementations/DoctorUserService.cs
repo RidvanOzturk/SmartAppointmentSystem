@@ -33,46 +33,52 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         );
     }
 
-    public async Task<string?> LoginUserAsync(DoctorUserLoginRequestDTO request, CancellationToken cancellationToken)
+    public async Task<TokenReponse?> LoginUserAsync(DoctorUserLoginRequestDTO request, CancellationToken cancellationToken)
     {
 
-        var user = await context.Doctors
+        var doctor = await context.Doctors
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
 
 
-        if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+        if (doctor == null || !BCrypt.Net.BCrypt.Verify(request.Password, doctor.PasswordHash))
         {
             return null;
         }
 
-        var generatedToken = tokenService.GenerateToken(new TokenRequest
+        var generatedTokenResponse = tokenService.GenerateToken(new TokenRequest
         {
-            UserId = user.Id,
-            Name = user.Name,
-            Mail = user.Email
+            UserId = doctor.Id,
+            Name = doctor.Name,
+            Mail = doctor.Email
         });
-        var refreshTokenString = tokenService.GenerateRefreshToken();
+
+        var refreshToken = tokenService.GenerateRefreshToken();
+
         var refreshTokenEntity = new RefreshToken
         {
-            Token = refreshTokenString,
+            Token = refreshToken,
             Expiration = DateTime.UtcNow.AddDays(7),
-            DoctorId = user.Id,
+            DoctorId = doctor.Id,
             IsRevoked = false,
             CreatedAt = DateTime.UtcNow
         };
-        await context.RefreshTokens.AddAsync(refreshTokenEntity, cancellationToken);
+        context.RefreshTokens.Add(refreshTokenEntity);
         await context.SaveChangesAsync(cancellationToken);
 
-        return generatedToken;
+        return new TokenReponse
+        {
+            AccessToken = generatedTokenResponse,
+            RefreshToken = refreshToken
+        };
     }
     //TODO RefreshToken
     public async Task<List<AllDoctorResponseDTO>> GetAllDoctorsAsync(CancellationToken cancellationToken)
     {
         var doctors = await context.Doctors
                 .AsNoTracking()
-                .Include(x => x.Branch)   
-                .Include(x => x.Ratings)   
+                .Include(x => x.Branch)
+                .Include(x => x.Ratings)
                 .Select(x => new AllDoctorResponseDTO(
                     x.Id,
                     x.Name,
@@ -90,14 +96,14 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
     {
         return await context.Doctors
             .AsNoTracking()
-            .OrderByDescending(x=> x.CreatedAt)
+            .OrderByDescending(x => x.CreatedAt)
             .ToListAsync(cancellationToken);
     }
     public async Task<List<Doctor>> GetDoctorsWithMostAppointmentsAsync(CancellationToken cancellationToken)
     {
         return await context.Doctors
             .AsNoTracking()
-            .OrderByDescending(x=>x.Appointments.Count)
+            .OrderByDescending(x => x.Appointments.Count)
             .ToListAsync(cancellationToken);
     }
     public async Task<List<DoctorsRatingDTO>> GetTopRatedDoctorsAsync(CancellationToken cancellationToken)
@@ -105,18 +111,18 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         var queryResult = await context.Doctors
             .Include(d => d.Ratings)
             .Select(d => new
-        {
-            Doctor = d,
-            AverageRating = FunctionExtensions.CalculateAverageRating(d.Ratings)
-        })
+            {
+                Doctor = d,
+                AverageRating = FunctionExtensions.CalculateAverageRating(d.Ratings)
+            })
             .OrderByDescending(x => x.AverageRating)
             .ToListAsync(cancellationToken);
 
         var result = queryResult.Select(x =>
         {
             var dto = new DoctorsRatingDTO();
-            dto.Map(x.Doctor); 
-            dto.AverageRating = Math.Round(x.AverageRating, 2); 
+            dto.Map(x.Doctor);
+            dto.AverageRating = Math.Round(x.AverageRating, 2);
             return dto;
         }).ToList();
         return result;
@@ -135,8 +141,8 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             return true;
         }
         return false;
-      
-        
+
+
     }
     public async Task<List<Doctor>> SearchDoctorsNameAsync(string query, CancellationToken cancellationToken)
     {
@@ -154,13 +160,13 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
 
     public async Task<List<Doctor>> SearchDoctorsBranchAsync(int query, CancellationToken cancellationToken)
     {
-      
+
         return await context.Doctors.AsNoTracking()
-             .Where(x=> x.BranchId == query)
+             .Where(x => x.BranchId == query)
              .ToListAsync(cancellationToken);
     }
 
-    
+
     public async Task UpdateDoctorByIdAsync(Guid id, DoctorUserRequestDTO requestDTO, CancellationToken cancellationToken)
     {
         var doctor = await context.Doctors
@@ -178,6 +184,6 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
     public async Task<bool> IsDoctorExistAsync(Guid id, CancellationToken cancellationToken)
     {
         return await context.Doctors
-            .AnyAsync(x=> x.Id == id, cancellationToken);
+            .AnyAsync(x => x.Id == id, cancellationToken);
     }
 }
