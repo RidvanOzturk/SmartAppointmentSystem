@@ -4,11 +4,12 @@ using SmartAppointmentSystem.Business.DTOs;
 using SmartAppointmentSystem.Business.Extensions;
 using SmartAppointmentSystem.Data;
 using SmartAppointmentSystem.Data.Entities;
+using System.Linq;
 namespace SmartAppointmentSystem.Business.Implementations;
 
 public class PatientUserService(AppointmentContext context, ITokenService tokenService) : IPatientUserService
 {
-    public async Task<bool> CreatePatientAsync(PatientUserRequestDTO requestDTO, CancellationToken cancellationToken)
+    public async Task<bool> CreatePatientAsync(PatientUserRequestDTO requestDTO, CancellationToken cancellationToken = default)
     {
         var user = await context.Patients.FirstOrDefaultAsync(x=>x.Email == requestDTO.Email);
         if (user == null)
@@ -24,39 +25,46 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
         return false;
     }
 
-    public async Task<UserResponseModel> LoginPatientUserAsync(PatientUserLoginRequestDTO request, CancellationToken cancellationToken)
+    public async Task<TokenReponse?> LoginPatientUserAsync(PatientUserLoginRequestDTO request, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
         {
-            return new UserResponseModel
-            {
-                AccessTokenExpireDate = null,
-                AuthenticateResult = false,
-                AuthToken = null
-            };
+            return null;
         }
 
-        var patient = await context.Patients
-            .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
+        var patient = await context.Patients.FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
         if (patient == null || !BCrypt.Net.BCrypt.Verify(request.Password, patient.PasswordHash))
         {
-            return new UserResponseModel
-            {
-                AccessTokenExpireDate = null,
-                AuthenticateResult = false,
-                AuthToken = null
-            };
+            return null;
         }
 
-        var generatedToken = tokenService.GenerateToken(new TokenRequest { UserId = patient.Id, Name = patient.Name, Mail = patient.Email });
-        return new UserResponseModel
+        var generatedTokenResponse = tokenService.GenerateToken(new TokenRequest
         {
-            //AccessTokenExpireDate = generatedToken.TokenExpireDate,
-            //AuthenticateResult = true,
-            //AuthToken = generatedToken.Token
+            UserId = patient.Id,
+            Name = patient.Name,
+            Mail = patient.Email
+        });
+
+        var refreshToken = tokenService.GenerateRefreshToken();
+
+        var refreshTokenEntity = new RefreshToken
+        {
+            Token = refreshToken,
+            Expiration = DateTime.UtcNow.AddDays(7), 
+            PatientId = patient.Id,
+            IsRevoked = false,
+            CreatedAt = DateTime.UtcNow
+        };
+        context.RefreshTokens.Add(refreshTokenEntity);
+        await context.SaveChangesAsync(cancellationToken);
+
+        return new TokenReponse
+        {
+            AccessToken = generatedTokenResponse,
+            RefreshToken = refreshToken
         };
     }
-    public async Task<List<Patient>> GetPatientUsersAsync(CancellationToken cancellationToken)
+    public async Task<List<Patient>> GetPatientUsersAsync(CancellationToken cancellationToken = default)
     {
         //return await context.Patients
         //    .AsNoTracking()
@@ -72,7 +80,7 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
         //    .ToListAsync(cancellationToken);
         return await context.Patients.ToListAsync();
     }
-    public async Task<PatientResponseDTO?> GetPatientUserByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<PatientResponseDTO?> GetPatientUserByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var patient = await context.Patients
             .AsNoTracking()
@@ -91,13 +99,13 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
             patient.Ratings
         );
     }
-    public async Task DeletePatientUserByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task DeletePatientUserByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var patient = await context.Patients.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         context.Patients.Remove(patient);
         await context.SaveChangesAsync(cancellationToken);
     }
-    public async Task<bool> IsPatientExistAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<bool> IsPatientExistAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await context.Patients
             .AnyAsync(x => x.Id == id, cancellationToken);

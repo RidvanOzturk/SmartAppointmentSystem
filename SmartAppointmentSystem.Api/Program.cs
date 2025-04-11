@@ -10,6 +10,10 @@ using SmartAppointmentSystem.Api.Middlewares;
 using SmartAppointmentSystem.Api.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 builder.Services.AddRateLimiter(options =>
 {
     options.AddFixedWindowLimiter("fixed", limiterOptions =>

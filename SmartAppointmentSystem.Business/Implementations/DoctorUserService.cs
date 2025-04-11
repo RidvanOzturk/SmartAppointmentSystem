@@ -52,7 +52,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             Name = user.Name,
             Mail = user.Email
         });
-        var refreshTokenString = tokenService.GenerateRefreshTokenAsync();
+        var refreshTokenString = tokenService.GenerateRefreshToken();
         var refreshTokenEntity = new RefreshToken
         {
             Token = refreshTokenString,

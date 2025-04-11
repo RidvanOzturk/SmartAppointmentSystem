@@ -26,6 +26,7 @@ public class PatientController(IPatientUserService userPatientService) : Control
     public async Task<IActionResult> GetPatientUserById(Guid id, CancellationToken cancellationToken)
     {
         var patient = await userPatientService.GetPatientUserByIdAsync(id, cancellationToken);
+
         if (patient == null)
         {
             return NotFound();
@@ -39,7 +40,8 @@ public class PatientController(IPatientUserService userPatientService) : Control
     {
         var patientEntity = request.Map();
         var patient = await userPatientService.LoginPatientUserAsync(patientEntity, cancellationToken);
-        if (!patient.AuthenticateResult)
+
+        if (patient == null)
         {
             return BadRequest();
         }
@@ -51,10 +53,12 @@ public class PatientController(IPatientUserService userPatientService) : Control
     public async Task<IActionResult> GetAllPatients(CancellationToken cancellationToken)
     {
         var patients = await userPatientService.GetPatientUsersAsync(cancellationToken);
+
         if (patients.Count == 0)
         {
             return BadRequest();
         }
+
         return Ok(patients);
     }
 
@@ -65,10 +69,12 @@ public class PatientController(IPatientUserService userPatientService) : Control
 
         var patientEntity = request.Map();
         var patient = await userPatientService.CreatePatientAsync(patientEntity, cancellationToken);
+
         if (patient == false)
         {
             return BadRequest("The patient is already registered.");
         }
+
         return Ok();
     }
 

@@ -6,5 +6,5 @@ namespace SmartAppointmentSystem.Business.Contracts;
 public interface ITokenService
 {
     string GenerateToken(TokenRequest request);
-    string GenerateRefreshTokenAsync();
+    string GenerateRefreshToken();
 }
