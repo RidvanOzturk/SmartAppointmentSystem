@@ -47,7 +47,6 @@ public class TokenService(IConfiguration configuration) : ITokenService
 
         return token;
     }
-    //TODO
     public string GenerateRefreshToken()
     {
         var randomNumber = new byte[32];

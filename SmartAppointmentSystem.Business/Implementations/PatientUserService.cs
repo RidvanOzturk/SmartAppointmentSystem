@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SmartAppointmentSystem.Business.Contracts;
 using SmartAppointmentSystem.Business.DTOs;
 using SmartAppointmentSystem.Business.Extensions;
@@ -7,7 +8,7 @@ using SmartAppointmentSystem.Data.Entities;
 using System.Linq;
 namespace SmartAppointmentSystem.Business.Implementations;
 
-public class PatientUserService(AppointmentContext context, ITokenService tokenService) : IPatientUserService
+public class PatientUserService(AppointmentContext context, ITokenService tokenService, IConfiguration configuration) : IPatientUserService
 {
     public async Task<bool> CreatePatientAsync(PatientUserRequestDTO requestDTO, CancellationToken cancellationToken = default)
     {
@@ -38,6 +39,9 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
             return null;
         }
 
+        int tokenExpiryMinutes = configuration.GetValue<int>("TokenSettings:ExpiresInMinutes");
+        var expireDate = DateTime.UtcNow.AddMinutes(tokenExpiryMinutes);
+
         var generatedTokenResponse = tokenService.GenerateToken(new TokenRequest
         {
             UserId = patient.Id,
@@ -61,7 +65,8 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
         return new TokenReponse
         {
             AccessToken = generatedTokenResponse,
-            RefreshToken = refreshToken
+            RefreshToken = refreshToken,
+            ExpireDate = expireDate
         };
     }
     public async Task<List<Patient>> GetPatientUsersAsync(CancellationToken cancellationToken = default)

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SmartAppointmentSystem.Business.Contracts;
 using SmartAppointmentSystem.Business.DTOs;
 using SmartAppointmentSystem.Business.Extensions;
@@ -8,7 +9,7 @@ using SmartAppointmentSystem.Data.Entities;
 
 namespace SmartAppointmentSystem.Business.Implementations;
 
-public class DoctorUserService(AppointmentContext context, ITokenService tokenService, IMapper mapper) : IDoctorUserService
+public class DoctorUserService(AppointmentContext context, ITokenService tokenService, IConfiguration configuration, IMapper mapper) : IDoctorUserService
 {
     public async Task<DoctorResponseDTO> GetDoctorByIdAsync(Guid id, CancellationToken cancellationToken)
     {
@@ -35,16 +36,16 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
 
     public async Task<TokenReponse?> LoginUserAsync(DoctorUserLoginRequestDTO request, CancellationToken cancellationToken)
     {
-
         var doctor = await context.Doctors
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
-
-
         if (doctor == null || !BCrypt.Net.BCrypt.Verify(request.Password, doctor.PasswordHash))
         {
             return null;
         }
+
+        int tokenExpiryMinutes = configuration.GetValue<int>("TokenSettings:ExpiresInMinutes");
+        var expireDate = DateTime.UtcNow.AddMinutes(tokenExpiryMinutes);
 
         var generatedTokenResponse = tokenService.GenerateToken(new TokenRequest
         {
@@ -69,10 +70,11 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         return new TokenReponse
         {
             AccessToken = generatedTokenResponse,
-            RefreshToken = refreshToken
+            RefreshToken = refreshToken,
+            ExpireDate = expireDate
         };
     }
-    //TODO RefreshToken
+
     public async Task<List<AllDoctorResponseDTO>> GetAllDoctorsAsync(CancellationToken cancellationToken)
     {
         var doctors = await context.Doctors
