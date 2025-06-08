@@ -9,7 +9,7 @@ using SmartAppointmentSystem.Data.Entities;
 
 namespace SmartAppointmentSystem.Business.Implementations;
 
-public class DoctorUserService(AppointmentContext context, ITokenService tokenService, IConfiguration configuration, IMapper mapper) : IDoctorUserService
+public class DoctorUserService(AppointmentContext context, ITokenService tokenService, IConfiguration configuration) : IDoctorUserService
 {
     public async Task<DoctorResponseDTO> GetDoctorByIdAsync(Guid id, CancellationToken cancellationToken)
     {
@@ -169,11 +169,10 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
     }
 
 
-    public async Task UpdateDoctorByIdAsync(Guid id, DoctorUserRequestDTO requestDTO, CancellationToken cancellationToken)
+    public async Task UpdateDoctorByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var doctor = await context.Doctors
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        mapper.Map(requestDTO, doctor);
         await context.SaveChangesAsync(cancellationToken);
     }
     public async Task DeleteDoctorByIdAsync(Guid id, CancellationToken cancellationToken)

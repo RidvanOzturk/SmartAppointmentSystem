@@ -47,18 +47,6 @@ public static class MapperExtensions
             Score = ratingRequest.Score,
         };
     }
-    public static Doctor Map(this DoctorUserRequestDTO doctorUserRequest)
-    {
-        return new Doctor
-        {
-            Id = Guid.NewGuid(),
-            PasswordHash = doctorUserRequest.Password,
-            Name = doctorUserRequest.Name,
-            Email = doctorUserRequest.Email,
-            Description = doctorUserRequest.Description,
-            BranchId = doctorUserRequest.BranchId,
-        };
-    }
     public static Doctor Map(this DoctorUserSignUpRequestDTO doctorUserSignUpRequest)
     {
         return new Doctor
@@ -76,14 +64,6 @@ public static class MapperExtensions
         target.Email = source.Email;
         target.Description = source.Description;
         target.BranchId = source.BranchId.Value;
-    }
-    public static void Map(this DoctorUserRequestDTO source, Doctor target)
-    {
-        target.PasswordHash = source.Password;
-        target.Name = source.Name;
-        target.Email = source.Email;
-        target.Description = source.Email;
-        target.BranchId = source.BranchId;
     }
     public static void Map(this RatingRequestDTO source, Rating target)
     {

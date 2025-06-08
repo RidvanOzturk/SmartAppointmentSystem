@@ -12,7 +12,7 @@ namespace SmartAppointmentSystem.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class DoctorController(IDoctorUserService doctorUserService, IMapper mapper) : ControllerBase
+public class DoctorController(IDoctorUserService doctorUserService) : ControllerBase
 {
     [Authorize]
     [HttpGet]
@@ -125,8 +125,7 @@ public class DoctorController(IDoctorUserService doctorUserService, IMapper mapp
         {
             return NotFound();
         }
-        var doctorDTO = mapper.Map<DoctorUserRequestDTO>(doctorUserRequest);
-        await doctorUserService.UpdateDoctorByIdAsync(id, doctorDTO, cancellationToken);
+        await doctorUserService.UpdateDoctorByIdAsync(id, cancellationToken);
         return Ok();
     }
 

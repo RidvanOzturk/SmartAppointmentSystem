@@ -12,7 +12,9 @@ public static class FunctionExtensions
     public static double CalculateAverageRating(ICollection<Rating> ratings)
     {
         if (ratings == null || !ratings.Any())
+        {
             return 0;
+        }
         return ratings.Average(r => r.Score);
     }
 }

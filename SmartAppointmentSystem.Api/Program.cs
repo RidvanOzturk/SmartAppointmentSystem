@@ -7,7 +7,6 @@ using FluentValidation;
 using SmartAppointmentSystem.Api.Extensions;
 using Microsoft.AspNetCore.RateLimiting;
 using SmartAppointmentSystem.Api.Middlewares;
-using SmartAppointmentSystem.Api.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,7 +50,6 @@ builder.Services.AddControllers()
     });
 builder.Services.AddOpenApi();
 builder.Services.RegisterJWTAuthentication();
-builder.Services.AddAutoMapper(typeof(MappingProfile));
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {

@@ -21,7 +21,6 @@ public static class MapperExtensions
             value.Status
         );
     }
-
     public static RatingRequestDTO Map(this RatingRequestModel value)
     {
         return new RatingRequestDTO(
@@ -32,7 +31,6 @@ public static class MapperExtensions
             value.CreatedAt
         );
     }
-
     public static TimeSlotRequestDTO Map(this TimeSlotRequestModel value)
     {
         return new TimeSlotRequestDTO(
@@ -43,34 +41,18 @@ public static class MapperExtensions
             value.AvailableTo
         );
     }
-
-    public static DoctorUserRequestDTO Map(this DoctorUserRequestModel value)
-    {
-        return new DoctorUserRequestDTO(
-            value.Name,
-            value.Email,
-            value.Password,
-            value.Description,
-            null,
-            value.BranchId
-        );
-    }
-
     public static DoctorUserSignUpRequestDTO Map(this DoctorUserSignUpRequestModel value)
     {
         return new DoctorUserSignUpRequestDTO(value.Name, value.Email, value.Password);
     }
-
     public static DoctorUserLoginRequestDTO Map(this DoctorUserLoginRequestModel value)
     {
         return new DoctorUserLoginRequestDTO(value.Email, value.Password);
     }
-
     public static PatientUserLoginRequestDTO Map(this PatientUserLoginRequestModel value)
     {
         return new PatientUserLoginRequestDTO(value.Email, value.Password);
     }
-
     public static LogDTO ToLogDTO(this HttpContext context, string requestBody, string responseBody)
     {
         var request = context.Request;
