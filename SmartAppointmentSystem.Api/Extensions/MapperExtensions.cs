@@ -11,11 +11,11 @@ public static class MapperExtensions
         return new PatientUserRequestDTO(value.Name, value.Email, value.Password);
     }
 
-    public static AppointmentRequestDTO Map(this AppointmentRequestModel value)
+    public static AppointmentRequestDTO Map(this AppointmentRequestModel value, Guid patientId)
     {
         return new AppointmentRequestDTO(
             value.DoctorId,
-            value.PatientId,
+            patientId,
             value.Time,
             value.Notes,
             value.Status

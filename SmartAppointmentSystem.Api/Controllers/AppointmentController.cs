@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmartAppointmentSystem.Api.Extensions;
 using SmartAppointmentSystem.Api.Models;
 using SmartAppointmentSystem.Business.Contracts;
+using SmartAppointmentSystem.Data.Entities;
 
 namespace SmartAppointmentSystem.Api.Controllers;
 
@@ -15,7 +16,12 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     [HttpPost]
     public async Task<IActionResult> CreateAppointment([FromBody] AppointmentRequestModel requestModel, CancellationToken cancellationToken = default)
     {
-        var appointment = requestModel.Map();
+        var patientId = HttpContext.User.GetUserId();
+        if (patientId == Guid.Empty)
+        {
+            return BadRequest("Invalid patient ID.");
+        }
+        var appointment = requestModel.Map(patientId);
         await appointmentService.CreateAppointmentAsync(appointment, cancellationToken);
         return Ok();
     }
@@ -76,12 +82,13 @@ public class AppointmentController(IAppointmentService appointmentService) : Con
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAppointment([FromRoute] Guid id, AppointmentRequestModel request, CancellationToken cancellationToken = default)
     {
+        //var patientId = HttpContext.User.GetUserId();
         var isAppointmentExist = await appointmentService.IsAppointmentExistAsync(id, cancellationToken);
-        if (!isAppointmentExist)
+        if (!isAppointmentExist/* || patientId == Guid.Empty*/)
         {
             return NotFound();
         }
-        var updateAppointment = request.Map();
+        var updateAppointment = request.Map(id/*patientId*/);
         await appointmentService.UpdateAppointmentByIdAsync(id, updateAppointment, cancellationToken);
         return Ok();
     }

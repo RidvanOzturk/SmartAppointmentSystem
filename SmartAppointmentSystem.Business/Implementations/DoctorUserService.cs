@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SmartAppointmentSystem.Business.Contracts;
 using SmartAppointmentSystem.Business.DTOs;
@@ -33,7 +32,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
              FunctionExtensions.CalculateAverageRating(doctor.Ratings)
         );
     }
-
+  
     public async Task<TokenReponse?> LoginUserAsync(DoctorUserLoginRequestDTO request, CancellationToken cancellationToken)
     {
         var doctor = await context.Doctors
@@ -74,7 +73,6 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             ExpireDate = expireDate
         };
     }
-
     public async Task<List<AllDoctorResponseDTO>> GetAllDoctorsAsync(CancellationToken cancellationToken)
     {
         var doctors = await context.Doctors
