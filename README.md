@@ -17,7 +17,7 @@ The application is built with a clean separation of concerns, with distinct laye
 
 - .NET 9
 - Entity Framework Core
-- PostgreSQL (both development and production)
+- PostgreSQL
 - LINQ for data queries
 - RESTful API design principles
 
@@ -53,7 +53,7 @@ Use the provided endpoints to create, read, update, and delete appointments and 
 Example: GET /api/doctors/all returns a list of all doctors.
 
 Testing with Postman:
-Example: https://smartappointmentsystem.up.railway.app/api/doctor/all
+Example: https://smartappointmentsystem.onrender.com/api/doctor/all
 
 ## Deployment
 Both the API and the database have been deployed in a cloud environment. 
