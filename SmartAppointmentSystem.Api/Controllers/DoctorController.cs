@@ -71,7 +71,7 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
     }
 
     [HttpGet("search-branch")]
-    public async Task<IActionResult> GetDoctorByBrancSearch([FromQuery] int query, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetDoctorByBranchSearch([FromQuery] int query, CancellationToken cancellationToken)
     {
         var doctors = await doctorUserService.SearchDoctorsBranchAsync(query, cancellationToken);
         if (doctors.Count == 0)
@@ -121,7 +121,8 @@ public class DoctorController(IDoctorUserService doctorUserService) : Controller
         {
             return NotFound();
         }
-        await doctorUserService.UpdateDoctorByIdAsync(id, cancellationToken);
+        var doctor = doctorUserRequest.Map();
+        await doctorUserService.UpdateDoctorByIdAsync(id, doctor, cancellationToken);
         return Ok();
     }
 

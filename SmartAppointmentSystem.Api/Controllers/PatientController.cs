@@ -77,6 +77,21 @@ public class PatientController(IPatientUserService userPatientService) : Control
 
         return Ok();
     }
+
+    [Authorize]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdatePatientUser([FromRoute] Guid id, [FromBody] PatientUserRequestModel doctorUserRequest, CancellationToken cancellationToken)
+    {
+        var isPatientExist = await userPatientService.IsPatientExistAsync(id, cancellationToken);
+        if (!isPatientExist)
+        {
+            return NotFound();
+        }
+        var patient = doctorUserRequest.Map();
+        await userPatientService.UpdatePatientById(id, patient, cancellationToken);
+        return Ok();
+    }
+
     [Authorize]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePatientUser([FromRoute] Guid id, CancellationToken cancellationToken)

@@ -14,6 +14,7 @@ public interface IPatientUserService
     Task<TokenReponse?> LoginPatientUserAsync(PatientUserLoginRequestDTO request, CancellationToken cancellationToken = default);
     Task<List<Patient>> GetPatientUsersAsync(CancellationToken cancellationToken = default);
     Task<PatientResponseDTO?> GetPatientUserByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task UpdatePatientById(Guid id, PatientUserRequestDTO requestDTO, CancellationToken cancellationToken = default);
     Task DeletePatientUserByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> IsPatientExistAsync(Guid id, CancellationToken cancellationToken = default);
 }

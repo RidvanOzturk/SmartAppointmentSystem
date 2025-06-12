@@ -3,7 +3,7 @@
 public record DoctorUserRequestDTO
 (
      string? Name,
-     string Email,
+     string? Email,
      string? Password,
      string? Description,
      string? Image,

@@ -10,6 +10,17 @@ public static class MapperExtensions
     {
         return new PatientUserRequestDTO(value.Name, value.Email, value.Password);
     }
+    public static DoctorUserRequestDTO Map(this DoctorUserRequestModel model)
+    {
+        return new DoctorUserRequestDTO(
+            model.Name,
+            model.Email,
+            model.Password,
+            model.Description,
+            model.Image,
+            model.BranchId
+        );
+    }
 
     public static AppointmentRequestDTO Map(this AppointmentRequestModel value, Guid patientId)
     {

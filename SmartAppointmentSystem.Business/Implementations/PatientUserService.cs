@@ -104,6 +104,30 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
             patient.Ratings
         );
     }
+
+    public async Task UpdatePatientById(Guid id, PatientUserRequestDTO requestDTO, CancellationToken cancellationToken = default)
+    {
+        var patient = await context.Patients.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        if (patient.Name != requestDTO.Name)
+        {
+            patient.Name = requestDTO.Name;
+        }
+
+        if (patient.Email != requestDTO.Email)
+        {
+            patient.Email = requestDTO.Email;
+        }  
+
+        if (!string.IsNullOrWhiteSpace(requestDTO.Password))
+        {
+            if (!BCrypt.Net.BCrypt.Verify(requestDTO.Password, patient.PasswordHash))
+            {
+                patient.PasswordHash = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password);
+            }
+        }
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task DeletePatientUserByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var patient = await context.Patients.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);

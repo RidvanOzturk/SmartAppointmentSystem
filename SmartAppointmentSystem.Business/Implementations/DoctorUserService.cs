@@ -167,10 +167,42 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
     }
 
 
-    public async Task UpdateDoctorByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task UpdateDoctorByIdAsync(Guid id, DoctorUserRequestDTO requestDTO, CancellationToken cancellationToken)
     {
-        var doctor = await context.Doctors
-            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var doctor = await context.Doctors.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        if (doctor.Name != requestDTO.Name) 
+        {
+            doctor.Name = requestDTO.Name;
+        }
+
+        if (doctor.Email != requestDTO.Email)
+        {
+            doctor.Email = requestDTO.Email;
+        }
+
+        if (doctor.Description != requestDTO.Description)
+        {
+            doctor.Description = requestDTO.Description;
+        }
+
+        if (doctor.Image != requestDTO.Image)
+        {
+            doctor.Image = requestDTO.Image;
+        }
+
+        if (!string.IsNullOrWhiteSpace(requestDTO.Password))
+        {
+            if (!BCrypt.Net.BCrypt.Verify(requestDTO.Password, doctor.PasswordHash))
+            {
+                doctor.PasswordHash = BCrypt.Net.BCrypt.HashPassword(requestDTO.Password);
+            }
+        }
+
+        if (doctor.BranchId != requestDTO.BranchId)
+        {
+            doctor.BranchId = requestDTO.BranchId;
+        }
+
         await context.SaveChangesAsync(cancellationToken);
     }
     public async Task DeleteDoctorByIdAsync(Guid id, CancellationToken cancellationToken)
