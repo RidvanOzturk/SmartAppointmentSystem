@@ -23,10 +23,6 @@ namespace SmartAppointmentSystem.Api.Controllers
         public async Task<IActionResult> GetAllBranches(CancellationToken cancellationToken = default)
         {
             var branches = await branchService.GetAllBranchesAsync(cancellationToken);
-            if (branches.Count == 0)
-            {
-                return NotFound();
-            }
             return Ok(branches);
         }
     }

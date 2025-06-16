@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartAppointmentSystem.Business.Contracts;
+using SmartAppointmentSystem.Business.DTOs;
 using SmartAppointmentSystem.Data;
 using SmartAppointmentSystem.Data.Entities;
 
@@ -18,8 +19,10 @@ public class BranchService(AppointmentContext context) : IBranchService
             .Where(d => EF.Functions.Like(d.Title, $"%{query}%"))
             .ToListAsync(cancellationToken);
     }
-    public async Task<List<Branch>> GetAllBranchesAsync(CancellationToken cancellationToken)
+    public async Task<List<BranchRequestDTO>> GetAllBranchesAsync(CancellationToken cancellationToken)
     {
-        return await context.Branches.AsNoTracking().ToListAsync(cancellationToken);
+        return await context.Branches.AsNoTracking()
+            .Select(x=> new BranchRequestDTO(x.Title, x.Description))
+            .ToListAsync(cancellationToken);
     }
 }

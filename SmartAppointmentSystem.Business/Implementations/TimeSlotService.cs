@@ -27,7 +27,7 @@ public class TimeSlotService(AppointmentContext context) : ITimeSlotService
     {
         return await context.TimeSlots
             .AsNoTracking()
-            .Where(ts => ts.DoctorId == id && ts.AvailableFrom < ts.AvailableTo)
+            .Where(x => x.DoctorId == id && x.AvailableFrom < x.AvailableTo)
             .ToListAsync(cancellationToken);
     }
     public async Task<TimeSlot> GetTimeSlotByIdAsync(Guid id, CancellationToken cancellationToken)
