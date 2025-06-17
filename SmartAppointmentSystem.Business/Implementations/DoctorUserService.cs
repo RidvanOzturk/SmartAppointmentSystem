@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using SmartAppointmentSystem.Business.Contracts;
 using SmartAppointmentSystem.Business.DTOs;
+using SmartAppointmentSystem.Business.DTOs.RequestDTOs;
+using SmartAppointmentSystem.Business.DTOs.ResponseDTOs;
 using SmartAppointmentSystem.Business.Extensions;
 using SmartAppointmentSystem.Data;
 using SmartAppointmentSystem.Data.Entities;
@@ -28,7 +30,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
              doctor.Image,
              doctor.BranchId,
              doctor.CreatedAt,
-             doctor.Branch != null ? new BranchResponseDTO(doctor.Branch.Id, doctor.Branch.Title) : null,
+             doctor.Branch != null ? new BranchResponseDTO(doctor.Branch.Id, doctor.Branch.Title, doctor.Branch.Description) : null,
              FunctionExtensions.CalculateAverageRating(doctor.Ratings)
         );
     }
@@ -84,7 +86,7 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
                     x.Name,
                     x.Email,
                     x.BranchId,
-                    x.Branch != null ? new BranchResponseDTO(x.Branch.Id, x.Branch.Title) : null,
+                    x.Branch != null ? new BranchResponseDTO(x.Branch.Id, x.Branch.Title, x.Branch.Description) : new BranchResponseDTO(0, string.Empty, string.Empty),
                     FunctionExtensions.CalculateAverageRating(x.Ratings)
                 ))
                 .ToListAsync(cancellationToken);

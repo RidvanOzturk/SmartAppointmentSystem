@@ -1,4 +1,4 @@
-﻿namespace SmartAppointmentSystem.Business.DTOs;
+﻿namespace SmartAppointmentSystem.Business.DTOs.RequestDTOs;
 
 public record AppointmentRequestDTO
 (

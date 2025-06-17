@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using SmartAppointmentSystem.Business.Contracts;
 using SmartAppointmentSystem.Business.DTOs;
+using SmartAppointmentSystem.Business.DTOs.RequestDTOs;
+using SmartAppointmentSystem.Business.DTOs.ResponseDTOs;
 using SmartAppointmentSystem.Business.Extensions;
 using SmartAppointmentSystem.Data;
 using SmartAppointmentSystem.Data.Entities;
@@ -69,21 +71,19 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
             ExpireDate = expireDate
         };
     }
-    public async Task<List<Patient>> GetPatientUsersAsync(CancellationToken cancellationToken = default)
+    public async Task<List<PatientResponseDTO>> GetPatientUsersAsync(CancellationToken cancellationToken = default)
     {
-        //return await context.Patients
-        //    .AsNoTracking()
-        //    .Include(x=>x.Ratings)
-        //    .Include(x=>x.Appointments)
-        //    .Select(x=> new PatientResponseDTO(
-        //        x.Id,
-        //        x.Name,
-        //        x.Email,
-        //        x.Appointments,
-        //        x.Ratings
-        //        ))
-        //    .ToListAsync(cancellationToken);
-        return await context.Patients.ToListAsync();
+        return await context.Patients
+            .AsNoTracking()
+            .Include(x => x.Ratings)
+            .Include(x => x.Appointments)
+            .Select(x => new PatientResponseDTO(
+                x.Name,
+                x.Email,
+                x.Appointments,
+                x.Ratings
+                ))
+            .ToListAsync(cancellationToken);
     }
     public async Task<PatientResponseDTO?> GetPatientUserByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
@@ -97,7 +97,6 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
             return null;
         }
         return new PatientResponseDTO(
-            patient.Id,
             patient.Name,
             patient.Email,
             patient.Appointments,

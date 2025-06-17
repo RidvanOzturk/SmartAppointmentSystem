@@ -1,5 +1,6 @@
 ﻿using SmartAppointmentSystem.Api.Models;
 using SmartAppointmentSystem.Business.DTOs;
+using SmartAppointmentSystem.Business.DTOs.RequestDTOs;
 using System.Text;
 
 namespace SmartAppointmentSystem.Api.Extensions;

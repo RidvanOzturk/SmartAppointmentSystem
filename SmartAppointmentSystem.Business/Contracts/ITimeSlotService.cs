@@ -1,4 +1,5 @@
-﻿using SmartAppointmentSystem.Business.DTOs;
+﻿using SmartAppointmentSystem.Business.DTOs.RequestDTOs;
+using SmartAppointmentSystem.Business.DTOs.ResponseDTOs;
 using SmartAppointmentSystem.Data.Entities;
 
 namespace SmartAppointmentSystem.Business.Contracts;
@@ -6,10 +7,10 @@ namespace SmartAppointmentSystem.Business.Contracts;
 public interface ITimeSlotService
 {
     Task CreateTimeSlotAsync(TimeSlotRequestDTO timeSlotRequestDTO, CancellationToken cancellationToken = default);
-    Task<TimeSlot> GetTimeSlotByIdAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<List<TimeSlot>> AvailableTimeSlotDoctorAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<List<TimeSlot>> GetDoctorTimeSlotsAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<List<TimeSlot>> GetAllTimeSlotsAsync(CancellationToken cancellationToken = default);
+    Task<TimeSlotResponseDTO?> GetTimeSlotByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<List<TimeSlotResponseDTO?>> AvailableTimeSlotDoctorAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<List<TimeSlotResponseDTO?>> GetDoctorTimeSlotsAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<List<TimeSlotResponseDTO?>> GetAllTimeSlotsAsync(CancellationToken cancellationToken = default);
     Task UpdateTimeSlotByIdAsync(Guid id, TimeSlotRequestDTO timeSlotRequestDTO, CancellationToken cancellationToken = default);
     Task DeleteTimeSlotByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> IsTimeSlotExistAsync(Guid id, CancellationToken cancellationToken = default);

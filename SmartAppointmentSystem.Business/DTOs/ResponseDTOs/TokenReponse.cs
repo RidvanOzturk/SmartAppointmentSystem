@@ -1,4 +1,4 @@
-﻿namespace SmartAppointmentSystem.Business.DTOs;
+﻿namespace SmartAppointmentSystem.Business.DTOs.ResponseDTOs;
 
 public class TokenReponse
 {

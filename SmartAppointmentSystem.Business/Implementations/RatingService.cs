@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartAppointmentSystem.Business.Contracts;
-using SmartAppointmentSystem.Business.DTOs;
+using SmartAppointmentSystem.Business.DTOs.RequestDTOs;
+using SmartAppointmentSystem.Business.DTOs.ResponseDTOs;
 using SmartAppointmentSystem.Business.Extensions;
 using SmartAppointmentSystem.Data;
 using SmartAppointmentSystem.Data.Entities;
@@ -16,17 +17,30 @@ public class RatingService(AppointmentContext context) : IRatingService
             .AddAsync(rating, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
     }
-    public async Task<List<Rating>> GetAllRatingsAsync(CancellationToken cancellationToken)
+    public async Task<List<RatingResponseDTO>> GetAllRatingsAsync(CancellationToken cancellationToken)
     {
         return await context.Ratings
             .AsNoTracking()
+            .Select(x=> new RatingResponseDTO(
+                x.DoctorId,
+                x.PatientId,
+                x.Score,
+                x.Comment
+                ))
             .ToListAsync(cancellationToken);
     }
-    public async Task<Rating> GetRatingByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<RatingResponseDTO?> GetRatingByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await context.Ratings
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            .Where(x=>x.Id == id)
+            .Select(x=> new RatingResponseDTO(
+                x.DoctorId,
+                x.PatientId,
+                x.Score,
+                x.Comment
+                ))
+            .FirstOrDefaultAsync(cancellationToken);
     }
     public async Task UpdateRatingByIdAsync(Guid id, RatingRequestDTO ratingRequestDTO, CancellationToken cancellationToken)
     {

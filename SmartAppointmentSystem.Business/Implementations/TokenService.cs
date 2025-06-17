@@ -2,7 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using SmartAppointmentSystem.Business.Contracts;
-using SmartAppointmentSystem.Business.DTOs;
+using SmartAppointmentSystem.Business.DTOs.RequestDTOs;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;

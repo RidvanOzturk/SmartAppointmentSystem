@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartAppointmentSystem.Business.Contracts;
-using SmartAppointmentSystem.Business.DTOs;
+using SmartAppointmentSystem.Business.DTOs.RequestDTOs;
+using SmartAppointmentSystem.Business.DTOs.ResponseDTOs;
 using SmartAppointmentSystem.Business.Extensions;
 using SmartAppointmentSystem.Data;
 using SmartAppointmentSystem.Data.Entities;
@@ -16,30 +17,52 @@ public class TimeSlotService(AppointmentContext context) : ITimeSlotService
             .AddAsync(timeSlot, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
     }
-    public async Task<List<TimeSlot>> GetDoctorTimeSlotsAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<List<TimeSlotResponseDTO>> GetDoctorTimeSlotsAsync(Guid id, CancellationToken cancellationToken)
     {
         return await context.TimeSlots
             .AsNoTracking()
-            .Where(x=>x.DoctorId == id)
+            .Where(x => x.DoctorId == id)
+            .Select(x => new TimeSlotResponseDTO(x.DoctorId, x.AvailableDay, x.AppointmentFrequency, x.AvailableFrom, x.AvailableTo))
             .ToListAsync(cancellationToken);
     }
-    public async Task<List<TimeSlot>> AvailableTimeSlotDoctorAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<List<TimeSlotResponseDTO>> AvailableTimeSlotDoctorAsync(Guid id, CancellationToken cancellationToken)
     {
         return await context.TimeSlots
             .AsNoTracking()
             .Where(x => x.DoctorId == id && x.AvailableFrom < x.AvailableTo)
+            .Select(x => new TimeSlotResponseDTO(
+                x.DoctorId,
+                x.AvailableDay,
+                x.AppointmentFrequency,
+                x.AvailableFrom,
+                x.AvailableTo))
             .ToListAsync(cancellationToken);
     }
-    public async Task<TimeSlot> GetTimeSlotByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<TimeSlotResponseDTO?> GetTimeSlotByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await context.TimeSlots
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            .Where(x => x.Id == id)
+            .Select(x => new TimeSlotResponseDTO(
+                x.DoctorId,
+                x.AvailableDay,
+                x.AppointmentFrequency,
+                x.AvailableFrom,
+                x.AvailableTo
+       ))
+       .FirstOrDefaultAsync(cancellationToken);
     }
-    public async Task<List<TimeSlot>> GetAllTimeSlotsAsync(CancellationToken cancellationToken)
+    public async Task<List<TimeSlotResponseDTO>> GetAllTimeSlotsAsync(CancellationToken cancellationToken)
     {
         return await context.TimeSlots
             .AsNoTracking()
+            .Select(x => new TimeSlotResponseDTO(
+                x.DoctorId,
+                x.AvailableDay,
+                x.AppointmentFrequency,
+                x.AvailableFrom,
+                x.AvailableTo
+       ))
             .ToListAsync(cancellationToken);
     }
     public async Task UpdateTimeSlotByIdAsync(Guid id, TimeSlotRequestDTO timeSlotRequestDTO, CancellationToken cancellationToken)

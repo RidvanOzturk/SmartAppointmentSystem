@@ -1,4 +1,6 @@
 ﻿using SmartAppointmentSystem.Business.DTOs;
+using SmartAppointmentSystem.Business.DTOs.RequestDTOs;
+using SmartAppointmentSystem.Business.DTOs.ResponseDTOs;
 using SmartAppointmentSystem.Data.Entities;
 
 namespace SmartAppointmentSystem.Business.Contracts;
