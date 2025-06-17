@@ -22,6 +22,7 @@ public class RatingService(AppointmentContext context) : IRatingService
         return await context.Ratings
             .AsNoTracking()
             .Select(x=> new RatingResponseDTO(
+                x.Id,
                 x.DoctorId,
                 x.PatientId,
                 x.Score,
@@ -35,6 +36,7 @@ public class RatingService(AppointmentContext context) : IRatingService
             .AsNoTracking()
             .Where(x=>x.Id == id)
             .Select(x=> new RatingResponseDTO(
+                x.Id,
                 x.DoctorId,
                 x.PatientId,
                 x.Score,

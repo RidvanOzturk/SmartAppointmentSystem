@@ -58,14 +58,6 @@ public static class MapperExtensions
             Email = doctorUserSignUpRequest.Email
         };
     }
-    public static void Map(this DoctorsRatingDTO target, Doctor source)
-    {
-        target.Id = source.Id;
-        target.Name = source.Name;
-        target.Email = source.Email;
-        target.Description = source.Description;
-        target.BranchId = source.BranchId.Value;
-    }
     public static void Map(this RatingRequestDTO source, Rating target)
     {
         target.DoctorId = source.DoctorId;

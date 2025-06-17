@@ -22,7 +22,14 @@ public class TimeSlotService(AppointmentContext context) : ITimeSlotService
         return await context.TimeSlots
             .AsNoTracking()
             .Where(x => x.DoctorId == id)
-            .Select(x => new TimeSlotResponseDTO(x.DoctorId, x.AvailableDay, x.AppointmentFrequency, x.AvailableFrom, x.AvailableTo))
+            .Select(x => new TimeSlotResponseDTO
+            (
+                x.Id,
+                x.DoctorId, 
+                x.AvailableDay, 
+                x.AppointmentFrequency, 
+                x.AvailableFrom, 
+                x.AvailableTo))
             .ToListAsync(cancellationToken);
     }
     public async Task<List<TimeSlotResponseDTO>> AvailableTimeSlotDoctorAsync(Guid id, CancellationToken cancellationToken)
@@ -31,6 +38,7 @@ public class TimeSlotService(AppointmentContext context) : ITimeSlotService
             .AsNoTracking()
             .Where(x => x.DoctorId == id && x.AvailableFrom < x.AvailableTo)
             .Select(x => new TimeSlotResponseDTO(
+                x.Id,
                 x.DoctorId,
                 x.AvailableDay,
                 x.AppointmentFrequency,
@@ -44,6 +52,7 @@ public class TimeSlotService(AppointmentContext context) : ITimeSlotService
             .AsNoTracking()
             .Where(x => x.Id == id)
             .Select(x => new TimeSlotResponseDTO(
+                x.Id,
                 x.DoctorId,
                 x.AvailableDay,
                 x.AppointmentFrequency,
@@ -57,6 +66,7 @@ public class TimeSlotService(AppointmentContext context) : ITimeSlotService
         return await context.TimeSlots
             .AsNoTracking()
             .Select(x => new TimeSlotResponseDTO(
+                x.Id,
                 x.DoctorId,
                 x.AvailableDay,
                 x.AppointmentFrequency,

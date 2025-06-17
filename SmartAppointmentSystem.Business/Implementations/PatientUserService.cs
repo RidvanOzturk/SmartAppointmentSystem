@@ -78,6 +78,7 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
             .Include(x => x.Ratings)
             .Include(x => x.Appointments)
             .Select(x => new PatientResponseDTO(
+                x.Id,
                 x.Name,
                 x.Email,
                 x.Appointments,
@@ -97,6 +98,7 @@ public class PatientUserService(AppointmentContext context, ITokenService tokenS
             return null;
         }
         return new PatientResponseDTO(
+            patient.Id,
             patient.Name,
             patient.Email,
             patient.Appointments,

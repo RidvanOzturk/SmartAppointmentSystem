@@ -8,17 +8,18 @@ namespace SmartAppointmentSystem.Business.Implementations;
 
 public class BranchService(AppointmentContext context) : IBranchService
 {
-    public async Task<List<Branch>> GetBranchesSearchAsync(string query, CancellationToken cancellationToken)
+    public async Task<List<BranchResponseDTO>> GetBranchesSearchAsync(string query, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(query))
-        {
-            return await context.Branches.ToListAsync(cancellationToken);
-        }
-        return await context.Branches
-            .AsNoTracking()
-            .Where(d => EF.Functions.Like(d.Title, $"%{query}%"))
+        IQueryable<Branch> branchQuery = context.Branches.AsNoTracking();
+
+        if (!string.IsNullOrEmpty(query))
+            branchQuery = branchQuery.Where(d => EF.Functions.Like(d.Title, $"%{query}%"));
+
+        return await branchQuery
+            .Select(x => new BranchResponseDTO(x.Id, x.Title, x.Description))
             .ToListAsync(cancellationToken);
     }
+
     public async Task<List<BranchResponseDTO>> GetAllBranchesAsync(CancellationToken cancellationToken)
     {
         return await context.Branches.AsNoTracking()

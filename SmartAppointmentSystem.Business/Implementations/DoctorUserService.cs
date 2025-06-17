@@ -19,16 +19,17 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
          .Include(x => x.Branch)
          .Include(x => x.Ratings)
          .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-
-        if (doctor == null)
+        if (doctor is null)
+        {
             return null;
+        }
+
         return new DoctorResponseDTO(
              doctor.Id,
              doctor.Name,
              doctor.Email,
              doctor.Description,
              doctor.Image,
-             doctor.BranchId,
              doctor.CreatedAt,
              doctor.Branch != null ? new BranchResponseDTO(doctor.Branch.Id, doctor.Branch.Title, doctor.Branch.Description) : null,
              FunctionExtensions.CalculateAverageRating(doctor.Ratings)
@@ -75,17 +76,19 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
             ExpireDate = expireDate
         };
     }
-    public async Task<List<AllDoctorResponseDTO>> GetAllDoctorsAsync(CancellationToken cancellationToken)
+    public async Task<List<DoctorResponseDTO>> GetAllDoctorsAsync(CancellationToken cancellationToken)
     {
         var doctors = await context.Doctors
                 .AsNoTracking()
                 .Include(x => x.Branch)
                 .Include(x => x.Ratings)
-                .Select(x => new AllDoctorResponseDTO(
+                .Select(x => new DoctorResponseDTO(
                     x.Id,
                     x.Name,
                     x.Email,
-                    x.BranchId,
+                    x.Description,
+                    x.Image,
+                    x.CreatedAt,
                     x.Branch != null ? new BranchResponseDTO(x.Branch.Id, x.Branch.Title, x.Branch.Description) : new BranchResponseDTO(0, string.Empty, string.Empty),
                     FunctionExtensions.CalculateAverageRating(x.Ratings)
                 ))
@@ -94,41 +97,63 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
         return doctors;
     }
 
-    public async Task<List<Doctor>> GetNewAddedDoctors(CancellationToken cancellationToken)
+    public async Task<List<DoctorResponseDTO>> GetNewAddedDoctors(CancellationToken cancellationToken)
     {
         return await context.Doctors
             .AsNoTracking()
             .OrderByDescending(x => x.CreatedAt)
+            .Select(x => new DoctorResponseDTO(
+                    x.Id,
+                    x.Name,
+                    x.Email,
+                    x.Description,
+                    x.Image,
+                    x.CreatedAt,
+                    x.Branch != null ? new BranchResponseDTO(x.Branch.Id, x.Branch.Title, x.Branch.Description) : new BranchResponseDTO(0, string.Empty, string.Empty),
+                    FunctionExtensions.CalculateAverageRating(x.Ratings)
+                ))
             .ToListAsync(cancellationToken);
     }
-    public async Task<List<Doctor>> GetDoctorsWithMostAppointmentsAsync(CancellationToken cancellationToken)
+    public async Task<List<DoctorResponseDTO>> GetDoctorsWithMostAppointmentsAsync(CancellationToken cancellationToken)
     {
         return await context.Doctors
             .AsNoTracking()
             .OrderByDescending(x => x.Appointments.Count)
+            .Select(x => new DoctorResponseDTO(
+                x.Id,
+                x.Name,
+                x.Email,
+                x.Description,
+                x.Image,
+                x.CreatedAt,
+                x.Branch != null
+                    ? new BranchResponseDTO(x.Branch.Id, x.Branch.Title, x.Branch.Description)
+                    : null,
+                FunctionExtensions.CalculateAverageRating(x.Ratings)
+            ))
             .ToListAsync(cancellationToken);
     }
-    public async Task<List<DoctorsRatingDTO>> GetTopRatedDoctorsAsync(CancellationToken cancellationToken)
+
+    public async Task<List<DoctorResponseDTO>> GetTopRatedDoctorsAsync(CancellationToken cancellationToken)
     {
-        var queryResult = await context.Doctors
-            .Include(d => d.Ratings)
-            .Select(d => new
-            {
-                Doctor = d,
-                AverageRating = FunctionExtensions.CalculateAverageRating(d.Ratings)
-            })
+        return await context.Doctors
+            .AsNoTracking()
+            .Select(d => new DoctorResponseDTO(
+                d.Id,
+                d.Name,
+                d.Email,
+                d.Description,
+                d.Image,
+                d.CreatedAt,
+                d.Branch != null
+                    ? new BranchResponseDTO(d.Branch.Id, d.Branch.Title, d.Branch.Description)
+                    : null,
+                Math.Round(FunctionExtensions.CalculateAverageRating(d.Ratings), 2)
+            ))
             .OrderByDescending(x => x.AverageRating)
             .ToListAsync(cancellationToken);
-
-        var result = queryResult.Select(x =>
-        {
-            var dto = new DoctorsRatingDTO();
-            dto.Map(x.Doctor);
-            dto.AverageRating = Math.Round(x.AverageRating, 2);
-            return dto;
-        }).ToList();
-        return result;
     }
+
     public async Task<bool> CreateDoctorAsync(DoctorUserSignUpRequestDTO requestDTO, CancellationToken cancellationToken)
     {
         var user = await context.Doctors.FirstOrDefaultAsync(x => x.Email == requestDTO.Email, cancellationToken);
@@ -146,27 +171,50 @@ public class DoctorUserService(AppointmentContext context, ITokenService tokenSe
 
 
     }
-    public async Task<List<Doctor>> SearchDoctorsNameAsync(string query, CancellationToken cancellationToken)
+    public async Task<List<DoctorResponseDTO>> SearchDoctorsNameAsync(string query, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(query))
-        {
-            return await context.Doctors
-                .AsNoTracking()
-                .ToListAsync(cancellationToken);
-        }
-        return await context.Doctors
-            .AsNoTracking()
-            .Where(d => EF.Functions.Like(d.Name, $"%{query}%"))
+        IQueryable<Doctor> doctorQuery = context.Doctors.AsNoTracking();
+
+        if (!string.IsNullOrEmpty(query))
+            doctorQuery = doctorQuery.Where(d => EF.Functions.Like(d.Name, $"%{query}%"));
+
+        return await doctorQuery
+            .Select(d => new DoctorResponseDTO(
+                d.Id,
+                d.Name,
+                d.Email,
+                d.Description,
+                d.Image,
+                d.CreatedAt,
+                d.Branch != null
+                    ? new BranchResponseDTO(d.Branch.Id, d.Branch.Title, d.Branch.Description)
+                    : null,
+                Math.Round(FunctionExtensions.CalculateAverageRating(d.Ratings), 2)
+            ))
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<List<Doctor>> SearchDoctorsBranchAsync(int query, CancellationToken cancellationToken)
-    {
 
-        return await context.Doctors.AsNoTracking()
-             .Where(x => x.BranchId == query)
-             .ToListAsync(cancellationToken);
+    public async Task<List<DoctorResponseDTO>> SearchDoctorsBranchAsync(int query, CancellationToken cancellationToken)
+    {
+        return await context.Doctors
+            .AsNoTracking()
+            .Where(x => x.BranchId == query)
+            .Select(d => new DoctorResponseDTO(
+                d.Id,
+                d.Name,
+                d.Email,
+                d.Description,
+                d.Image,
+                d.CreatedAt,
+                d.Branch != null
+                    ? new BranchResponseDTO(d.Branch.Id, d.Branch.Title, d.Branch.Description)
+                    : null,
+                Math.Round(FunctionExtensions.CalculateAverageRating(d.Ratings), 2)
+            ))
+            .ToListAsync(cancellationToken);
     }
+
 
 
     public async Task UpdateDoctorByIdAsync(Guid id, DoctorUserRequestDTO requestDTO, CancellationToken cancellationToken)

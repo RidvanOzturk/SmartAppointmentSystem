@@ -2,7 +2,8 @@
 
 public record RatingResponseDTO
 (
-    Guid DoctorId,
+     Guid Id,
+     Guid DoctorId,
      Guid PatientId,
      int Score,
      string Comment

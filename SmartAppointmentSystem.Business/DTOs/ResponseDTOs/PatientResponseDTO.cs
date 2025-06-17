@@ -3,6 +3,7 @@
 namespace SmartAppointmentSystem.Business.DTOs.ResponseDTOs;
 
 public record PatientResponseDTO(
+    Guid Id,
     string Name,
     string Email,
     ICollection<Appointment> Appointments,
