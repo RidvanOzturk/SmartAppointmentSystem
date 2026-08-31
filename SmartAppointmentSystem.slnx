@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="SmartAppointmentSystem.Api/SmartAppointmentSystem.Api.csproj">
+    <BuildDependency Project="SmartAppointmentSystem.Business/SmartAppointmentSystem.Business.csproj" />
+  </Project>
+  <Project Path="SmartAppointmentSystem.Business/SmartAppointmentSystem.Business.csproj">
+    <BuildDependency Project="SmartAppointmentSystem.Data/SmartAppointmentSystem.Data.csproj" />
+  </Project>
+  <Project Path="SmartAppointmentSystem.Data/SmartAppointmentSystem.Data.csproj" />
+  <Project Path="SmartAppointmentSystem.Infrastructure/SmartAppointmentSystem.Infrastructure.csproj" />
+</Solution>
