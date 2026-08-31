@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.12.35521.163
+# Visual Studio Version 18
+VisualStudioVersion = 18.9.12112.369
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartAppointmentSystem.Api", "SmartAppointmentSystem.Api\SmartAppointmentSystem.Api.csproj", "{165979DF-8E7C-4981-A93C-1A216AC8A1E7}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartAppointmentSystem.Busi
 	ProjectSection(ProjectDependencies) = postProject
 		{7236B4F0-F0B3-4F2A-98F4-29B5C3A5421D} = {7236B4F0-F0B3-4F2A-98F4-29B5C3A5421D}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartAppointmentSystem.Infrastructure", "SmartAppointmentSystem.Infrastructure\SmartAppointmentSystem.Infrastructure.csproj", "{327821A6-FC1B-44FC-8BDB-7464DB998F73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +35,15 @@ Global
 		{0DC88193-3FCC-44D3-B466-0BF20D55526C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DC88193-3FCC-44D3-B466-0BF20D55526C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DC88193-3FCC-44D3-B466-0BF20D55526C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{327821A6-FC1B-44FC-8BDB-7464DB998F73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{327821A6-FC1B-44FC-8BDB-7464DB998F73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{327821A6-FC1B-44FC-8BDB-7464DB998F73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{327821A6-FC1B-44FC-8BDB-7464DB998F73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1B64A865-4D0C-4C14-BD28-4707565169AD}
 	EndGlobalSection
 EndGlobal
