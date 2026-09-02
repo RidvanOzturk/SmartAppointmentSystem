@@ -30,7 +30,7 @@ public class AppointmentService(AppointmentContext context) : IAppointmentServic
             .Where(x => x.PatientId == id)
             .ToListAsync(cancellationToken);
     }
-    public async Task<Appointment> GetAppointmentsByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Appointment?> GetAppointmentsByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await context.Appointments
             .AsNoTracking()

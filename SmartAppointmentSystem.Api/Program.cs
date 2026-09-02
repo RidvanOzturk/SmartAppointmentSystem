@@ -7,6 +7,7 @@ using FluentValidation;
 using SmartAppointmentSystem.Api.Extensions;
 using Microsoft.AspNetCore.RateLimiting;
 using SmartAppointmentSystem.Api.Middlewares;
+using SmartAppointmentSystem.Infrastructure.AI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,16 @@ builder.Services.AddRateLimiter(options =>
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddEnvironmentVariables();
+
+builder.Services
+    .AddOptions<OpenAiOptions>()
+    .Bind(builder.Configuration.GetSection(OpenAiOptions.SectionName))
+    .Validate(options => !string.IsNullOrWhiteSpace(options.ApiKey),
+        "OpenAI:ApiKey configuration is required.")
+    .Validate(options => !string.IsNullOrWhiteSpace(options.Model),
+        "OpenAI:Model configuration is required.");
+
+builder.Services.AddSingleton<IAiChatService, OpenAiChatService>();
 
 var connectionString = builder.Configuration.GetConnectionString("AppointmentContext");
 builder.Services.AddDbContext<AppointmentContext>(options =>
