@@ -1,37 +1,50 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace SmartAppointmentSystem.Api.Extensions
+namespace SmartAppointmentSystem.Api.Extensions;
+
+public static class ServiceExtensions
 {
-    public static class ServiceExtensions
+    public static IServiceCollection RegisterJWTAuthentication(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
-        public static void RegisterJWTAuthentication(this IServiceCollection services)
+        string? secretKey = configuration["AppSettings:Secret"];
+
+        if (string.IsNullOrWhiteSpace(secretKey))
         {
-            var secretKey = Environment.GetEnvironmentVariable("AppSettings__Secret");
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey)),
-
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-
-                    ValidateLifetime = true,
-
-                    ClockSkew = TimeSpan.Zero
-                };
-            });
+            throw new InvalidOperationException(
+                "AppSettings:Secret configuration is required.");
         }
+
+        if (Encoding.UTF8.GetByteCount(secretKey) < 32)
+        {
+            throw new InvalidOperationException(
+                "AppSettings:Secret must contain at least 32 bytes.");
+        }
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.RequireHttpsMetadata = false;
+            options.SaveToken = true;
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(secretKey)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+        });
+
+        return services;
     }
 }

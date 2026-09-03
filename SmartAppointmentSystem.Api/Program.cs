@@ -6,6 +6,7 @@ using SmartAppointmentSystem.Data;
 using FluentValidation;
 using SmartAppointmentSystem.Api.Extensions;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.HttpOverrides;
 using SmartAppointmentSystem.Api.Middlewares;
 using SmartAppointmentSystem.Infrastructure.AI;
 
@@ -13,6 +14,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+builder.Services.AddHealthChecks();
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders =
+        ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 builder.Services.AddRateLimiter(options =>
 {
@@ -37,6 +47,13 @@ builder.Services
 builder.Services.AddSingleton<IAiChatService, OpenAiChatService>();
 
 var connectionString = builder.Configuration.GetConnectionString("AppointmentContext");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "ConnectionStrings:AppointmentContext configuration is required.");
+}
+
 builder.Services.AddDbContext<AppointmentContext>(options =>
     options.UseNpgsql(connectionString, b => b.MigrationsAssembly("SmartAppointmentSystem.Data")));
 
@@ -60,13 +77,15 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 builder.Services.AddOpenApi();
-builder.Services.RegisterJWTAuthentication();
+builder.Services.RegisterJWTAuthentication(builder.Configuration);
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppointmentContext>();
-    dbContext.Database.Migrate();
+    await dbContext.Database.MigrateAsync();
 }
+app.UseForwardedHeaders();
+app.UseExceptionHandler();
 app.UseRateLimiter();
 if (app.Environment.IsDevelopment())
 {
@@ -78,5 +97,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualBasic;
 using SmartAppointmentSystem.Business.Contracts;
 using SmartAppointmentSystem.Business.DTOs.RequestDTOs;
 using System.IdentityModel.Tokens.Jwt;
@@ -13,7 +12,7 @@ public class TokenService(IConfiguration configuration) : ITokenService
 {
     public string GenerateToken(TokenRequest request)
     {
-        var secretKey = Environment.GetEnvironmentVariable("AppSettings__Secret");
+        var secretKey = configuration["AppSettings:Secret"];
         int tokenExpiryMinutes = configuration.GetValue<int>("TokenSettings:ExpiresInMinutes");
         var issuer = configuration.GetValue<string>("TokenSettings:Issuer");
         var audience = configuration.GetValue<string>("TokenSettings:Audience");
@@ -23,7 +22,7 @@ public class TokenService(IConfiguration configuration) : ITokenService
         ArgumentException.ThrowIfNullOrWhiteSpace(audience);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(tokenExpiryMinutes);
 
-        var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
+        var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
         var claims = new List<Claim>
         {

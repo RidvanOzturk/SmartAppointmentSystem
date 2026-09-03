@@ -1,23 +1,22 @@
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
-WORKDIR /app
-
-# Render ortamı için: ASPNETCORE_URLS port ayarı
-ENV ASPNETCORE_URLS=http://+:$PORT
-
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
+
 COPY ["SmartAppointmentSystem.Api/SmartAppointmentSystem.Api.csproj", "SmartAppointmentSystem.Api/"]
 COPY ["SmartAppointmentSystem.Business/SmartAppointmentSystem.Business.csproj", "SmartAppointmentSystem.Business/"]
 COPY ["SmartAppointmentSystem.Data/SmartAppointmentSystem.Data.csproj", "SmartAppointmentSystem.Data/"]
+COPY ["SmartAppointmentSystem.Infrastructure/SmartAppointmentSystem.Infrastructure.csproj", "SmartAppointmentSystem.Infrastructure/"]
 RUN dotnet restore "SmartAppointmentSystem.Api/SmartAppointmentSystem.Api.csproj"
+
 COPY . .
-WORKDIR "/src/SmartAppointmentSystem.Api"
-RUN dotnet build "SmartAppointmentSystem.Api.csproj" -c Release -o /app/build
+RUN dotnet publish "SmartAppointmentSystem.Api/SmartAppointmentSystem.Api.csproj" \
+    -c Release \
+    -o /app/publish \
+    --no-restore \
+    /p:UseAppHost=false
 
-FROM build AS publish
-RUN dotnet publish "SmartAppointmentSystem.Api.csproj" -c Release -o /app/publish
-
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+ENV ASPNETCORE_HTTP_PORTS=10000
+EXPOSE 10000
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "SmartAppointmentSystem.Api.dll"]
