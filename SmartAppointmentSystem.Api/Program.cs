@@ -32,10 +32,6 @@ builder.Services.AddRateLimiter(options =>
         limiterOptions.Window = TimeSpan.FromSeconds(10);
     });
 });
-builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
-builder.Configuration.AddEnvironmentVariables();
-
 builder.Services
     .AddOptions<OpenAiOptions>()
     .Bind(builder.Configuration.GetSection(OpenAiOptions.SectionName))

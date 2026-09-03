@@ -17,6 +17,7 @@ RUN dotnet publish "SmartAppointmentSystem.Api/SmartAppointmentSystem.Api.csproj
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 ENV ASPNETCORE_HTTP_PORTS=10000
+ENV DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
 EXPOSE 10000
 COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "SmartAppointmentSystem.Api.dll"]
