@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartAppointmentSystem.Business.Contracts;
 using SmartAppointmentSystem.Business.DTOs.RequestDTOs;
+using SmartAppointmentSystem.Business.DTOs.ResponseDTOs;
 using SmartAppointmentSystem.Business.Extensions;
 using SmartAppointmentSystem.Data;
 using SmartAppointmentSystem.Data.Entities;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SmartAppointmentSystem.Business.Implementations;
 
@@ -76,6 +76,98 @@ public class AppointmentService(AppointmentContext context) : IAppointmentServic
     {
         return await context.Appointments
             .AnyAsync(x => x.Id == id, cancellationToken);
+    }
+
+    public async Task<List<AvailableAppointmentResponseDTO>> GetAvailableAppointmentsAsync(
+    string branch,
+    DateOnly date,
+    TimeOnly? afterTime,
+    CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(branch);
+
+        int dayOfWeek = (int)date.DayOfWeek;
+
+        var timeSlots = await context.TimeSlots
+            .AsNoTracking()
+            .Where(x =>
+                x.AvailableDay == dayOfWeek &&
+                x.Doctor.Branch != null &&
+                EF.Functions.ILike(x.Doctor.Branch.Title, $"%{branch}%"))
+            .Select(x => new
+            {
+                x.DoctorId,
+                DoctorName = x.Doctor.Name,
+                Branch = x.Doctor.Branch.Title,
+                x.AvailableFrom,
+                x.AvailableTo,
+                x.AppointmentFrequency
+            })
+            .ToListAsync(cancellationToken);
+
+        if (timeSlots.Count == 0)
+            return [];
+
+        var doctorIds = timeSlots
+            .Select(x => x.DoctorId)
+            .Distinct()
+            .ToList();
+
+        DateTime startOfDay = DateTime.SpecifyKind(date.ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc);
+        DateTime endOfDay = startOfDay.AddDays(1);
+
+        var occupiedAppointments = await context.Appointments
+            .AsNoTracking()
+            .Where(x =>
+                doctorIds.Contains(x.DoctorId) &&
+                x.Time >= startOfDay &&
+                x.Time < endOfDay)
+            .Select(x => new
+            {
+                x.DoctorId,
+                x.Time
+            })
+            .ToListAsync(cancellationToken);
+
+        var result = new List<AvailableAppointmentResponseDTO>();
+
+        foreach (var timeSlot in timeSlots)
+        {
+            TimeSpan currentTime = timeSlot.AvailableFrom;
+            TimeSpan frequency = TimeSpan.FromMinutes(timeSlot.AppointmentFrequency);
+
+            while (currentTime + frequency <= timeSlot.AvailableTo)
+            {
+                TimeOnly appointmentTime = TimeOnly.FromTimeSpan(currentTime);
+
+                if (afterTime.HasValue && appointmentTime <= afterTime.Value)
+                {
+                    currentTime = currentTime.Add(frequency);
+                    continue;
+                }
+
+                bool isOccupied = occupiedAppointments.Any(x =>
+                    x.DoctorId == timeSlot.DoctorId &&
+                    x.Time.TimeOfDay == currentTime);
+
+                if (!isOccupied)
+                {
+                    result.Add(new AvailableAppointmentResponseDTO(
+                        timeSlot.DoctorId,
+                        timeSlot.DoctorName,
+                        timeSlot.Branch,
+                        date,
+                        appointmentTime));
+                }
+
+                currentTime = currentTime.Add(frequency);
+            }
+        }
+
+        return result
+            .OrderBy(x => x.Time)
+            .ThenBy(x => x.DoctorName)
+            .ToList();
     }
 
 }

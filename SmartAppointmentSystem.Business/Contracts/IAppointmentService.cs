@@ -1,4 +1,5 @@
 ﻿using SmartAppointmentSystem.Business.DTOs.RequestDTOs;
+using SmartAppointmentSystem.Business.DTOs.ResponseDTOs;
 using SmartAppointmentSystem.Data.Entities;
 
 namespace SmartAppointmentSystem.Business.Contracts;
@@ -13,4 +14,9 @@ public interface IAppointmentService
     Task UpdateAppointmentByIdAsync(Guid id, AppointmentRequestDTO appointmentRequestDTO, CancellationToken cancellationToken = default);
     Task<List<Appointment>> GetAllAppointmentsAsync(CancellationToken cancellationToken = default);
     Task<bool> IsAppointmentExistAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<List<AvailableAppointmentResponseDTO>> GetAvailableAppointmentsAsync(
+    string branch,
+    DateOnly date,
+    TimeOnly? afterTime,
+    CancellationToken cancellationToken = default);
 }
